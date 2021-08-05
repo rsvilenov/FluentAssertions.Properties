@@ -1,76 +1,40 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
 
 namespace FluentAssertions.Properties
 {
-
-
-    internal static class PropertyInfoExtensions
-
+    internal class PropertyInvoker<TDeclaringType>
     {
-
-        public static Func<T, object> GetValueGetter<T>(this PropertyInfo propertyInfo)
-
+        private readonly TDeclaringType _instance;
+        public PropertyInvoker(TDeclaringType instance)
         {
-
-            if (typeof(T) != propertyInfo.DeclaringType)
-
-            {
-
-                throw new ArgumentException();
-
-            }
-
-
-
-            var instance = Expression.Parameter(propertyInfo.DeclaringType, "i");
-
-            var property = Expression.Property(instance, propertyInfo);
-
-            var convert = Expression.TypeAs(property, typeof(object));
-
-            return (Func<T, object>)Expression.Lambda(convert, instance).Compile();
-
+            _instance = instance;
         }
 
-
-
-        public static Action<T, object> GetValueSetter<T>(this PropertyInfo propertyInfo)
-
+        public void SetValue<TProperty>(string propertyName, TProperty testData)
         {
+            ParameterExpression paramExpression = Expression.Parameter(typeof(TDeclaringType));
+            ParameterExpression paramExpression2 = Expression.Parameter(typeof(TProperty), propertyName);
+            MemberExpression propertyGetterExpression = Expression.Property(paramExpression, propertyName);
 
-            if (typeof(T) != propertyInfo.DeclaringType)
+            Action<TDeclaringType, TProperty> result = Expression.Lambda<Action<TDeclaringType, TProperty>>
+            (
+                Expression.Assign(propertyGetterExpression, paramExpression2), paramExpression, paramExpression2
+            )
+            .Compile();
 
-            {
-
-                throw new ArgumentException();
-
-            }
-
-
-
-            var instance = Expression.Parameter(propertyInfo.DeclaringType, "i");
-
-            var argument = Expression.Parameter(typeof(object), "a");
-
-            var setterCall = Expression.Call(
-
-                instance,
-
-                propertyInfo.GetSetMethod(),
-
-                Expression.Convert(argument, propertyInfo.PropertyType));
-
-            return (Action<T, object>)Expression.Lambda(setterCall, instance, argument)
-
-                                                .Compile();
-
+            result(_instance, testData);
         }
 
+        public TProperty GetValue<TProperty>(string propertyName)
+        {
+            ParameterExpression paramExpression = Expression.Parameter(typeof(TDeclaringType));
+            MemberExpression propertyGetterExpression = Expression.Property(paramExpression, propertyName);
+
+            var expression = Expression.Lambda<Func<TDeclaringType, TProperty>>(propertyGetterExpression, paramExpression);
+            var labmda = expression.Compile();
+
+            return labmda(_instance);
+        }
     }
-
-
 }

@@ -2,18 +2,18 @@
 using System.Linq;
 using System.Reflection;
 using FluentAssertions.Execution;
-using FluentAssertions.Properties.Objects;
+using FluentAssertions.Properties.Data;
 
-namespace FluentAssertions.Properties.Primitives
+namespace FluentAssertions.Properties.Assertions
 {
     /// <summary>
     /// Contains a number of methods to assert that a <see cref="bool"/> is in the expected state.
     /// </summary>
     [DebuggerNonUserCode]
-    public class InstancePropertyInfoAssertions<TAssertions, TDeclaringType>
-        where TAssertions : InstancePropertyInfoAssertions<TAssertions, TDeclaringType>
+    public class InstancePropertyAssertions<TAssertions, TDeclaringType>
+        where TAssertions : InstancePropertyAssertions<TAssertions, TDeclaringType>
     {
-        public InstancePropertyInfoAssertions(InstancePropertyInfo<TDeclaringType> value)
+        public InstancePropertyAssertions(InstancePropertyInfo<TDeclaringType> value)
         {
             Subject = value;
         }

@@ -1,17 +1,18 @@
-﻿using System;
+﻿using FluentAssertions.Properties.Data;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FluentAssertions.Properties.Objects
+namespace FluentAssertions.Properties.Selectors
 {
-    public class InstanceWithValuePropertyInfoSelector<TDeclaringType, TProperty> : IEnumerable<InstancePropertyInfo<TDeclaringType, TProperty>>
+    public class PropertyInvocationCollection<TDeclaringType, TProperty> : IEnumerable<InstancePropertyInfo<TDeclaringType, TProperty>>
     {
         public TProperty Value { get; }
         protected IEnumerable<InstancePropertyInfo<TDeclaringType, TProperty>> SelectedProperties { get; set; } = new List<InstancePropertyInfo<TDeclaringType, TProperty>>();
         public TDeclaringType Instance { get; }
 
-        public InstanceWithValuePropertyInfoSelector(TDeclaringType instance, TProperty value, IEnumerable<InstancePropertyInfo<TDeclaringType, TProperty>> instancePropertyInfos)
+        public PropertyInvocationCollection(TDeclaringType instance, TProperty value, IEnumerable<InstancePropertyInfo<TDeclaringType, TProperty>> instancePropertyInfos)
         {
             Instance = instance;
             Value = value;

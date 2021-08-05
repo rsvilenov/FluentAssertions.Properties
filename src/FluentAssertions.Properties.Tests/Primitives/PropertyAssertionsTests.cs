@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using Xunit;
 
-namespace FluentAssertions.Properties.Primitives
+namespace FluentAssertions.Properties.Assertions
 {
     public class PropertyAssertionsTests
     {
@@ -34,6 +34,7 @@ namespace FluentAssertions.Properties.Primitives
             //    .ProvideSymmetricAccess();
 
             sampleDto.Properties(p => p.MyStringProperty2, p => p.MyIntReadOnlyProperty)
+                .ThatAreOfPrimitiveTypes
                 .OfType<string>()
                 .WhenCalledWith("test1")
                 .Should()
@@ -44,6 +45,8 @@ namespace FluentAssertions.Properties.Primitives
                 .Should()
                 .ThrowFromSetter<ArgumentException>()
                 .WithMessage("test");
+
+
 
             //sampleDto.Properties<SampleDto, string>()
             //    .HavingValue("test").Should().BeWritable();

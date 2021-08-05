@@ -1,10 +1,11 @@
 ﻿using System.Reflection;
 
-namespace FluentAssertions.Properties.Objects
+namespace FluentAssertions.Properties.Data
 {
     public class InstancePropertyInfo<TDeclaringType>
     {
-        internal InstancePropertyInfo(PropertyInfo propertyInfo)
+        public InstancePropertyInfo() { }
+        public InstancePropertyInfo(PropertyInfo propertyInfo)
         {
             PropertyInfo = propertyInfo;
         }
@@ -13,12 +14,13 @@ namespace FluentAssertions.Properties.Objects
             : this(instancePropertyInfo.PropertyInfo)
             { }
 
-        public PropertyInfo PropertyInfo { get; }
+        public PropertyInfo PropertyInfo { get; internal set; }
     }
 
     public class InstancePropertyInfo<TDeclaringType, TProperty> : InstancePropertyInfo<TDeclaringType>
     {
-        internal InstancePropertyInfo(InstancePropertyInfo<TDeclaringType> instancePropertyInfo)
+        public InstancePropertyInfo() { }
+        public InstancePropertyInfo(InstancePropertyInfo<TDeclaringType> instancePropertyInfo)
             : base(instancePropertyInfo)
         {
         }

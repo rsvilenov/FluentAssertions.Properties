@@ -2,7 +2,7 @@
 using System.Reflection;
 using FluentAssertions.Execution;
 
-namespace FluentAssertions.Properties.Primitives
+namespace FluentAssertions.Properties.Assertions
 {
     /// <summary>
     /// Contains a number of methods to assert that a <see cref="bool"/> is in the expected state.

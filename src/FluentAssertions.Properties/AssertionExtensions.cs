@@ -1,9 +1,10 @@
-﻿using FluentAssertions.Properties.Objects;
-using FluentAssertions.Properties.Primitives;
+﻿using FluentAssertions.Properties.Data;
+using FluentAssertions.Properties.Assertions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Reflection;
+using FluentAssertions.Properties.Selectors;
 
 namespace FluentAssertions.Properties
 {
@@ -36,15 +37,15 @@ namespace FluentAssertions.Properties
         //}
 
         [Pure]
-        public static InstancePropertyInfoSelectorAssertions<TDeclaringType, TProperty> Should<TDeclaringType, TProperty>(this InstancePropertyInfoSelector<TDeclaringType, TProperty> actualValue)
+        public static InstancePropertySelectorAssertions<TDeclaringType, TProperty> Should<TDeclaringType, TProperty>(this InstancePropertyWithKnownTypeSelector<TDeclaringType, TProperty> actualValue)
         {
-            return new InstancePropertyInfoSelectorAssertions<TDeclaringType, TProperty>(actualValue);
+            return new InstancePropertySelectorAssertions<TDeclaringType, TProperty>(actualValue);
         }
 
         [Pure]
-        public static InstanceWithValuePropertyInfoSelectorAssertions<TDeclaringType, TProperty> Should<TDeclaringType, TProperty>(this InstanceWithValuePropertyInfoSelector<TDeclaringType, TProperty> actualValue)
+        public static PropertyInvocationCollectionAssertions<TDeclaringType, TProperty> Should<TDeclaringType, TProperty>(this PropertyInvocationCollection<TDeclaringType, TProperty> actualValue)
         {
-            return new InstanceWithValuePropertyInfoSelectorAssertions<TDeclaringType, TProperty>(actualValue);
+            return new PropertyInvocationCollectionAssertions<TDeclaringType, TProperty>(actualValue);
         }
     }
 }
