@@ -5,7 +5,9 @@ using System.Linq;
 
 namespace FluentAssertions.Properties.Selectors
 {
-    public class InstancePropertyWithKnownTypeSelector<TDeclaringType, TProperty> : InstancePropertySelectorBase<TDeclaringType, InstancePropertyInfo<TDeclaringType, TProperty>>
+    public class InstancePropertyWithKnownTypeSelector<TDeclaringType, TProperty> :
+        InstancePropertySelectorBase<TDeclaringType, InstancePropertyInfo<TDeclaringType, TProperty>>
+        
     {
         public InstancePropertyWithKnownTypeSelector(TDeclaringType instance, InstancePropertyInfo<TDeclaringType, TProperty> instancePropertyInfo)
                : this(instance, new[] { instancePropertyInfo })

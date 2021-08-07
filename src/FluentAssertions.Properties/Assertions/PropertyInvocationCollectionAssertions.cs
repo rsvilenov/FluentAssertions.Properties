@@ -30,7 +30,7 @@ namespace FluentAssertions.Properties.Assertions
             foreach (var instancePropertyInfo in Subject)
             {
                 Execute.Assertion
-                .ForCondition(instancePropertyInfo.PropertyInfo.CanRead && instancePropertyInfo.PropertyInfo.CanWrite)
+                .ForCondition(instancePropertyInfo.PropertyInfo.CanWrite)
                 .FailWith("Expected property {0} to be writable, but was not.", instancePropertyInfo.PropertyInfo.Name)
                 .Then
                 .ForCondition(AreGetSetOperationsSymetric(instancePropertyInfo, Subject.Value))
@@ -44,13 +44,16 @@ namespace FluentAssertions.Properties.Assertions
         public ExceptionAssertions<TException> ThrowFromSetter<TException>(string because = "", params object[] becauseArgs)
             where TException : Exception
         {
-            Action setAction = new Action(() =>
+            // TODO: check all properties, not just the first one throwing
+            Action setAction = () =>
             {
                 foreach (var instancePropInfo in Subject)
                 {
                     _propertyInvoker.SetValue(instancePropInfo.PropertyInfo.Name, Subject.Value);
+
+
                 }
-            });
+            };
 
             return setAction
                 .Should()

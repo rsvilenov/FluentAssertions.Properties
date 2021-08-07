@@ -20,26 +20,16 @@ namespace FluentAssertions.Properties
             return new PropertyInfoAssertions(actualValue);
         }
 
-        ///// <summary>
-        ///// Returns an <see cref="BooleanAssertions"/> object that can be used to assert the
-        ///// current <see cref="bool"/>.
-        ///// </summary>
-        //[Pure]
-        //public static InstancePropertyInfoAssertions Should(this InstancePropertyInfo actualValue)
-        //{
-        //    return new InstancePropertyInfoAssertions(actualValue);
-        //}
-
-        //[Pure]
-        //public static InstancePropertyInfoSelectorAssertions Should(this InstancePropertyInfoSelector actualValue)
-        //{
-        //    return new InstancePropertyInfoSelectorAssertions(actualValue);
-        //}
+        [Pure]
+        public static InstancePropertySelectorAssertions<TDeclaringType, InstancePropertyInfo<TDeclaringType, TProperty>> Should<TDeclaringType, TProperty>(this InstancePropertySelectorBase<TDeclaringType, InstancePropertyInfo<TDeclaringType, TProperty>> actualValue)
+        {
+            return new InstancePropertySelectorAssertions<TDeclaringType, InstancePropertyInfo<TDeclaringType, TProperty>>(actualValue);
+        }
 
         [Pure]
-        public static InstancePropertySelectorAssertions<TDeclaringType, TProperty> Should<TDeclaringType, TProperty>(this InstancePropertyWithKnownTypeSelector<TDeclaringType, TProperty> actualValue)
+        public static InstancePropertySelectorAssertions<TDeclaringType, InstancePropertyInfo<TDeclaringType>> Should<TDeclaringType>(this InstancePropertySelectorBase<TDeclaringType, InstancePropertyInfo<TDeclaringType>> actualValue)
         {
-            return new InstancePropertySelectorAssertions<TDeclaringType, TProperty>(actualValue);
+            return new InstancePropertySelectorAssertions<TDeclaringType, InstancePropertyInfo<TDeclaringType>>(actualValue);
         }
 
         [Pure]

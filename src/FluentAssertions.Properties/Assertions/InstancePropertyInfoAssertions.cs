@@ -1,8 +1,6 @@
-﻿using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using FluentAssertions.Execution;
+﻿using FluentAssertions.Execution;
 using FluentAssertions.Properties.Data;
+using System.Diagnostics;
 
 namespace FluentAssertions.Properties.Assertions
 {
@@ -10,10 +8,10 @@ namespace FluentAssertions.Properties.Assertions
     /// Contains a number of methods to assert that a <see cref="bool"/> is in the expected state.
     /// </summary>
     [DebuggerNonUserCode]
-    public class InstancePropertyAssertions<TAssertions, TDeclaringType>
-        where TAssertions : InstancePropertyAssertions<TAssertions, TDeclaringType>
+    public class InstancePropertyInfoAssertions<TAssertions, TDeclaringType>
+        where TAssertions : InstancePropertyInfoAssertions<TAssertions, TDeclaringType>
     {
-        public InstancePropertyAssertions(InstancePropertyInfo<TDeclaringType> value)
+        public InstancePropertyInfoAssertions(InstancePropertyInfo<TDeclaringType> value)
         {
             Subject = value;
         }

@@ -10,8 +10,8 @@ namespace FluentAssertions.Properties.Selectors
     public abstract class InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo> : IEnumerable<TInstancePropertyInfo>
         where TInstancePropertyInfo : InstancePropertyInfo<TDeclaringType>, new()
     {
-        protected IEnumerable<TInstancePropertyInfo> SelectedProperties { get; set; } = new List<TInstancePropertyInfo>();
-        protected TDeclaringType Instance { get; set; }
+        internal protected IEnumerable<TInstancePropertyInfo> SelectedProperties { get; set; } = new List<TInstancePropertyInfo>();
+        internal protected TDeclaringType Instance { get; set; }
 
 
         /// <summary>
