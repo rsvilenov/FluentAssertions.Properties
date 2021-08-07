@@ -13,7 +13,12 @@ namespace FluentAssertions.Properties.Selectors
         internal protected IEnumerable<TInstancePropertyInfo> SelectedProperties { get; set; } = new List<TInstancePropertyInfo>();
         internal protected TDeclaringType Instance { get; set; }
 
-
+        public InstancePropertySelectorBase() { }
+        internal InstancePropertySelectorBase(InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo> instancePropertySelector)
+        {
+            Instance = instancePropertySelector.Instance;
+            SelectedProperties = instancePropertySelector.SelectedProperties;
+        }
         /// <summary>
         /// Only select the properties that have a public or internal getter.
         /// </summary>

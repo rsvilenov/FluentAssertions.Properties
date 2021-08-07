@@ -1,5 +1,6 @@
 ﻿using FluentAssertions.Execution;
 using FluentAssertions.Properties.Selectors;
+using FluentAssertions.Types;
 using System.Diagnostics;
 using System.Linq;
 

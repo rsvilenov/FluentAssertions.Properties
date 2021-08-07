@@ -9,6 +9,12 @@ namespace FluentAssertions.Properties.Selectors
 {
     public class InstancePropertySelector<TDeclaringType> :  InstancePropertySelectorBase<TDeclaringType, InstancePropertyInfo<TDeclaringType>>
     {
+        protected InstancePropertySelector(InstancePropertySelector<TDeclaringType> instancePropertySelector)
+        {
+            Instance = instancePropertySelector.Instance;
+            SelectedProperties = instancePropertySelector.SelectedProperties;
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="InstancePropertyInfoSelector"/> class.
         /// </summary>
@@ -61,17 +67,75 @@ namespace FluentAssertions.Properties.Selectors
             return this;
         }
 
-
-        public InstancePropertySelector<TDeclaringType> ThatAreOfPrimitiveTypes
+        public InstancePropertyOfValueTypeSelector<TDeclaringType> ThatAreOfValueTypes
         {
             get
             {
                 SelectedProperties = SelectedProperties
-                    .Where(property => property.PropertyInfo.PropertyType.IsPrimitive);
+                    .Where(property => property.PropertyInfo.PropertyType.IsValueType ||
+                        (property.PropertyInfo.PropertyType.CheckIfTypeIsNullableValueType()
+                            && property.PropertyInfo.PropertyType.GetActualTypeIfNullable().IsValueType));
+
+                return new InstancePropertyOfValueTypeSelector<TDeclaringType>(this);
+            }
+        }
+
+        public InstancePropertyOfValueTypeSelector<TDeclaringType> ThatAreOfReferenceTypes
+        {
+            get
+            {
+                SelectedProperties = SelectedProperties
+                    .Where(property => !property.PropertyInfo.PropertyType.IsValueType &&
+                        (property.PropertyInfo.PropertyType.CheckIfTypeIsNullableValueType()
+                            && !property.PropertyInfo.PropertyType.GetActualTypeIfNullable().IsValueType));
 
                 return this;
             }
         }
 
+
+        public InstancePropertySelector<TDeclaringType> ThatAreVirtual
+        {
+            get
+            {
+                SelectedProperties = SelectedProperties
+                    .Where(property => property.PropertyInfo.GetMethod.IsVirtual);
+
+                return this;
+            }
+        }
+
+        public InstancePropertySelector<TDeclaringType> ThatAreNotVirtual
+        {
+            get
+            {
+                SelectedProperties = SelectedProperties
+                    .Where(property => !property.PropertyInfo.GetMethod.IsVirtual);
+
+                return this;
+            }
+        }
+
+
+        ///// <summary>
+        ///// Only select the properties that are decorated with an attribute of the specified type.
+        ///// </summary>
+        //public InstancePropertySelector<TDeclaringType> ThatAreDecoratedWith<TAttribute>()
+        //    where TAttribute : Attribute
+        //{
+        //    SelectedProperties = SelectedProperties.Where(property => property.IsDecoratedWith<TAttribute>());
+        //    return this;
+        //}
+
+
+        ///// <summary>
+        ///// Only select the properties that are not decorated with an attribute of the specified type.
+        ///// </summary>
+        //public PropertyInfoSelector ThatAreNotDecoratedWith<TAttribute>()
+        //    where TAttribute : Attribute
+        //{
+        //    selectedProperties = selectedProperties.Where(property => !property.IsDecoratedWith<TAttribute>());
+        //    return this;
+        //}
     }
 }

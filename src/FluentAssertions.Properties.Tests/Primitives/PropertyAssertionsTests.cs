@@ -7,6 +7,14 @@ namespace FluentAssertions.Properties.Assertions
 {
     public class PropertyAssertionsTests
     {
+        struct TestStruct
+        {
+            public string MyProperty { get; set; }
+            public TestStruct(string str)
+            {
+                MyProperty = str;
+            }
+        }
         [Fact]
         public void Test1()
         {
@@ -34,7 +42,6 @@ namespace FluentAssertions.Properties.Assertions
             //    .ProvideSymmetricAccess();
 
             sampleDto.Properties(p => p.MyStringProperty2, p => p.MyIntReadOnlyProperty)
-                .ThatAreOfPrimitiveTypes
                 .OfType<string>()
                 .WhenCalledWith("test1")
                 .Should()
