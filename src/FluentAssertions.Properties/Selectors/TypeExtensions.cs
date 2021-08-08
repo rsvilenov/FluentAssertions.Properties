@@ -19,7 +19,7 @@ namespace FluentAssertions.Properties.Selectors
         {
             return 
                 type.IsGenericType 
-                && type.GetGenericTypeDefinition() == typeof(Nullable<>));
+                && type.GetGenericTypeDefinition() == typeof(Nullable<>);
         }
 
     }

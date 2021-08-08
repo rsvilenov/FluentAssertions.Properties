@@ -3,6 +3,7 @@ using FluentAssertions.Properties.Data;
 using FluentAssertions.Properties.Selectors;
 using FluentAssertions.Specialized;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace FluentAssertions.Properties.Assertions
@@ -41,23 +42,36 @@ namespace FluentAssertions.Properties.Assertions
             return new AndConstraint<PropertyInvocationCollectionAssertions<TDeclaringType, TProperty>>(this);
         }
 
-        public ExceptionAssertions<TException> ThrowFromSetter<TException>(string because = "", params object[] becauseArgs)
+        public PropertyExceptionCollection<TException> ThrowFromSetter<TException>(string because = "", params object[] becauseArgs)
             where TException : Exception
         {
-            // TODO: check all properties, not just the first one throwing
-            Action setAction = () =>
+            PropertyExceptionCollection<TException> propertyExceptions = new PropertyExceptionCollection<TException>();
+
+            foreach (var instancePropInfo in Subject)
             {
-                foreach (var instancePropInfo in Subject)
+                try
                 {
                     _propertyInvoker.SetValue(instancePropInfo.PropertyInfo.Name, Subject.Value);
 
-
+                    Execute.Assertion
+                        .BecauseOf(because, becauseArgs)
+                        .FailWith("Expected property setter of property {0} to throw {1}, but no exception was thrown.", instancePropInfo.PropertyInfo.Name, typeof(TException));
                 }
-            };
+                catch (Exception ex)
+                {
+                    TException tex = ex as TException;
+                    if (tex == null)
+                    {
+                        Execute.Assertion
+                            .BecauseOf(because, becauseArgs)
+                            .FailWith("Expected property setter of property {0} to throw {1}, but {2} was thrown. {3}", instancePropInfo.PropertyInfo.Name, typeof(TException), ex.GetType(), ex);
+                    }
 
-            return setAction
-                .Should()
-                .Throw<TException>(because, becauseArgs);
+                    propertyExceptions.Add(tex, instancePropInfo.PropertyInfo.Name);
+                }
+            }
+
+            return propertyExceptions;
         }
 
         public ExceptionAssertions<TException> ThrowFromGetter<TException>(string because = "", params object[] becauseArgs)
