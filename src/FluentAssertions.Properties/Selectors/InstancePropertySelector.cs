@@ -93,29 +93,6 @@ namespace FluentAssertions.Properties.Selectors
         }
 
 
-        public InstancePropertySelector<TDeclaringType> ThatAreVirtual
-        {
-            get
-            {
-                SelectedProperties = SelectedProperties
-                    .Where(property => property.PropertyInfo.GetMethod.IsVirtual);
-
-                return this;
-            }
-        }
-
-        public InstancePropertySelector<TDeclaringType> ThatAreNotVirtual
-        {
-            get
-            {
-                SelectedProperties = SelectedProperties
-                    .Where(property => !property.PropertyInfo.GetMethod.IsVirtual);
-
-                return this;
-            }
-        }
-
-
         ///// <summary>
         ///// Only select the properties that are decorated with an attribute of the specified type.
         ///// </summary>

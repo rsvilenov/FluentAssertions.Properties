@@ -64,6 +64,31 @@ namespace FluentAssertions.Properties.Selectors
             }
         }
 
+
+
+        public InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo> ThatAreVirtual
+        {
+            get
+            {
+                SelectedProperties = SelectedProperties
+                    .Where(property => property.PropertyInfo.GetMethod.IsVirtual);
+
+                return this;
+            }
+        }
+
+        public InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo> ThatAreNotVirtual
+        {
+            get
+            {
+                SelectedProperties = SelectedProperties
+                    .Where(property => !property.PropertyInfo.GetMethod.IsVirtual);
+
+                return this;
+            }
+        }
+
+
         /// <summary>
         /// Select return types of the properties
         /// </summary>

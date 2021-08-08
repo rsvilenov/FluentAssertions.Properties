@@ -4,6 +4,7 @@ using FluentAssertions.Properties.Selectors;
 using FluentAssertions.Specialized;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 
 namespace FluentAssertions.Properties.Assertions
@@ -45,66 +46,125 @@ namespace FluentAssertions.Properties.Assertions
         public PropertyExceptionCollection<TException> ThrowFromSetter<TException>(string because = "", params object[] becauseArgs)
             where TException : Exception
         {
+            return Throw<TException>(
+                PropertyAccessorEvaluationType.Setter,
+                matchExactExceptionType: false,
+                because,
+                becauseArgs);
+        }
+
+        public PropertyExceptionCollection<TException> ThrowFromGetter<TException>(string because = "", params object[] becauseArgs)
+            where TException : Exception
+        {
+            return Throw<TException>(
+                PropertyAccessorEvaluationType.Getter,
+                matchExactExceptionType: false, 
+                because, 
+                becauseArgs);
+        }
+
+        public PropertyExceptionCollection<TException> Throw<TException>(string because = "", params object[] becauseArgs)
+            where TException : Exception
+        {
+            return Throw<TException>(
+                PropertyAccessorEvaluationType.GetterOrSetter, 
+                matchExactExceptionType: false, 
+                because, 
+                becauseArgs);
+        }
+
+        public PropertyExceptionCollection<TException> ThrowFromSetterExactly<TException>(string because = "", params object[] becauseArgs)
+            where TException : Exception
+        {
+            return Throw<TException>(
+                PropertyAccessorEvaluationType.Setter,
+                matchExactExceptionType: true,
+                because,
+                becauseArgs);
+        }
+
+        public PropertyExceptionCollection<TException> ThrowFromGetterExactly<TException>(string because = "", params object[] becauseArgs)
+            where TException : Exception
+        {
+            return Throw<TException>(
+                PropertyAccessorEvaluationType.Getter,
+                matchExactExceptionType: true,
+                because,
+                becauseArgs);
+        }
+
+        public PropertyExceptionCollection<TException> ThrowExactly<TException>(string because = "", params object[] becauseArgs)
+            where TException : Exception
+        {
+            return Throw<TException>(
+                PropertyAccessorEvaluationType.GetterOrSetter,
+                matchExactExceptionType: true,
+                because,
+                becauseArgs);
+        }
+
+        private enum PropertyAccessorEvaluationType
+        {
+            [Description("getter")]
+            Getter,
+            [Description("setter")]
+            Setter,
+            [Description("getter or setter")]
+            GetterOrSetter
+        }
+
+        private PropertyExceptionCollection<TException> Throw<TException>(PropertyAccessorEvaluationType evalType, bool matchExactExceptionType, string because = "", params object[] becauseArgs)
+            where TException : Exception
+        {
             PropertyExceptionCollection<TException> propertyExceptions = new PropertyExceptionCollection<TException>();
+
+            string accessorTypeFailMessagePart = evalType.GetDescription();
 
             foreach (var instancePropInfo in Subject)
             {
                 try
                 {
-                    _propertyInvoker.SetValue(instancePropInfo.PropertyInfo.Name, Subject.Value);
+                    if (evalType == PropertyAccessorEvaluationType.Setter ||
+                        evalType == PropertyAccessorEvaluationType.GetterOrSetter)
+                    {
+                        _propertyInvoker.SetValue(instancePropInfo.PropertyInfo.Name, Subject.Value);
+                    }
+                    else if (evalType == PropertyAccessorEvaluationType.Getter ||
+                        evalType == PropertyAccessorEvaluationType.GetterOrSetter)
+                    {
+                        _propertyInvoker.GetValue<TProperty>(instancePropInfo.PropertyInfo.Name);
+                    }
 
                     Execute.Assertion
                         .BecauseOf(because, becauseArgs)
-                        .FailWith("Expected property setter of property {0} to throw {1}, but no exception was thrown.", instancePropInfo.PropertyInfo.Name, typeof(TException));
+                        .FailWith("Expected property {0} of property {1} to throw {2}, but no exception was thrown.", 
+                            accessorTypeFailMessagePart, 
+                            instancePropInfo.PropertyInfo.Name, 
+                            typeof(TException));
                 }
                 catch (Exception ex)
                 {
-                    TException tex = ex as TException;
-                    if (tex == null)
+                    bool exceptionTypeMatches = matchExactExceptionType 
+                        ? ex.GetType().Equals(typeof(TException))
+                        : ex is TException;
+
+                    if (!exceptionTypeMatches)
                     {
                         Execute.Assertion
                             .BecauseOf(because, becauseArgs)
-                            .FailWith("Expected property setter of property {0} to throw {1}, but {2} was thrown. {3}", instancePropInfo.PropertyInfo.Name, typeof(TException), ex.GetType(), ex);
+                            .FailWith("Expected property {0} of property {1} to throw {2}, but {3} was thrown. {4}", 
+                                accessorTypeFailMessagePart, 
+                                instancePropInfo.PropertyInfo.Name, 
+                                typeof(TException), 
+                                ex.GetType(), 
+                                ex);
                     }
 
-                    propertyExceptions.Add(tex, instancePropInfo.PropertyInfo.Name);
+                    propertyExceptions.Add((TException)ex, instancePropInfo.PropertyInfo.Name);
                 }
             }
 
             return propertyExceptions;
-        }
-
-        public ExceptionAssertions<TException> ThrowFromGetter<TException>(string because = "", params object[] becauseArgs)
-            where TException : Exception
-        {
-            Action setAction = new Action(() =>
-            {
-                foreach (var instancePropInfo in Subject)
-                {
-                    _propertyInvoker.GetValue<TProperty>(instancePropInfo.PropertyInfo.Name);
-                }
-            });
-
-            return setAction
-                .Should()
-                .Throw<TException>(because, becauseArgs);
-        }
-
-        public ExceptionAssertions<TException> Throw<TException>(string because = "", params object[] becauseArgs)
-            where TException : Exception
-        {
-            Action setAction = new Action(() =>
-            {
-                foreach (var instancePropInfo in Subject)
-                {
-                    _propertyInvoker.SetValue(instancePropInfo.PropertyInfo.Name, Subject.Value);
-                    _propertyInvoker.GetValue<TProperty>(instancePropInfo.PropertyInfo.Name);
-                }
-            });
-
-            return setAction
-                .Should()
-                .Throw<TException>(because, becauseArgs);
         }
 
         private bool AreGetSetOperationsSymetric(InstancePropertyInfo<TDeclaringType, TProperty> instancePropertyInfo,

@@ -50,7 +50,7 @@ namespace FluentAssertions.Properties.Assertions
             sampleDto.Properties(p => p.MyStringProperty2)
                 .WhenCalledWith("throw")
                 .Should()
-                .ThrowFromSetter<ArgumentException>();
+                .ThrowFromSetterExactly<ArgumentException>();
                 //.WithMessage("test");
 
 
