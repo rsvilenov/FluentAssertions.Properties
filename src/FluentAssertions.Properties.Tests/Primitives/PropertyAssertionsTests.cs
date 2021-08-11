@@ -45,13 +45,16 @@ namespace FluentAssertions.Properties.Assertions
                 .OfType<string>()
                 .WhenCalledWith("test1")
                 .Should()
+                .NotThrow()
+                .And
+                .Should()
                 .ProvideSymmetricAccess();
 
-            sampleDto.Properties(p => p.MyStringProperty2)
-                .WhenCalledWith("throw")
+            sampleDto.Properties(p => p.MyStringProperty2, p => p.MyStringProperty)
+                .WhenCalledWith("not throw")
                 .Should()
-                .ThrowFromSetterExactly<ArgumentException>();
-                //.WithMessage("test");
+                .ThrowFromSetterExactly<ArgumentException>()
+                .WithMessage("test2", "some reason");
 
 
 

@@ -1,9 +1,7 @@
 ﻿using FluentAssertions.Execution;
 using FluentAssertions.Properties.Data;
 using FluentAssertions.Properties.Selectors;
-using FluentAssertions.Specialized;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 
@@ -29,21 +27,24 @@ namespace FluentAssertions.Properties.Assertions
 
         public AndConstraint<PropertyInvocationCollectionAssertions<TDeclaringType, TProperty>> ProvideSymmetricAccess(string because = "", params object[] becauseArgs)
         {
-            foreach (var instancePropertyInfo in Subject)
+            using (AssertionScope assertion = new AssertionScope())
             {
-                Execute.Assertion
-                .ForCondition(instancePropertyInfo.PropertyInfo.CanWrite)
-                .FailWith("Expected property {0} to be writable, but was not.", instancePropertyInfo.PropertyInfo.Name)
-                .Then
-                .ForCondition(AreGetSetOperationsSymetric(instancePropertyInfo, Subject.Value))
-                .BecauseOf(because, becauseArgs)
-                .FailWith("Expected the get and set operations of property {0} to be symetric, but was not.", instancePropertyInfo.PropertyInfo.Name);
+                foreach (var instancePropertyInfo in Subject)
+                {
+                    Execute.Assertion
+                    .ForCondition(instancePropertyInfo.PropertyInfo.CanWrite)
+                    .FailWith("Expected property {0} to be writable, but was not.", instancePropertyInfo.PropertyInfo.Name)
+                    .Then
+                    .ForCondition(AreGetSetOperationsSymetric(instancePropertyInfo, Subject.Value))
+                    .BecauseOf(because, becauseArgs)
+                    .FailWith("Expected the get and set operations of property {0} to be symetric, but was not.", instancePropertyInfo.PropertyInfo.Name);
+                }
             }
 
             return new AndConstraint<PropertyInvocationCollectionAssertions<TDeclaringType, TProperty>>(this);
         }
 
-        public PropertyExceptionCollection<TException> ThrowFromSetter<TException>(string because = "", params object[] becauseArgs)
+        public PropertyExceptionCollectionAssertions<TException> ThrowFromSetter<TException>(string because = "", params object[] becauseArgs)
             where TException : Exception
         {
             return Throw<TException>(
@@ -53,7 +54,7 @@ namespace FluentAssertions.Properties.Assertions
                 becauseArgs);
         }
 
-        public PropertyExceptionCollection<TException> ThrowFromGetter<TException>(string because = "", params object[] becauseArgs)
+        public PropertyExceptionCollectionAssertions<TException> ThrowFromGetter<TException>(string because = "", params object[] becauseArgs)
             where TException : Exception
         {
             return Throw<TException>(
@@ -63,7 +64,7 @@ namespace FluentAssertions.Properties.Assertions
                 becauseArgs);
         }
 
-        public PropertyExceptionCollection<TException> Throw<TException>(string because = "", params object[] becauseArgs)
+        public PropertyExceptionCollectionAssertions<TException> Throw<TException>(string because = "", params object[] becauseArgs)
             where TException : Exception
         {
             return Throw<TException>(
@@ -73,7 +74,18 @@ namespace FluentAssertions.Properties.Assertions
                 becauseArgs);
         }
 
-        public PropertyExceptionCollection<TException> ThrowFromSetterExactly<TException>(string because = "", params object[] becauseArgs)
+        public AndConstraint<PropertyInvocationCollection<TDeclaringType, TProperty>> NotThrow<TException>(string because = "", params object[] becauseArgs)
+            where TException : Exception
+        {
+            return new AndConstraint<PropertyInvocationCollection<TDeclaringType, TProperty>>(Subject);
+        }
+
+        public AndConstraint<PropertyInvocationCollection<TDeclaringType, TProperty>> NotThrow(string because = "", params object[] becauseArgs)
+        {
+            return new AndConstraint<PropertyInvocationCollection<TDeclaringType, TProperty>>(Subject);
+        }
+
+        public PropertyExceptionCollectionAssertions<TException> ThrowFromSetterExactly<TException>(string because = "", params object[] becauseArgs)
             where TException : Exception
         {
             return Throw<TException>(
@@ -83,7 +95,7 @@ namespace FluentAssertions.Properties.Assertions
                 becauseArgs);
         }
 
-        public PropertyExceptionCollection<TException> ThrowFromGetterExactly<TException>(string because = "", params object[] becauseArgs)
+        public PropertyExceptionCollectionAssertions<TException> ThrowFromGetterExactly<TException>(string because = "", params object[] becauseArgs)
             where TException : Exception
         {
             return Throw<TException>(
@@ -93,7 +105,7 @@ namespace FluentAssertions.Properties.Assertions
                 becauseArgs);
         }
 
-        public PropertyExceptionCollection<TException> ThrowExactly<TException>(string because = "", params object[] becauseArgs)
+        public PropertyExceptionCollectionAssertions<TException> ThrowExactly<TException>(string because = "", params object[] becauseArgs)
             where TException : Exception
         {
             return Throw<TException>(
@@ -113,58 +125,61 @@ namespace FluentAssertions.Properties.Assertions
             GetterOrSetter
         }
 
-        private PropertyExceptionCollection<TException> Throw<TException>(PropertyAccessorEvaluationType evalType, bool matchExactExceptionType, string because = "", params object[] becauseArgs)
+        private PropertyExceptionCollectionAssertions<TException> Throw<TException>(PropertyAccessorEvaluationType evalType, bool matchExactExceptionType, string because = "", params object[] becauseArgs)
             where TException : Exception
         {
             PropertyExceptionCollection<TException> propertyExceptions = new PropertyExceptionCollection<TException>();
 
             string accessorTypeFailMessagePart = evalType.GetDescription();
 
-            foreach (var instancePropInfo in Subject)
+            using (AssertionScope assertion = new AssertionScope())
             {
-                try
+                foreach (var instancePropInfo in Subject)
                 {
-                    if (evalType == PropertyAccessorEvaluationType.Setter ||
-                        evalType == PropertyAccessorEvaluationType.GetterOrSetter)
+                    try
                     {
-                        _propertyInvoker.SetValue(instancePropInfo.PropertyInfo.Name, Subject.Value);
-                    }
-                    else if (evalType == PropertyAccessorEvaluationType.Getter ||
-                        evalType == PropertyAccessorEvaluationType.GetterOrSetter)
-                    {
-                        _propertyInvoker.GetValue<TProperty>(instancePropInfo.PropertyInfo.Name);
-                    }
+                        if (evalType == PropertyAccessorEvaluationType.Setter ||
+                            evalType == PropertyAccessorEvaluationType.GetterOrSetter)
+                        {
+                            _propertyInvoker.SetValue(instancePropInfo.PropertyInfo.Name, Subject.Value);
+                        }
+                        else if (evalType == PropertyAccessorEvaluationType.Getter ||
+                            evalType == PropertyAccessorEvaluationType.GetterOrSetter)
+                        {
+                            _propertyInvoker.GetValue<TProperty>(instancePropInfo.PropertyInfo.Name);
+                        }
 
-                    Execute.Assertion
-                        .BecauseOf(because, becauseArgs)
-                        .FailWith("Expected property {0} of property {1} to throw {2}, but no exception was thrown.", 
-                            accessorTypeFailMessagePart, 
-                            instancePropInfo.PropertyInfo.Name, 
-                            typeof(TException));
-                }
-                catch (Exception ex)
-                {
-                    bool exceptionTypeMatches = matchExactExceptionType 
-                        ? ex.GetType().Equals(typeof(TException))
-                        : ex is TException;
-
-                    if (!exceptionTypeMatches)
-                    {
                         Execute.Assertion
                             .BecauseOf(because, becauseArgs)
-                            .FailWith("Expected property {0} of property {1} to throw {2}, but {3} was thrown. {4}", 
-                                accessorTypeFailMessagePart, 
-                                instancePropInfo.PropertyInfo.Name, 
-                                typeof(TException), 
-                                ex.GetType(), 
-                                ex);
+                            .FailWith("Expected property {0} of property {1} to throw {2}, but no exception was thrown.",
+                                accessorTypeFailMessagePart,
+                                instancePropInfo.PropertyInfo.Name,
+                                typeof(TException));
                     }
+                    catch (Exception ex)
+                    {
+                        bool exceptionTypeMatches = matchExactExceptionType
+                            ? ex.GetType().Equals(typeof(TException))
+                            : ex is TException;
 
-                    propertyExceptions.Add((TException)ex, instancePropInfo.PropertyInfo.Name);
+                        if (!exceptionTypeMatches)
+                        {
+                            Execute.Assertion
+                                .BecauseOf(because, becauseArgs)
+                                .FailWith("Expected property {0} of property {1} to throw {2}, but {3} was thrown. {4}",
+                                    accessorTypeFailMessagePart,
+                                    instancePropInfo.PropertyInfo.Name,
+                                    typeof(TException),
+                                    ex.GetType(),
+                                    ex);
+                        }
+
+                        propertyExceptions.Add((TException)ex, instancePropInfo.PropertyInfo.Name);
+                    }
                 }
             }
 
-            return propertyExceptions;
+            return new PropertyExceptionCollectionAssertions<TException>(propertyExceptions);
         }
 
         private bool AreGetSetOperationsSymetric(InstancePropertyInfo<TDeclaringType, TProperty> instancePropertyInfo,
