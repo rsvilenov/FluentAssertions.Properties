@@ -1,5 +1,6 @@
 using FluentAssertions.Properties.Tests.TestableObjects;
 using System;
+using System.ComponentModel;
 using System.Linq;
 using Xunit;
 
@@ -41,20 +42,23 @@ namespace FluentAssertions.Properties.Assertions
             //    .Should()
             //    .ProvideSymmetricAccess();
 
-            sampleDto.Properties(p => p.MyStringProperty2, p => p.MyIntReadOnlyProperty)
-                .OfType<string>()
-                .WhenCalledWith("test1")
-                .Should()
-                .NotThrow()
-                .And
-                .Should()
-                .ProvideSymmetricAccess();
+            //sampleDto.Properties(p => p.MyStringProperty2, p => p.MyIntReadOnlyProperty)
+            //    .OfType<string>()
+            //    .WhenCalledWith("test1")
+            //    .Should()
+            //    .NotThrowFromSetter<NullReferenceException>()
+            //    .And
+            //    .Should()
+            //    .ProvideSymmetricAccess();
 
-            sampleDto.Properties(p => p.MyStringProperty2, p => p.MyStringProperty)
-                .WhenCalledWith("not throw")
+            sampleDto.Properties( p => p.MyStringProperty)
+                .WhenCalledWith("throw")
                 .Should()
                 .ThrowFromSetterExactly<ArgumentException>()
-                .WithMessage("test2", "some reason");
+                .WithInnerException<NullReferenceException>()
+                .WithInnerException<Win32Exception>();
+                //.Where(ex => ex.Message.StartsWith("ate"), "some reason");
+                //.WithMessage("test2", "some reason");
 
 
 
