@@ -51,7 +51,7 @@ namespace FluentAssertions.Properties.Assertions
             //    .Should()
             //    .ProvideSymmetricAccess();
 
-            sampleDto.Properties( p => p.MyStringProperty)
+            sampleDto.Properties(p => p.MyStringProperty)
                 .WhenCalledWith("throw")
                 .Should()
                 .ThrowFromSetterExactly<ArgumentException>()

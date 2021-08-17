@@ -1,4 +1,5 @@
 ﻿using FluentAssertions.Execution;
+using FluentAssertions.Properties.Selectors;
 using FluentAssertions.Specialized;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,12 @@ namespace FluentAssertions.Properties.Assertions
         public virtual PropertyExceptionCollectionAssertions<TException> WithMessage(string expectedWildcardPattern, string because = "",
                     params object[] becauseArgs)
         {
+            return ExceptionStackTrace.StartFromCurrentFrame(() =>
+                WithMessageInternal(expectedWildcardPattern, because, becauseArgs));
+        }
+
+        private PropertyExceptionCollectionAssertions<TException> WithMessageInternal(string expectedWildcardPattern, string because, object[] becauseArgs)
+        {
             using (AssertionScope scope = new AssertionScope())
             {
                 foreach (PropertyException<TException> pex in _exceptionCollection)
@@ -43,21 +50,30 @@ namespace FluentAssertions.Properties.Assertions
             string because = "",
             params object[] becauseArgs)
         {
+            return ExceptionStackTrace.StartFromCurrentFrame(() =>
+                WhereInternal(exceptionExpression, because, becauseArgs));
+        }
+
+        private PropertyExceptionCollectionAssertions<TException> WhereInternal(Expression<Func<TException, bool>> exceptionExpression, string because, object[] becauseArgs)
+        {
             Func<TException, bool> condition = exceptionExpression.Compile();
 
             using (AssertionScope scope = new AssertionScope())
             {
                 foreach (PropertyException<TException> pex in _exceptionCollection)
                 {
-                    Execute.Assertion
-                        .ForCondition(condition(pex.Exception))
+                    using (var innerScope = Execute.Assertion)
+                    {
+                        innerScope.Context = pex.AccessorEvaluationType.GetDescription();
+                        innerScope.ForCondition(condition(pex.Exception))
                         .BecauseOf(because, becauseArgs)
-                        .FailWith("Expected exception{0} for property {1} where {2}{reason}, but the condition was not met by:{3}{3}{4}.",
+                        .FailWith("Expected exception{0} for the {context} of property {1} where {2}{reason}, but the condition was not met by:{3}{3}{4}.",
                             GetInnerExceptionStack<TException>(),
-                            pex.PropertyName, 
-                            exceptionExpression.Body, 
-                            Environment.NewLine, 
+                            pex.PropertyName,
+                            exceptionExpression.Body,
+                            Environment.NewLine,
                             pex.Exception);
+                    }
                 }
             }
 
@@ -68,14 +84,16 @@ namespace FluentAssertions.Properties.Assertions
             params object[] becauseArgs)
             where TInnerException : Exception
         {
-            return WithInnerExceptionInternal<TInnerException>(matchExactType: false, because, becauseArgs);
+            return ExceptionStackTrace.StartFromCurrentFrame(() =>
+                WithInnerExceptionInternal<TInnerException>(matchExactType: false, because, becauseArgs));
         }
-
+    
         public PropertyExceptionCollectionAssertions<TInnerException> WithInnerExceptionExactly<TInnerException>(string because = null,
             params object[] becauseArgs)
             where TInnerException : Exception
         {
-            return WithInnerExceptionInternal<TInnerException>(matchExactType: true, because, becauseArgs);
+            return ExceptionStackTrace.StartFromCurrentFrame(() =>
+                   WithInnerExceptionInternal<TInnerException>(matchExactType: true, because, becauseArgs));
         }
 
         private PropertyExceptionCollectionAssertions<TInnerException> WithInnerExceptionInternal<TInnerException>(bool matchExactType,
@@ -84,6 +102,7 @@ namespace FluentAssertions.Properties.Assertions
             where TInnerException : Exception
         {
             PropertyExceptionCollection<TInnerException> innerExceptionCollection = new PropertyExceptionCollection<TInnerException>();
+
             using (AssertionScope scope = new AssertionScope())
             {
                 foreach (PropertyException<TException> pex in _exceptionCollection)
@@ -93,32 +112,41 @@ namespace FluentAssertions.Properties.Assertions
                         // format the message beforehand, so that FailWith() will not enclose the placeholders with brackets
                         string failMessage = string.Format("the {0} exception has no inner exception.",
                                 _innerExceptionStack.Any() ? "inner" : "thrown");
-                        Execute.Assertion
-                            .BecauseOf(because, becauseArgs)
-                            .WithExpectation("Expected inner {0}{reason} for property{1}, but ",
+
+                        using (var innerScope = Execute.Assertion)
+                        {
+                            innerScope.Context = pex.AccessorEvaluationType.GetDescription();
+                            innerScope.BecauseOf(because, becauseArgs)
+                            .WithExpectation("Expected inner {0}{reason} for the {context} of property {1}, but ",
                                 GetInnerExceptionStack<TInnerException>(),
                                 pex.PropertyName)
                             .FailWith(failMessage);
+                        }
                     }
                     else
                     {
-                        Execute.Assertion
-                            .ForCondition(matchExactType
+                        using (var innerScope = Execute.Assertion)
+                        {
+                            innerScope.Context = pex.AccessorEvaluationType.GetDescription();
+                            innerScope.ForCondition(matchExactType
                                 ? pex.Exception.InnerException.GetType().Equals(typeof(TInnerException))
                                 : pex.Exception.InnerException is TInnerException)
                             .BecauseOf(because, becauseArgs)
-                            .WithExpectation("Expected inner {0}{reason} for property {1}, but ",
+                            .WithExpectation("Expected inner {0}{reason} for the {context} of property {1}, but ",
                                 GetInnerExceptionStack<TInnerException>(),
                                 pex.PropertyName)
                             .FailWith("found {1}.",
                                 typeof(TInnerException), pex.Exception.InnerException);
+                        }
                     }
                 }
             }
 
             foreach (PropertyException<TException> pex in _exceptionCollection)
             {
-                innerExceptionCollection.Add((TInnerException)pex.Exception.InnerException, pex.PropertyName);
+                innerExceptionCollection.Add((TInnerException)pex.Exception.InnerException,
+                    pex.PropertyName,
+                    pex.AccessorEvaluationType);
             }
 
             _innerExceptionStack.Add(typeof(TInnerException).Name);

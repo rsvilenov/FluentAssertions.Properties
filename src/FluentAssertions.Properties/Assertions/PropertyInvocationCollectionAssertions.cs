@@ -107,14 +107,6 @@ namespace FluentAssertions.Properties.Assertions
                 becauseArgs);
         }
 
-        private enum PropertyAccessorEvaluationType
-        {
-            [Description("getter")]
-            Getter,
-            [Description("setter")]
-            Setter
-        }
-
         private PropertyExceptionCollectionAssertions<TException> Throw<TException>(PropertyAccessorEvaluationType evalType, bool matchExactExceptionType, string because = "", params object[] becauseArgs)
             where TException : Exception
         {
@@ -162,7 +154,9 @@ namespace FluentAssertions.Properties.Assertions
                                     ex);
                         }
 
-                        propertyExceptions.Add((TException)ex, instancePropInfo.PropertyInfo.Name);
+                        propertyExceptions.Add((TException)ex, 
+                            instancePropInfo.PropertyInfo.Name,
+                            evalType);
                     }
                 }
             }
@@ -174,8 +168,6 @@ namespace FluentAssertions.Properties.Assertions
             where TException : Exception
         {
             PropertyExceptionCollection<TException> propertyExceptions = new PropertyExceptionCollection<TException>();
-
-            string accessorTypeFailMessagePart = evalType.GetDescription();
 
             using (AssertionScope assertion = new AssertionScope())
             {
@@ -199,25 +191,32 @@ namespace FluentAssertions.Properties.Assertions
                             : ex is TException;
                         if (exceptionTypeMatches)
                         {
-                            Execute.Assertion
-                                .BecauseOf(because, becauseArgs)
-                                .FailWith("Did not expect the {0} of property {1} to throw {2}{reason}, but it threw {3}",
-                                    accessorTypeFailMessagePart,
+                            using (var innerScope = Execute.Assertion)
+                            {
+                                innerScope.Context = evalType.GetDescription();
+                                innerScope.BecauseOf(because, becauseArgs)
+                                .FailWith("Did not expect the {context} of property {0} to throw {1}{reason}, but it threw {2}",
                                     instancePropInfo.PropertyInfo.Name,
                                     typeof(TException),
                                     ex);
+                            }
                         }
                         else
                         {
-                            Execute.Assertion
+                            using (var innerScope = Execute.Assertion)
+                            {
+                                innerScope.Context = evalType.GetDescription();
+                                Execute.Assertion
                                 .BecauseOf(because, becauseArgs)
-                                .FailWith("Did not expect the {0} of property {1} to throw any exceptions {reason}, but it threw {2}",
-                                    accessorTypeFailMessagePart,
+                                .FailWith("Did not expect the {context} of property {0} to throw any exceptions {reason}, but it threw {1}",
                                     instancePropInfo.PropertyInfo.Name,
                                     ex);
+                            }
                         }
 
-                        propertyExceptions.Add((TException)ex, instancePropInfo.PropertyInfo.Name);
+                        propertyExceptions.Add((TException)ex, 
+                            instancePropInfo.PropertyInfo.Name,
+                            evalType);
                     }
                 }
             }
