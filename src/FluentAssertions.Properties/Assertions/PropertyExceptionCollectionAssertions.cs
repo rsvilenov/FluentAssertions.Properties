@@ -88,26 +88,37 @@ namespace FluentAssertions.Properties.Assertions
             {
                 foreach (PropertyException<TException> pex in _exceptionCollection)
                 {
-                    Execute.Assertion
-                        .BecauseOf(because, becauseArgs)
-                        .WithExpectation("Expected inner {0}{reason}, but ",
-                            GetInnerExceptionStack<TInnerException>())
-                        .ForCondition(pex.Exception.InnerException != null)
-                        .FailWith("the {0} exception has no inner exception.",
-                            _innerExceptionStack.Any() ? "inner" : "thrown")
-                        .Then
-                        .ClearExpectation();
-
-                    Execute.Assertion
-                        .ForCondition(matchExactType 
-                            ? pex.Exception.InnerException.GetType().Equals(typeof(TInnerException)) 
-                            : pex.Exception.InnerException is TInnerException)
-                        .BecauseOf(because, becauseArgs)
-                        .FailWith("Expected inner {0}{reason}, but found {1}.",
-                            typeof(TInnerException), pex.Exception.InnerException);
-
-                    innerExceptionCollection.Add((TInnerException)pex.Exception.InnerException, pex.PropertyName);
+                    if (pex.Exception.InnerException != null)
+                    {
+                        // format the message beforehand, so that FailWith() will not enclose the placeholders with brackets
+                        string failMessage = string.Format("the {0} exception has no inner exception.",
+                                _innerExceptionStack.Any() ? "inner" : "thrown");
+                        Execute.Assertion
+                            .BecauseOf(because, becauseArgs)
+                            .WithExpectation("Expected inner {0}{reason} for property{1}, but ",
+                                GetInnerExceptionStack<TInnerException>(),
+                                pex.PropertyName)
+                            .FailWith(failMessage);
+                    }
+                    else
+                    {
+                        Execute.Assertion
+                            .ForCondition(matchExactType
+                                ? pex.Exception.InnerException.GetType().Equals(typeof(TInnerException))
+                                : pex.Exception.InnerException is TInnerException)
+                            .BecauseOf(because, becauseArgs)
+                            .WithExpectation("Expected inner {0}{reason} for property {1}, but ",
+                                GetInnerExceptionStack<TInnerException>(),
+                                pex.PropertyName)
+                            .FailWith("found {1}.",
+                                typeof(TInnerException), pex.Exception.InnerException);
+                    }
                 }
+            }
+
+            foreach (PropertyException<TException> pex in _exceptionCollection)
+            {
+                innerExceptionCollection.Add((TInnerException)pex.Exception.InnerException, pex.PropertyName);
             }
 
             _innerExceptionStack.Add(typeof(TInnerException).Name);
@@ -118,11 +129,15 @@ namespace FluentAssertions.Properties.Assertions
         private string GetInnerExceptionStack<TInnerException>() 
             where TInnerException : Exception
         {
+            const string delimiter = "->";
             StringBuilder sb = new StringBuilder();
 
+            sb.Append(typeof(TException).Name);
+            sb.Append(delimiter);
             if (_innerExceptionStack.Any())
             {
-                sb.Append(string.Join("->", _innerExceptionStack));
+                sb.Append(string.Join(delimiter, _innerExceptionStack));
+                sb.Append(delimiter);
             }
 
             sb.Append(typeof(TInnerException).Name);
