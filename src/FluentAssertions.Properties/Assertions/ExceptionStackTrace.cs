@@ -1,10 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace FluentAssertions.Properties.Assertions
 {
     internal static class ExceptionStackTrace
     {
+        private static readonly List<string> _testProviderExceptions = new List<string>
+        {
+            "Xunit.Sdk.XunitException",
+            "NUnit.Framework.AssertionException",
+            "NSpec.Domain.AssertionException",
+            "Microsoft.VisualStudio.TestTools.UnitTesting.AssertFailedException",
+            "Machine.Specifications.SpecificationException"
+        };
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T StartFromCurrentFrame<T>(Func<T> act)
         {
@@ -14,11 +24,18 @@ namespace FluentAssertions.Properties.Assertions
             }
             catch (Exception ex)
             {
+                if (_testProviderExceptions.Contains(ex.GetType().FullName))
+                {
 #if DEBUG
-                throw;
+                    throw;
 #else
-                throw ex;
+                    throw ex;
 #endif
+                }
+                else
+                {
+                    throw;
+                }
             }
         }
     }
