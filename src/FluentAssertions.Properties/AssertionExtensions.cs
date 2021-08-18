@@ -10,14 +10,11 @@ namespace FluentAssertions.Properties
 {
     public static class AssertionExtensions
     {
-        /// <summary>
-        /// Returns an <see cref="BooleanAssertions"/> object that can be used to assert the
-        /// current <see cref="bool"/>.
-        /// </summary>
+        
         [Pure]
-        public static PropertyInfoAssertions Should(this PropertyInfo actualValue)
+        public static InstancePropertyInfoAssertions<TDeclaringType> Should<TDeclaringType>(this InstancePropertyInfo<TDeclaringType> actualValue)
         {
-            return new PropertyInfoAssertions(actualValue);
+            return new InstancePropertyInfoAssertions<TDeclaringType>(actualValue);
         }
 
         [Pure]

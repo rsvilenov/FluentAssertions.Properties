@@ -7,11 +7,22 @@ using System.Diagnostics;
 
 namespace FluentAssertions.Properties.Assertions
 {
+    [DebuggerNonUserCode]
+    public class PropertyInvocationCollectionAssertions<TDeclaringType, TProperty>
+        : PropertyInvocationCollectionAssertions<PropertyInvocationCollectionAssertions<TDeclaringType, TProperty>, TDeclaringType, TProperty>
+    {
+        public PropertyInvocationCollectionAssertions(PropertyInvocationCollection<TDeclaringType, TProperty> value)
+            : base(value)
+        {
+        }
+    }
+
     /// <summary>
     /// Contains a number of methods to assert that a <see cref="bool"/> is in the expected state.
     /// </summary>
     [DebuggerNonUserCode]
-    public class PropertyInvocationCollectionAssertions<TDeclaringType, TProperty>
+    public class PropertyInvocationCollectionAssertions<TAssertions, TDeclaringType, TProperty>
+        where TAssertions : PropertyInvocationCollectionAssertions<TAssertions, TDeclaringType, TProperty>
     {
         private readonly PropertyInvoker<TDeclaringType> _propertyInvoker;
         public PropertyInvocationCollectionAssertions(PropertyInvocationCollection<TDeclaringType, TProperty> value)
@@ -25,7 +36,7 @@ namespace FluentAssertions.Properties.Assertions
         /// </summary>
         public PropertyInvocationCollection<TDeclaringType, TProperty> Subject { get; }
 
-        public AndConstraint<PropertyInvocationCollectionAssertions<TDeclaringType, TProperty>> ProvideSymmetricAccess(string because = "", params object[] becauseArgs)
+        public AndConstraint<TAssertions> ProvideSymmetricAccess(string because = "", params object[] becauseArgs)
         {
             using (AssertionScope assertion = new AssertionScope())
             {
@@ -41,7 +52,7 @@ namespace FluentAssertions.Properties.Assertions
                 }
             }
 
-            return new AndConstraint<PropertyInvocationCollectionAssertions<TDeclaringType, TProperty>>(this);
+            return new AndConstraint<TAssertions>((TAssertions)this);
         }
 
         public PropertyExceptionCollectionAssertions<TException> ThrowFromSetter<TException>(string because = "", params object[] becauseArgs)
@@ -64,7 +75,7 @@ namespace FluentAssertions.Properties.Assertions
                 becauseArgs);
         }
 
-        public AndConstraint<PropertyInvocationCollection<TDeclaringType, TProperty>> NotThrowFromSetter<TException>(string because = "", params object[] becauseArgs)
+        public AndConstraint<TAssertions> NotThrowFromSetter<TException>(string because = "", params object[] becauseArgs)
             where TException : Exception
         {
             NotThrow<Exception>(
@@ -73,10 +84,10 @@ namespace FluentAssertions.Properties.Assertions
                 because,
                 becauseArgs);
 
-            return new AndConstraint<PropertyInvocationCollection<TDeclaringType, TProperty>>(Subject);
+            return new AndConstraint<TAssertions>((TAssertions)this);
         }
 
-        public AndConstraint<PropertyInvocationCollection<TDeclaringType, TProperty>> NotThrowFromSetter(string because = "", params object[] becauseArgs)
+        public AndConstraint<TAssertions> NotThrowFromSetter(string because = "", params object[] becauseArgs)
         {
             NotThrow<Exception>(
                 PropertyAccessorEvaluationType.Setter,
@@ -84,7 +95,7 @@ namespace FluentAssertions.Properties.Assertions
                 because,
                 becauseArgs);
 
-            return new AndConstraint<PropertyInvocationCollection<TDeclaringType, TProperty>>(Subject);
+            return new AndConstraint<TAssertions>((TAssertions)this);
         }
 
         public PropertyExceptionCollectionAssertions<TException> ThrowFromSetterExactly<TException>(string because = "", params object[] becauseArgs)
