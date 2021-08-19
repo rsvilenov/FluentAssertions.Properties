@@ -22,6 +22,7 @@ namespace FluentAssertions.Properties.Assertions
             // Arrange
             var sampleDto = new SampleDto();
 
+            sampleDto.Properties().Should().BeOfPrimitiveType();
             //Action test = () => throw new ArgumentException();
             //test.Should().Throw<ArgumentException>();
 

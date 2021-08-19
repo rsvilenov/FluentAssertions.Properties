@@ -2,7 +2,6 @@
 using FluentAssertions.Properties.Data;
 using FluentAssertions.Properties.Selectors;
 using System;
-using System.ComponentModel;
 using System.Diagnostics;
 
 namespace FluentAssertions.Properties.Assertions
@@ -38,6 +37,12 @@ namespace FluentAssertions.Properties.Assertions
 
         public AndConstraint<TAssertions> ProvideSymmetricAccess(string because = "", params object[] becauseArgs)
         {
+            return ExceptionStackTrace.StartFromCurrentFrame(() =>
+                                 ProvideSymmetricAccessInternal(because, becauseArgs));
+        }
+
+        private AndConstraint<TAssertions> ProvideSymmetricAccessInternal(string because, params object[] becauseArgs)
+        {
             using (AssertionScope assertion = new AssertionScope())
             {
                 foreach (var instancePropertyInfo in Subject)
@@ -58,42 +63,46 @@ namespace FluentAssertions.Properties.Assertions
         public PropertyExceptionCollectionAssertions<TException> ThrowFromSetter<TException>(string because = "", params object[] becauseArgs)
             where TException : Exception
         {
-            return Throw<TException>(
-                PropertyAccessorEvaluationType.Setter,
-                matchExactExceptionType: false,
-                because,
-                becauseArgs);
+            return ExceptionStackTrace.StartFromCurrentFrame(() =>
+                Throw<TException>(
+                    PropertyAccessorEvaluationType.Setter,
+                    matchExactExceptionType: false,
+                    because,
+                    becauseArgs));
         }
 
         public PropertyExceptionCollectionAssertions<TException> ThrowFromGetter<TException>(string because = "", params object[] becauseArgs)
             where TException : Exception
         {
-            return Throw<TException>(
-                PropertyAccessorEvaluationType.Getter,
-                matchExactExceptionType: false, 
-                because, 
-                becauseArgs);
+            return ExceptionStackTrace.StartFromCurrentFrame(() =>
+                Throw<TException>(
+                    PropertyAccessorEvaluationType.Getter,
+                    matchExactExceptionType: false, 
+                    because, 
+                    becauseArgs));
         }
 
         public AndConstraint<TAssertions> NotThrowFromSetter<TException>(string because = "", params object[] becauseArgs)
             where TException : Exception
         {
-            NotThrow<Exception>(
-                PropertyAccessorEvaluationType.Setter,
-                matchExactExceptionType: true,
-                because,
-                becauseArgs);
+            ExceptionStackTrace.StartFromCurrentFrame(() =>
+               NotThrow<Exception>(
+                    PropertyAccessorEvaluationType.Setter,
+                    matchExactExceptionType: true,
+                    because,
+                    becauseArgs));
 
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
 
         public AndConstraint<TAssertions> NotThrowFromSetter(string because = "", params object[] becauseArgs)
         {
-            NotThrow<Exception>(
-                PropertyAccessorEvaluationType.Setter,
-                matchExactExceptionType: true,
-                because,
-                becauseArgs);
+            ExceptionStackTrace.StartFromCurrentFrame(() =>
+                NotThrow<Exception>(
+                    PropertyAccessorEvaluationType.Setter,
+                    matchExactExceptionType: true,
+                    because,
+                    becauseArgs));
 
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
@@ -101,21 +110,23 @@ namespace FluentAssertions.Properties.Assertions
         public PropertyExceptionCollectionAssertions<TException> ThrowFromSetterExactly<TException>(string because = "", params object[] becauseArgs)
             where TException : Exception
         {
-            return Throw<TException>(
-                PropertyAccessorEvaluationType.Setter,
-                matchExactExceptionType: true,
-                because,
-                becauseArgs);
+            return ExceptionStackTrace.StartFromCurrentFrame(() =>
+                Throw<TException>(
+                    PropertyAccessorEvaluationType.Setter,
+                    matchExactExceptionType: true,
+                    because,
+                    becauseArgs));
         }
 
         public PropertyExceptionCollectionAssertions<TException> ThrowFromGetterExactly<TException>(string because = "", params object[] becauseArgs)
             where TException : Exception
         {
-            return Throw<TException>(
-                PropertyAccessorEvaluationType.Getter,
-                matchExactExceptionType: true,
-                because,
-                becauseArgs);
+            return ExceptionStackTrace.StartFromCurrentFrame(() =>
+                Throw<TException>(
+                    PropertyAccessorEvaluationType.Getter,
+                    matchExactExceptionType: true,
+                    because,
+                    becauseArgs));
         }
 
         private PropertyExceptionCollectionAssertions<TException> Throw<TException>(PropertyAccessorEvaluationType evalType, bool matchExactExceptionType, string because = "", params object[] becauseArgs)

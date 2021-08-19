@@ -32,100 +32,102 @@ namespace FluentAssertions.Properties.Assertions
         /// </summary>
         public InstancePropertyInfo<TDeclaringType> Subject { get; }
 
-        /// <summary>
-        /// Asserts that the value is <c>false</c>.
-        /// </summary>
-        /// <param name="because">
-        /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
-        /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
-        /// </param>
-        /// <param name="becauseArgs">
-        /// Zero or more objects to format using the placeholders in <paramref name="because" />.
-        /// </param>
         public AndConstraint<TAssertions> BeReadable(string because = "", params object[] becauseArgs)
         {
-            Subject.PropertyInfo.Should().BeReadable(because, becauseArgs);
+            ExceptionStackTrace.StartFromCurrentFrame(() =>
+                Subject.PropertyInfo.Should().BeReadable(because, becauseArgs));
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
         
         public AndConstraint<TAssertions> BeReadable(CSharpAccessModifier accessModifier, string because = "", params object[] becauseArgs)
         {
-            Subject.PropertyInfo.Should().BeReadable(accessModifier, because, becauseArgs);
+            ExceptionStackTrace.StartFromCurrentFrame(() =>
+               Subject.PropertyInfo.Should().BeReadable(accessModifier, because, becauseArgs));
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
 
         public AndConstraint<TAssertions> NotBeReadable(string because = "", params object[] becauseArgs)
         {
-            Subject.PropertyInfo.Should().NotBeReadable(because, becauseArgs);
+            ExceptionStackTrace.StartFromCurrentFrame(() =>
+               Subject.PropertyInfo.Should().NotBeReadable(because, becauseArgs));
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
 
         public AndConstraint<TAssertions> BeWritable(string because = "", params object[] becauseArgs)
         {
-            Subject.PropertyInfo.Should().BeWritable(because, becauseArgs);
+            ExceptionStackTrace.StartFromCurrentFrame(() =>
+               Subject.PropertyInfo.Should().BeWritable(because, becauseArgs));
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
 
         public AndConstraint<TAssertions> BeWritable(CSharpAccessModifier accessModifier, string because = "", params object[] becauseArgs)
         {
-            Subject.PropertyInfo.Should().BeWritable(accessModifier, because, becauseArgs);
+            ExceptionStackTrace.StartFromCurrentFrame(() =>
+               Subject.PropertyInfo.Should().BeWritable(accessModifier, because, becauseArgs));
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
 
         public AndConstraint<TAssertions> NotBeWritable(string because = "", params object[] becauseArgs)
         {
-            Subject.PropertyInfo.Should().NotBeWritable(because, becauseArgs);
+            ExceptionStackTrace.StartFromCurrentFrame(() =>
+               Subject.PropertyInfo.Should().NotBeWritable(because, becauseArgs));
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
 
         public AndConstraint<TAssertions> BeVirtual(string because = "", params object[] becauseArgs)
         {
-            Subject.PropertyInfo.Should().BeVirtual(because, becauseArgs);
+            ExceptionStackTrace.StartFromCurrentFrame(() =>
+               Subject.PropertyInfo.Should().BeVirtual(because, becauseArgs));
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
 
         public AndConstraint<TAssertions> NotBeVirtual(string because = "", params object[] becauseArgs)
         {
-            Subject.PropertyInfo.Should().NotBeVirtual(because, becauseArgs);
+            ExceptionStackTrace.StartFromCurrentFrame(() =>
+               Subject.PropertyInfo.Should().NotBeVirtual(because, becauseArgs));
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
 
         public AndConstraint<TAssertions> BeOfPrimitiveType(string because = "", params object[] becauseArgs)
         {
-            Execute.Assertion
+            ExceptionStackTrace.StartFromCurrentFrame(() =>
+               Execute.Assertion
                         .ForCondition(Subject.PropertyInfo.PropertyType.IsPrimitive)
                         .BecauseOf(because, becauseArgs)
-                        .FailWith("Expected property {0} to be of primitive type, but was not.", Subject.PropertyInfo.Name);
+                        .FailWith("Expected property {0} to be of primitive type, but was not.", Subject.PropertyInfo.Name));
 
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
 
         public AndConstraint<TAssertions> NotBeOfPrimitiveType(string because = "", params object[] becauseArgs)
         {
-            Execute.Assertion
+            ExceptionStackTrace.StartFromCurrentFrame(() =>
+               Execute.Assertion
                         .ForCondition(Subject.PropertyInfo.PropertyType.IsPrimitive)
                         .BecauseOf(because, becauseArgs)
-                        .FailWith("Expected property {0} not to be of primitive type, but was.", Subject.PropertyInfo.Name);
+                        .FailWith("Expected property {0} not to be of primitive type, but was.", Subject.PropertyInfo.Name));
 
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
 
         public AndConstraint<TAssertions> BeOfValueType(string because = "", params object[] becauseArgs)
         {
-            Execute.Assertion
+            ExceptionStackTrace.StartFromCurrentFrame(() =>
+               Execute.Assertion
                         .ForCondition(Subject.PropertyInfo.PropertyType.IsValueType)
                         .BecauseOf(because, becauseArgs)
-                        .FailWith("Expected property {0} to be of value type, but was not.", Subject.PropertyInfo.Name);
+                        .FailWith("Expected property {0} to be of value type, but was not.", Subject.PropertyInfo.Name));
 
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
 
         public AndConstraint<TAssertions> BeOfReferenceType(string because = "", params object[] becauseArgs)
         {
-            Execute.Assertion
+            ExceptionStackTrace.StartFromCurrentFrame(() =>
+               Execute.Assertion
                         .ForCondition(!Subject.PropertyInfo.PropertyType.IsValueType)
                         .BecauseOf(because, becauseArgs)
-                        .FailWith("Expected property {0} to be of reference type, but was not.", Subject.PropertyInfo.Name);
+                        .FailWith("Expected property {0} to be of reference type, but was not.", Subject.PropertyInfo.Name));
 
             return new AndConstraint<TAssertions>((TAssertions)this);
         }

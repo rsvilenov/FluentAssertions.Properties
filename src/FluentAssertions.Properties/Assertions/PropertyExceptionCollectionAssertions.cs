@@ -1,6 +1,5 @@
 ﻿using FluentAssertions.Execution;
 using FluentAssertions.Properties.Selectors;
-using FluentAssertions.Specialized;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

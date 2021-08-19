@@ -1,5 +1,6 @@
 ﻿using FluentAssertions.Common;
 using FluentAssertions.Execution;
+using FluentAssertions.Properties.Assertions;
 using FluentAssertions.Properties.Selectors;
 using System.Diagnostics;
 using System.Linq;
@@ -37,15 +38,21 @@ namespace FluentAssertions.Properties.Data
 
         public AndConstraint<TAssertions> HaveCount(int expectedCount, string because = "", params object[] becauseArgs)
         {
-            Execute.Assertion
+            ExceptionStackTrace.StartFromCurrentFrame(() =>
+               Execute.Assertion
                 .ForCondition(Subject.Count() == expectedCount)
                 .BecauseOf(because, becauseArgs)
-                .FailWith("Expected property count of type {0} to be {1}, but was not.", typeof(TDeclaringType), expectedCount);
+                .FailWith("Expected property count of type {0} to be {1}, but was not.", typeof(TDeclaringType), expectedCount));
 
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
-
         public AndConstraint<TAssertions> BeOfPrimitiveType(string because = "", params object[] becauseArgs)
+        {
+            return ExceptionStackTrace.StartFromCurrentFrame(() => 
+                    BeOfPrimitiveTypeInternal(because, becauseArgs));
+        }
+
+        private AndConstraint<TAssertions> BeOfPrimitiveTypeInternal(string because, params object[] becauseArgs)
         {
             using (AssertionScope scope = new AssertionScope())
             {
@@ -60,6 +67,12 @@ namespace FluentAssertions.Properties.Data
 
         public AndConstraint<TAssertions> NotBeOfPrimitiveType(string because = "", params object[] becauseArgs)
         {
+            return ExceptionStackTrace.StartFromCurrentFrame(() =>
+                       NotBeOfPrimitiveTypeInternal(because, becauseArgs));
+        }
+
+        private AndConstraint<TAssertions> NotBeOfPrimitiveTypeInternal(string because, params object[] becauseArgs)
+        {
             using (AssertionScope scope = new AssertionScope())
             {
                 foreach (var subject in Subject)
@@ -70,8 +83,13 @@ namespace FluentAssertions.Properties.Data
 
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
-
         public AndConstraint<TAssertions> BeOfValueType(string because = "", params object[] becauseArgs)
+        {
+            return ExceptionStackTrace.StartFromCurrentFrame(() =>
+                        BeOfValueTypeInternal(because, becauseArgs));
+        }
+
+        private AndConstraint<TAssertions> BeOfValueTypeInternal(string because, params object[] becauseArgs)
         {
             using (AssertionScope scope = new AssertionScope())
             {
@@ -86,6 +104,12 @@ namespace FluentAssertions.Properties.Data
 
         public AndConstraint<TAssertions> BeOfReferenceType(string because = "", params object[] becauseArgs)
         {
+            return ExceptionStackTrace.StartFromCurrentFrame(() =>
+                           BeOfReferenceTypeInternal(because, becauseArgs));
+        }
+        
+        private AndConstraint<TAssertions> BeOfReferenceTypeInternal(string because, params object[] becauseArgs)
+        {
             using (AssertionScope scope = new AssertionScope())
             {
                 foreach (var subject in Subject)
@@ -98,6 +122,12 @@ namespace FluentAssertions.Properties.Data
         }
 
         public AndConstraint<TAssertions> BeVirtual(string because = "", params object[] becauseArgs)
+        {
+            return ExceptionStackTrace.StartFromCurrentFrame(() =>
+                              BeVirtualInternal(because, becauseArgs));
+        }
+
+        private AndConstraint<TAssertions> BeVirtualInternal(string because, params object[] becauseArgs)
         {
             using (AssertionScope scope = new AssertionScope())
             {
@@ -112,6 +142,12 @@ namespace FluentAssertions.Properties.Data
 
         public AndConstraint<TAssertions> NotBeVirtual(string because = "", params object[] becauseArgs)
         {
+            return ExceptionStackTrace.StartFromCurrentFrame(() =>
+                                 NotBeVirtualInternal(because, becauseArgs));
+        }
+
+        private AndConstraint<TAssertions> NotBeVirtualInternal(string because, params object[] becauseArgs)
+        {
             using (AssertionScope scope = new AssertionScope())
             {
                 foreach (var subject in Subject)
@@ -124,6 +160,12 @@ namespace FluentAssertions.Properties.Data
         }
 
         public AndConstraint<TAssertions> BeReadable(string because = "", params object[] becauseArgs)
+        {
+            return ExceptionStackTrace.StartFromCurrentFrame(() =>
+                                    BeReadableInternal(because, becauseArgs));
+        }
+
+        private AndConstraint<TAssertions> BeReadableInternal(string because, params object[] becauseArgs)
         {
             using (AssertionScope scope = new AssertionScope())
             {
@@ -138,6 +180,12 @@ namespace FluentAssertions.Properties.Data
 
         public AndConstraint<TAssertions> BeReadable(CSharpAccessModifier accessModifier, string because = "", params object[] becauseArgs)
         {
+            return ExceptionStackTrace.StartFromCurrentFrame(() =>
+                                 BeReadableInternal(accessModifier, because, becauseArgs));
+        }
+
+        private AndConstraint<TAssertions> BeReadableInternal(CSharpAccessModifier accessModifier, string because, params object[] becauseArgs)
+        {
             using (AssertionScope scope = new AssertionScope())
             {
                 foreach (var subject in Subject)
@@ -150,6 +198,12 @@ namespace FluentAssertions.Properties.Data
         }
 
         public AndConstraint<TAssertions> NotBeReadable(string because = "", params object[] becauseArgs)
+        {
+            return ExceptionStackTrace.StartFromCurrentFrame(() =>
+                                    NotBeReadableInternal(because, becauseArgs));
+        }
+        
+        private AndConstraint<TAssertions> NotBeReadableInternal(string because, params object[] becauseArgs)
         {
             using (AssertionScope scope = new AssertionScope())
             {
@@ -164,6 +218,12 @@ namespace FluentAssertions.Properties.Data
 
         public AndConstraint<TAssertions> BeWritable(string because = "", params object[] becauseArgs)
         {
+            return ExceptionStackTrace.StartFromCurrentFrame(() =>
+                                    BeWritableInternal(because, becauseArgs));
+        }
+
+        private AndConstraint<TAssertions> BeWritableInternal(string because, params object[] becauseArgs)
+        {
             using (AssertionScope scope = new AssertionScope())
             {
                 foreach (var subject in Subject)
@@ -176,6 +236,12 @@ namespace FluentAssertions.Properties.Data
         }
 
         public AndConstraint<TAssertions> BeWritable(CSharpAccessModifier accessModifier, string because = "", params object[] becauseArgs)
+        {
+            return ExceptionStackTrace.StartFromCurrentFrame(() =>
+                                 BeWritableInternal(accessModifier, because, becauseArgs));
+        }
+
+        private AndConstraint<TAssertions> BeWritableInternal(CSharpAccessModifier accessModifier, string because, params object[] becauseArgs)
         {
             using (AssertionScope scope = new AssertionScope())
             {
