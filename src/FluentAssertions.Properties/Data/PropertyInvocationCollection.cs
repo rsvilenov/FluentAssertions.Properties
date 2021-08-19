@@ -1,10 +1,8 @@
-﻿using FluentAssertions.Properties.Data;
-using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FluentAssertions.Properties.Selectors
+namespace FluentAssertions.Properties.Data
 {
     public class PropertyInvocationCollection<TDeclaringType, TProperty> : IEnumerable<InstancePropertyInfo<TDeclaringType, TProperty>>
     {
@@ -12,7 +10,7 @@ namespace FluentAssertions.Properties.Selectors
         protected IEnumerable<InstancePropertyInfo<TDeclaringType, TProperty>> SelectedProperties { get; set; } = new List<InstancePropertyInfo<TDeclaringType, TProperty>>();
         public TDeclaringType Instance { get; }
 
-        public PropertyInvocationCollection(TDeclaringType instance, TProperty value, IEnumerable<InstancePropertyInfo<TDeclaringType, TProperty>> instancePropertyInfos)
+        internal PropertyInvocationCollection(TDeclaringType instance, TProperty value, IEnumerable<InstancePropertyInfo<TDeclaringType, TProperty>> instancePropertyInfos)
         {
             Instance = instance;
             Value = value;

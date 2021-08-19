@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 
-namespace FluentAssertions.Properties.Assertions
+namespace FluentAssertions.Properties.Data.Enums
 {
-    public enum PropertyAccessorEvaluationType
+    public enum PropertyAccessorEvaluation
     {
         [Description("getter")]
         Getter,

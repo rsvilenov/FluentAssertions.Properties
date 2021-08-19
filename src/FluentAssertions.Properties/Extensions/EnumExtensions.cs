@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 
-namespace FluentAssertions.Properties.Selectors
+namespace FluentAssertions.Properties.Extensions
 {
-    public static class EnumExtensions
+    internal static class EnumExtensions
     {
         public static string GetDescription<T>(this T source)
         {

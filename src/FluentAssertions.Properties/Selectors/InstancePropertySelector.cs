@@ -8,18 +8,12 @@ namespace FluentAssertions.Properties.Selectors
 {
     public class InstancePropertySelector<TDeclaringType> :  InstancePropertySelectorBase<TDeclaringType, InstancePropertyInfo<TDeclaringType>>
     {
-        protected InstancePropertySelector(InstancePropertySelector<TDeclaringType> instancePropertySelector)
-        {
-            Instance = instancePropertySelector.Instance;
-            SelectedProperties = instancePropertySelector.SelectedProperties;
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="InstancePropertyInfoSelector"/> class.
         /// </summary>
         /// <param name="types">The types from which to select properties.</param>
         /// <exception cref="ArgumentNullException"><paramref name="types"/> is <c>null</c>.</exception>
-        public InstancePropertySelector(TDeclaringType instance, IEnumerable<string> propertyNames = null)
+        internal InstancePropertySelector(TDeclaringType instance, IEnumerable<string> propertyNames = null)
         {
             if (instance == null)
             {

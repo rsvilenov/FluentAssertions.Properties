@@ -9,7 +9,7 @@ namespace FluentAssertions.Properties.Selectors
         InstancePropertySelectorBase<TDeclaringType, InstancePropertyInfo<TDeclaringType, TProperty>>
         
     {
-        public InstancePropertyWithKnownTypeSelector(TDeclaringType instance, InstancePropertyInfo<TDeclaringType, TProperty> instancePropertyInfo)
+        internal InstancePropertyWithKnownTypeSelector(TDeclaringType instance, InstancePropertyInfo<TDeclaringType, TProperty> instancePropertyInfo)
                : this(instance, new[] { instancePropertyInfo })
         {
 
@@ -20,7 +20,7 @@ namespace FluentAssertions.Properties.Selectors
         /// </summary>
         /// <param name="types">The types from which to select properties.</param>
         /// <exception cref="ArgumentNullException"><paramref name="types"/> is <c>null</c>.</exception>
-        public InstancePropertyWithKnownTypeSelector(TDeclaringType instance, IEnumerable<InstancePropertyInfo<TDeclaringType, TProperty>> instancePropertyInfos)
+        internal InstancePropertyWithKnownTypeSelector(TDeclaringType instance, IEnumerable<InstancePropertyInfo<TDeclaringType, TProperty>> instancePropertyInfos)
         {
             Instance = instance;
             SelectedProperties = instancePropertyInfos;

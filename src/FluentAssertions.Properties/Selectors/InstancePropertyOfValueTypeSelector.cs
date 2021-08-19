@@ -7,7 +7,7 @@ namespace FluentAssertions.Properties.Selectors
 {
     public class InstancePropertyOfValueTypeSelector<TDeclaringType> : InstancePropertySelectorBase<TDeclaringType, InstancePropertyInfo<TDeclaringType>>
     {
-        public InstancePropertyOfValueTypeSelector(InstancePropertySelectorBase<TDeclaringType, InstancePropertyInfo<TDeclaringType>> instancePropertySelector)
+        internal InstancePropertyOfValueTypeSelector(InstancePropertySelectorBase<TDeclaringType, InstancePropertyInfo<TDeclaringType>> instancePropertySelector)
             : base(instancePropertySelector)
         {
         }
@@ -59,13 +59,5 @@ namespace FluentAssertions.Properties.Selectors
                 .Invoke(Instance, null)
                 .Equals(defaultValue);
         }
-
-        ///// <summary>
-        ///// Only select the properties that return the specified type
-        ///// </summary>
-        //public PropertyInvocationCollection<TDeclaringType, object> WhenCalledWithDefaultValue()
-        //{
-        //    return new PropertyInvocationCollection<TDeclaringType, object>(Instance, default, SelectedProperties);
-        //}
     }
 }

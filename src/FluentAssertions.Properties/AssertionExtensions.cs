@@ -1,16 +1,12 @@
-﻿using FluentAssertions.Properties.Data;
-using FluentAssertions.Properties.Assertions;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Reflection;
+﻿using FluentAssertions.Properties.Assertions;
+using FluentAssertions.Properties.Data;
 using FluentAssertions.Properties.Selectors;
+using System.Diagnostics.Contracts;
 
 namespace FluentAssertions.Properties
 {
     public static class AssertionExtensions
     {
-        
         [Pure]
         public static InstancePropertyInfoAssertions<TDeclaringType> Should<TDeclaringType>(this InstancePropertyInfo<TDeclaringType> actualValue)
         {
@@ -29,7 +25,6 @@ namespace FluentAssertions.Properties
             return new InstancePropertySelectorAssertions<TDeclaringType, InstancePropertyInfo<TDeclaringType>>(actualValue);
         }
 
-        [Pure]
         public static PropertyInvocationCollectionAssertions<TDeclaringType, TProperty> Should<TDeclaringType, TProperty>(this PropertyInvocationCollection<TDeclaringType, TProperty> actualValue)
         {
             return new PropertyInvocationCollectionAssertions<TDeclaringType, TProperty>(actualValue);

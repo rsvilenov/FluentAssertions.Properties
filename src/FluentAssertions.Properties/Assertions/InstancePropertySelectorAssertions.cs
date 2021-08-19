@@ -10,9 +10,9 @@ namespace FluentAssertions.Properties.Data
     [DebuggerNonUserCode]
     public class InstancePropertySelectorAssertions<TDeclaringType, TInstancePropertyInfo>
         : InstancePropertySelectorAssertions<InstancePropertySelectorAssertions<TDeclaringType, TInstancePropertyInfo>, TDeclaringType, TInstancePropertyInfo>
-        where TInstancePropertyInfo : InstancePropertyInfo<TDeclaringType>, new()
+        where TInstancePropertyInfo : InstancePropertyInfo<TDeclaringType>
     {
-        public InstancePropertySelectorAssertions(InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo> value)
+        internal InstancePropertySelectorAssertions(InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo> value)
             : base (value)
         {
         }
@@ -24,9 +24,9 @@ namespace FluentAssertions.Properties.Data
     [DebuggerNonUserCode]
     public class InstancePropertySelectorAssertions<TAssertions, TDeclaringType, TInstancePropertyInfo>
         where TAssertions : InstancePropertySelectorAssertions<TAssertions, TDeclaringType, TInstancePropertyInfo>
-        where TInstancePropertyInfo : InstancePropertyInfo<TDeclaringType>, new()
+        where TInstancePropertyInfo : InstancePropertyInfo<TDeclaringType>
     {
-        public InstancePropertySelectorAssertions(InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo> value)
+        internal InstancePropertySelectorAssertions(InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo> value)
         {
             Subject = value; 
         }
@@ -46,6 +46,7 @@ namespace FluentAssertions.Properties.Data
 
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
+
         public AndConstraint<TAssertions> BeOfPrimitiveType(string because = "", params object[] becauseArgs)
         {
             return ExceptionStackTrace.StartFromCurrentFrame(() => 
@@ -83,6 +84,7 @@ namespace FluentAssertions.Properties.Data
 
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
+
         public AndConstraint<TAssertions> BeOfValueType(string because = "", params object[] becauseArgs)
         {
             return ExceptionStackTrace.StartFromCurrentFrame(() =>

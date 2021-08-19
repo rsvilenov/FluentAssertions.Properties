@@ -8,12 +8,12 @@ using System.Reflection;
 namespace FluentAssertions.Properties.Selectors
 {
     public abstract class InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo> : IEnumerable<TInstancePropertyInfo>
-        where TInstancePropertyInfo : InstancePropertyInfo<TDeclaringType>, new()
+        where TInstancePropertyInfo : InstancePropertyInfo<TDeclaringType>
     {
         internal protected IEnumerable<TInstancePropertyInfo> SelectedProperties { get; set; } = new List<TInstancePropertyInfo>();
         internal protected TDeclaringType Instance { get; set; }
 
-        public InstancePropertySelectorBase() { }
+        internal InstancePropertySelectorBase() { }
         internal InstancePropertySelectorBase(InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo> instancePropertySelector)
         {
             Instance = instancePropertySelector.Instance;

@@ -1,6 +1,7 @@
 ﻿using FluentAssertions.Execution;
 using FluentAssertions.Properties.Data;
-using FluentAssertions.Properties.Selectors;
+using FluentAssertions.Properties.Data.Enums;
+using FluentAssertions.Properties.Extensions;
 using System;
 using System.Diagnostics;
 
@@ -10,21 +11,19 @@ namespace FluentAssertions.Properties.Assertions
     public class PropertyInvocationCollectionAssertions<TDeclaringType, TProperty>
         : PropertyInvocationCollectionAssertions<PropertyInvocationCollectionAssertions<TDeclaringType, TProperty>, TDeclaringType, TProperty>
     {
-        public PropertyInvocationCollectionAssertions(PropertyInvocationCollection<TDeclaringType, TProperty> value)
+        internal PropertyInvocationCollectionAssertions(PropertyInvocationCollection<TDeclaringType, TProperty> value)
             : base(value)
         {
         }
     }
 
-    /// <summary>
-    /// Contains a number of methods to assert that a <see cref="bool"/> is in the expected state.
-    /// </summary>
     [DebuggerNonUserCode]
     public class PropertyInvocationCollectionAssertions<TAssertions, TDeclaringType, TProperty>
         where TAssertions : PropertyInvocationCollectionAssertions<TAssertions, TDeclaringType, TProperty>
     {
         private readonly PropertyInvoker<TDeclaringType> _propertyInvoker;
-        public PropertyInvocationCollectionAssertions(PropertyInvocationCollection<TDeclaringType, TProperty> value)
+
+        internal PropertyInvocationCollectionAssertions(PropertyInvocationCollection<TDeclaringType, TProperty> value)
         {
             Subject = value;
             _propertyInvoker = new PropertyInvoker<TDeclaringType>(value.Instance);
@@ -65,7 +64,7 @@ namespace FluentAssertions.Properties.Assertions
         {
             return ExceptionStackTrace.StartFromCurrentFrame(() =>
                 Throw<TException>(
-                    PropertyAccessorEvaluationType.Setter,
+                    PropertyAccessorEvaluation.Setter,
                     matchExactExceptionType: false,
                     because,
                     becauseArgs));
@@ -76,7 +75,7 @@ namespace FluentAssertions.Properties.Assertions
         {
             return ExceptionStackTrace.StartFromCurrentFrame(() =>
                 Throw<TException>(
-                    PropertyAccessorEvaluationType.Getter,
+                    PropertyAccessorEvaluation.Getter,
                     matchExactExceptionType: false, 
                     because, 
                     becauseArgs));
@@ -87,7 +86,7 @@ namespace FluentAssertions.Properties.Assertions
         {
             ExceptionStackTrace.StartFromCurrentFrame(() =>
                NotThrow<Exception>(
-                    PropertyAccessorEvaluationType.Setter,
+                    PropertyAccessorEvaluation.Setter,
                     matchExactExceptionType: true,
                     because,
                     becauseArgs));
@@ -99,7 +98,7 @@ namespace FluentAssertions.Properties.Assertions
         {
             ExceptionStackTrace.StartFromCurrentFrame(() =>
                 NotThrow<Exception>(
-                    PropertyAccessorEvaluationType.Setter,
+                    PropertyAccessorEvaluation.Setter,
                     matchExactExceptionType: true,
                     because,
                     becauseArgs));
@@ -112,7 +111,7 @@ namespace FluentAssertions.Properties.Assertions
         {
             return ExceptionStackTrace.StartFromCurrentFrame(() =>
                 Throw<TException>(
-                    PropertyAccessorEvaluationType.Setter,
+                    PropertyAccessorEvaluation.Setter,
                     matchExactExceptionType: true,
                     because,
                     becauseArgs));
@@ -123,13 +122,13 @@ namespace FluentAssertions.Properties.Assertions
         {
             return ExceptionStackTrace.StartFromCurrentFrame(() =>
                 Throw<TException>(
-                    PropertyAccessorEvaluationType.Getter,
+                    PropertyAccessorEvaluation.Getter,
                     matchExactExceptionType: true,
                     because,
                     becauseArgs));
         }
 
-        private PropertyExceptionCollectionAssertions<TException> Throw<TException>(PropertyAccessorEvaluationType evalType, bool matchExactExceptionType, string because = "", params object[] becauseArgs)
+        private PropertyExceptionCollectionAssertions<TException> Throw<TException>(PropertyAccessorEvaluation evalType, bool matchExactExceptionType, string because = "", params object[] becauseArgs)
             where TException : Exception
         {
             PropertyExceptionCollection<TException> propertyExceptions = new PropertyExceptionCollection<TException>();
@@ -142,11 +141,11 @@ namespace FluentAssertions.Properties.Assertions
                 {
                     try
                     {
-                        if (evalType == PropertyAccessorEvaluationType.Setter)
+                        if (evalType == PropertyAccessorEvaluation.Setter)
                         {
                             _propertyInvoker.SetValue(instancePropInfo.PropertyInfo.Name, Subject.Value);
                         }
-                        else if (evalType == PropertyAccessorEvaluationType.Getter)
+                        else if (evalType == PropertyAccessorEvaluation.Getter)
                         {
                             _propertyInvoker.GetValue<TProperty>(instancePropInfo.PropertyInfo.Name);
                         }
@@ -186,7 +185,7 @@ namespace FluentAssertions.Properties.Assertions
             return new PropertyExceptionCollectionAssertions<TException>(propertyExceptions);
         }
 
-        private PropertyExceptionCollectionAssertions<TException> NotThrow<TException>(PropertyAccessorEvaluationType evalType, bool matchExactExceptionType, string because = "", params object[] becauseArgs)
+        private PropertyExceptionCollectionAssertions<TException> NotThrow<TException>(PropertyAccessorEvaluation evalType, bool matchExactExceptionType, string because = "", params object[] becauseArgs)
             where TException : Exception
         {
             PropertyExceptionCollection<TException> propertyExceptions = new PropertyExceptionCollection<TException>();
@@ -197,11 +196,11 @@ namespace FluentAssertions.Properties.Assertions
                 {
                     try
                     {
-                        if (evalType == PropertyAccessorEvaluationType.Setter)
+                        if (evalType == PropertyAccessorEvaluation.Setter)
                         {
                             _propertyInvoker.SetValue(instancePropInfo.PropertyInfo.Name, Subject.Value);
                         }
-                        else if (evalType == PropertyAccessorEvaluationType.Getter)
+                        else if (evalType == PropertyAccessorEvaluation.Getter)
                         {
                             _propertyInvoker.GetValue<TProperty>(instancePropInfo.PropertyInfo.Name);
                         }

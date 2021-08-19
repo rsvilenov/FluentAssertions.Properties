@@ -9,7 +9,7 @@ namespace FluentAssertions.Properties.Assertions
     public class InstancePropertyInfoAssertions<TDeclaringType>
         : InstancePropertyInfoAssertions<InstancePropertyInfoAssertions<TDeclaringType>, TDeclaringType>
     {
-        public InstancePropertyInfoAssertions(InstancePropertyInfo<TDeclaringType> value)
+        internal InstancePropertyInfoAssertions(InstancePropertyInfo<TDeclaringType> value)
             : base(value)
         {
         }
@@ -22,7 +22,7 @@ namespace FluentAssertions.Properties.Assertions
     public class InstancePropertyInfoAssertions<TAssertions, TDeclaringType>
         where TAssertions : InstancePropertyInfoAssertions<TAssertions, TDeclaringType>
     {
-        public InstancePropertyInfoAssertions(InstancePropertyInfo<TDeclaringType> value)
+        internal InstancePropertyInfoAssertions(InstancePropertyInfo<TDeclaringType> value)
         {
             Subject = value;
         }

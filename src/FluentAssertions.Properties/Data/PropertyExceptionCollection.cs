@@ -1,15 +1,16 @@
-﻿using System;
+﻿using FluentAssertions.Properties.Data.Enums;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace FluentAssertions.Properties.Assertions
+namespace FluentAssertions.Properties.Data
 {
-    public class PropertyException<TException>
+    internal class PropertyException<TException>
         where TException : Exception
     {
-        public PropertyException(TException exception,
+        internal PropertyException(TException exception,
             string propertyName,
-            PropertyAccessorEvaluationType accessorEvaluationType)
+            PropertyAccessorEvaluation accessorEvaluationType)
         {
             Exception = exception;
             PropertyName = propertyName;
@@ -18,16 +19,16 @@ namespace FluentAssertions.Properties.Assertions
 
         public TException Exception { get; }
         public string PropertyName { get; }
-        public PropertyAccessorEvaluationType AccessorEvaluationType { get; set; }
+        public PropertyAccessorEvaluation AccessorEvaluationType { get; internal set; }
 
     }
 
-    public class PropertyExceptionCollection<TException> : IEnumerable<PropertyException<TException>>
+    internal class PropertyExceptionCollection<TException> : IEnumerable<PropertyException<TException>>
         where TException : Exception
     {
-        List<PropertyException<TException>> _propertyExceptions = new List<PropertyException<TException>>();
+        private readonly List<PropertyException<TException>> _propertyExceptions = new List<PropertyException<TException>>();
 
-        public void Add(TException exception, string propertyName, PropertyAccessorEvaluationType accessorEvaluationType)
+        internal void Add(TException exception, string propertyName, PropertyAccessorEvaluation accessorEvaluationType)
         {
             _propertyExceptions.Add(new PropertyException<TException>(exception, propertyName, accessorEvaluationType));
         }

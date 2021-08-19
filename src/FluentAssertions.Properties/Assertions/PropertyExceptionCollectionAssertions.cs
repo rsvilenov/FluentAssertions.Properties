@@ -1,4 +1,6 @@
 ﻿using FluentAssertions.Execution;
+using FluentAssertions.Properties.Data;
+using FluentAssertions.Properties.Extensions;
 using FluentAssertions.Properties.Selectors;
 using System;
 using System.Collections.Generic;
@@ -15,7 +17,8 @@ namespace FluentAssertions.Properties.Assertions
     {
         private readonly List<string> _innerExceptionStack;
         private readonly PropertyExceptionCollection<TException> _exceptionCollection;
-        public PropertyExceptionCollectionAssertions(PropertyExceptionCollection<TException> exceptionCollection,
+
+        internal PropertyExceptionCollectionAssertions(PropertyExceptionCollection<TException> exceptionCollection,
             List<string> innerExceptionStack = null)
         {
             _exceptionCollection = exceptionCollection;
