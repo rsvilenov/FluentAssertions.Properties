@@ -27,14 +27,22 @@ namespace FluentAssertions.Properties.Selectors
             Type type = instance.GetType();
             foreach (PropertyInfo propInfo in type.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
             {
-                if (propertyNames == null || propertyNames.Contains(propInfo.Name))
+                if ((propertyNames == null || propertyNames.Contains(propInfo.Name))
+                    && IsPropertyPublicOrInternal(propInfo))
                 {
+
                     properties.Add(new InstancePropertyInfo<TDeclaringType>(propInfo));
                 }
             }
 
 
             SelectedProperties = properties;
+        }
+
+        private bool IsPropertyPublicOrInternal(PropertyInfo propertyInfo)
+        {
+            MethodInfo getter = propertyInfo.GetGetMethod(nonPublic: true);
+            return (getter != null) && (getter.IsPublic || getter.IsAssembly);
         }
 
         /// <summary>

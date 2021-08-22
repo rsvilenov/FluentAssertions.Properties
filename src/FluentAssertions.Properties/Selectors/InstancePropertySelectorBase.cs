@@ -19,22 +19,6 @@ namespace FluentAssertions.Properties.Selectors
             Instance = instancePropertySelector.Instance;
             SelectedProperties = instancePropertySelector.SelectedProperties;
         }
-        /// <summary>
-        /// Only select the properties that have a public or internal getter.
-        /// </summary>
-        public InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo> ThatArePublicOrInternal
-        {
-            get
-            {
-                SelectedProperties = SelectedProperties.Where(property =>
-                {
-                    MethodInfo getter = property.PropertyInfo.GetGetMethod(nonPublic: true);
-                    return (getter != null) && (getter.IsPublic || getter.IsAssembly);
-                });
-
-                return this;
-            }
-        }
 
         public InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo> ThatAreWritable
         {
@@ -87,7 +71,6 @@ namespace FluentAssertions.Properties.Selectors
                 return this;
             }
         }
-
 
         /// <summary>
         /// Select return types of the properties

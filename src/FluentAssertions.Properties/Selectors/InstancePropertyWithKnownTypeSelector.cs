@@ -34,10 +34,6 @@ namespace FluentAssertions.Properties.Selectors
             return this;
         }
 
-
-        /// <summary>
-        /// Only select the properties that return the specified type
-        /// </summary>
         public PropertyInvocationCollection<TDeclaringType, TProperty> WhenCalledWith(TProperty value)
         {
             return new PropertyInvocationCollection<TDeclaringType, TProperty>(Instance, value, SelectedProperties);
