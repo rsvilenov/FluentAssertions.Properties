@@ -4,7 +4,6 @@ namespace FluentAssertions.Properties.Data
 {
     public class InstancePropertyInfo<TDeclaringType>
     {
-        internal InstancePropertyInfo() { }
         internal InstancePropertyInfo(PropertyInfo propertyInfo)
         {
             PropertyInfo = propertyInfo;
@@ -19,13 +18,9 @@ namespace FluentAssertions.Properties.Data
 
     public class InstancePropertyInfo<TDeclaringType, TProperty> : InstancePropertyInfo<TDeclaringType>
     {
-        internal InstancePropertyInfo() { }
-
         internal InstancePropertyInfo(InstancePropertyInfo<TDeclaringType> instancePropertyInfo)
             : base(instancePropertyInfo)
         {
         }
-
-        public TProperty PropertyValue { get; internal set; }
     }
 }

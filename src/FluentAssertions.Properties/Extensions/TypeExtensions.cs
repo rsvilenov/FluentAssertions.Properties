@@ -29,11 +29,7 @@ namespace FluentAssertions.Properties.Extensions
         {
             return type
                 .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                .Where(propertyInfo =>
-                {
-                    MethodInfo getter = propertyInfo.GetGetMethod(nonPublic: true);
-                    return (getter != null) && (getter.IsPublic || getter.IsAssembly);
-                });
+                .Where(propertyInfo => propertyInfo.HasPublicOrInternalGetter());
         }
 
     }

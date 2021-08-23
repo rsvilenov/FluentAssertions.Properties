@@ -30,7 +30,7 @@ namespace FluentAssertions.Properties.Assertions
                 .Should()
                 .ProvideSymmetricAccess();
 
-            sampleDto.Properties().Should().BeOfPrimitiveType();
+            //sampleDto.Properties().Should().BeOfPrimitiveType();
             //Action test = () => throw new ArgumentException();
             //test.Should().Throw<ArgumentException>();
 
@@ -60,12 +60,12 @@ namespace FluentAssertions.Properties.Assertions
             //    .Should()
             //    .ProvideSymmetricAccess();
 
-            sampleDto.Properties(p => p.MyStringProperty)
-                .WhenCalledWith("throw")
-                .Should()
-                .ThrowFromSetterExactly<ArgumentException>()
-                .WithInnerException<NullReferenceException>()
-                .WithInnerException<Win32Exception>();
+            //sampleDto.Properties(p => p.MyStringProperty)
+            //    .WhenCalledWith("throw")
+            //    .Should()
+            //    .ThrowFromSetterExactly<ArgumentException>()
+            //    .WithInnerException<NullReferenceException>()
+            //    .WithInnerException<Win32Exception>();
                 //.Where(ex => ex.Message.StartsWith("ate"), "some reason");
                 //.WithMessage("test2", "some reason");
 

@@ -2,6 +2,7 @@
 using FluentAssertions.Properties.Data;
 using FluentAssertions.Properties.Data.Enums;
 using FluentAssertions.Properties.Extensions;
+using FluentAssertions.Properties.Invocation;
 using System;
 using System.Diagnostics;
 using System.Reflection;
@@ -22,12 +23,12 @@ namespace FluentAssertions.Properties.Assertions
     public class PropertyInvocationCollectionAssertions<TAssertions, TDeclaringType, TProperty>
         where TAssertions : PropertyInvocationCollectionAssertions<TAssertions, TDeclaringType, TProperty>
     {
-        private readonly PropertyInvoker<TDeclaringType> _propertyInvoker;
+        private readonly IPropertyInvoker _propertyInvoker;
 
         internal PropertyInvocationCollectionAssertions(PropertyInvocationCollection<TDeclaringType, TProperty> value)
         {
             Subject = value;
-            _propertyInvoker = new PropertyInvoker<TDeclaringType>(value.Instance);
+            _propertyInvoker = new ReflectionPropertyInvoker<TDeclaringType>(value.Instance);
         }
 
         /// <summary>
@@ -52,11 +53,15 @@ namespace FluentAssertions.Properties.Assertions
 
                     Execute.Assertion
                     .ForCondition(propertyInfo.CanWrite)
+                    .FailWith("Expected property {0} to have public or internal getter, but did not.", propertyInfo.Name)
+                    .Then
+                    .ForCondition(propertyInfo.CanWrite)
                     .FailWith("Expected property {0} to be writable, but was not.", propertyInfo.Name)
                     .Then
                     .ForCondition(AreGetSetOperationsSymetric(propertyInfo.Name, propertyInvocationInfo.Value))
                     .BecauseOf(because, becauseArgs)
                     .FailWith("Expected the get and set operations of property {0} to be symetric, but was not.", propertyInfo.Name);
+
                 }
             }
 

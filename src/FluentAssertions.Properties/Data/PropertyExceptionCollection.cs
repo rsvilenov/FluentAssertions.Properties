@@ -19,7 +19,7 @@ namespace FluentAssertions.Properties.Data
 
         public TException Exception { get; }
         public string PropertyName { get; }
-        public PropertyAccessorEvaluation AccessorEvaluationType { get; internal set; }
+        public PropertyAccessorEvaluation AccessorEvaluationType { get; }
 
     }
 

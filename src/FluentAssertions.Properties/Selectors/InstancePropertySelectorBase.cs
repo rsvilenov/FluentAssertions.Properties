@@ -1,5 +1,6 @@
 ﻿using FluentAssertions.Properties.Data;
 using FluentAssertions.Properties.Extensions;
+using FluentAssertions.Properties.Invocation;
 using FluentAssertions.Types;
 using System.Collections;
 using System.Collections.Generic;
@@ -25,11 +26,8 @@ namespace FluentAssertions.Properties.Selectors
         {
             get
             {
-                SelectedProperties = SelectedProperties.Where(property =>
-                {
-                    MethodInfo setter = property.PropertyInfo.GetSetMethod(nonPublic: true);
-                    return (setter != null) && (setter.IsPublic || setter.IsAssembly);
-                });
+                SelectedProperties = SelectedProperties
+                    .Where(p => p.PropertyInfo.CanWrite);
 
                 return this;
             }
@@ -39,11 +37,8 @@ namespace FluentAssertions.Properties.Selectors
         {
             get
             {
-                SelectedProperties = SelectedProperties.Where(property =>
-                {
-                    MethodInfo setter = property.PropertyInfo.GetSetMethod(nonPublic: true);
-                    return setter == null || (!setter.IsPublic && !setter.IsAssembly);
-                });
+                SelectedProperties = SelectedProperties
+                    .Where(p => !p.PropertyInfo.CanWrite);
 
                 return this;
             }
@@ -76,7 +71,7 @@ namespace FluentAssertions.Properties.Selectors
         public PropertyInvocationCollection<TDeclaringType, object> WhenCalledWithValuesFrom(TDeclaringType source)
         {
             var propertyInvocationInfos = new List<PropertyInvocationInfo<TDeclaringType, object>>();
-            var propertyInvoker = new PropertyInvoker<TDeclaringType>(source);
+            var propertyInvoker = new ReflectionPropertyInvoker<TDeclaringType>(source);
             
             foreach (PropertyInfo propInfo in typeof(TDeclaringType)
                 .GetPublicOrInternalProperties()

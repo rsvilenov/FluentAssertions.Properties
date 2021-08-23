@@ -1,5 +1,6 @@
 ﻿using FluentAssertions.Properties.Data;
-using System;
+using FluentAssertions.Properties.Extensions;
+using FluentAssertions.Properties.Invocation;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,11 +16,6 @@ namespace FluentAssertions.Properties.Selectors
 
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="InstancePropertyInfoSelector"/> class.
-        /// </summary>
-        /// <param name="types">The types from which to select properties.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="types"/> is <c>null</c>.</exception>
         internal InstancePropertyWithKnownTypeSelector(TDeclaringType instance, IEnumerable<InstancePropertyInfo<TDeclaringType, TProperty>> instancePropertyInfos)
         {
             Instance = instance;
@@ -28,8 +24,11 @@ namespace FluentAssertions.Properties.Selectors
 
         public InstancePropertyWithKnownTypeSelector<TDeclaringType, TProperty> HavingValue(TProperty value)
         {
+            var propertyInvoker = new ReflectionPropertyInvoker<TDeclaringType>(Instance);
+            
             SelectedProperties = SelectedProperties
-                .Where(property => property.PropertyValue.Equals(value));
+                .Where(p => p.PropertyInfo.HasPublicOrInternalGetter()
+                    && propertyInvoker.GetValue<TProperty>(p.PropertyInfo.Name).Equals(value));
 
             return this;
         }
