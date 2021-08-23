@@ -1,4 +1,5 @@
 ﻿using FluentAssertions.Properties.Data;
+using FluentAssertions.Properties.Extensions;
 using System;
 using System.Linq;
 using System.Reflection;

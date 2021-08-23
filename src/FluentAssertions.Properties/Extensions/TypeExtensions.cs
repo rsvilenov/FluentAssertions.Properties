@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
-namespace FluentAssertions.Properties.Selectors
+namespace FluentAssertions.Properties.Extensions
 {
-    internal static class TypeExtensions
+    public static class TypeExtensions
     {
         public static Type GetActualTypeIfNullable(this Type type)
         {
@@ -20,6 +23,17 @@ namespace FluentAssertions.Properties.Selectors
             return 
                 type.IsGenericType 
                 && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+        }
+
+        public static IEnumerable<PropertyInfo> GetPublicOrInternalProperties(this Type type)
+        {
+            return type
+                .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                .Where(propertyInfo =>
+                {
+                    MethodInfo getter = propertyInfo.GetGetMethod(nonPublic: true);
+                    return (getter != null) && (getter.IsPublic || getter.IsAssembly);
+                });
         }
 
     }

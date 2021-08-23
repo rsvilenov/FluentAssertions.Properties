@@ -36,7 +36,12 @@ namespace FluentAssertions.Properties.Selectors
 
         public PropertyInvocationCollection<TDeclaringType, TProperty> WhenCalledWith(TProperty value)
         {
-            return new PropertyInvocationCollection<TDeclaringType, TProperty>(Instance, value, SelectedProperties);
+            var propertyInvocationInfos = SelectedProperties
+                .Select(ipi => new PropertyInvocationInfo<TDeclaringType, TProperty>(ipi.PropertyInfo, value));
+            
+            return new PropertyInvocationCollection<TDeclaringType, TProperty>(
+                Instance,
+                propertyInvocationInfos);
         }
     }
 }

@@ -1,3 +1,4 @@
+using AutoFixture;
 using FluentAssertions.Properties.Tests.TestableObjects;
 using System;
 using System.ComponentModel;
@@ -21,6 +22,13 @@ namespace FluentAssertions.Properties.Assertions
         {
             // Arrange
             var sampleDto = new SampleDto();
+
+            sampleDto.Properties()
+                .OfType<int>()
+                .ThatAreWritable
+                .WhenCalledWithValuesFrom(new Fixture().Create<SampleDto>())
+                .Should()
+                .ProvideSymmetricAccess();
 
             sampleDto.Properties().Should().BeOfPrimitiveType();
             //Action test = () => throw new ArgumentException();

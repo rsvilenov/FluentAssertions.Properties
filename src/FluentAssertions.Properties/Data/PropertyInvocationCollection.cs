@@ -4,22 +4,20 @@ using System.Linq;
 
 namespace FluentAssertions.Properties.Data
 {
-    public class PropertyInvocationCollection<TDeclaringType, TProperty> : IEnumerable<InstancePropertyInfo<TDeclaringType, TProperty>>
+    public class PropertyInvocationCollection<TDeclaringType, TProperty> : IEnumerable<PropertyInvocationInfo<TDeclaringType, TProperty>>
     {
-        public TProperty Value { get; }
-        protected IEnumerable<InstancePropertyInfo<TDeclaringType, TProperty>> SelectedProperties { get; set; } = new List<InstancePropertyInfo<TDeclaringType, TProperty>>();
+        protected IEnumerable<PropertyInvocationInfo<TDeclaringType, TProperty>> SelectedProperties { get; set; } = new List<PropertyInvocationInfo<TDeclaringType, TProperty>>();
         public TDeclaringType Instance { get; }
 
-        internal PropertyInvocationCollection(TDeclaringType instance, TProperty value, IEnumerable<InstancePropertyInfo<TDeclaringType, TProperty>> instancePropertyInfos)
+        internal PropertyInvocationCollection(TDeclaringType instance, IEnumerable<PropertyInvocationInfo<TDeclaringType, TProperty>> instancePropertyInfos)
         {
             Instance = instance;
-            Value = value;
             SelectedProperties = instancePropertyInfos.ToList(); // copy the collection
         }
         /// <summary>
         /// The resulting <see cref="PropertyInfo"/> objects.
         /// </summary>
-        public InstancePropertyInfo<TDeclaringType, TProperty>[] ToArray()
+        public PropertyInvocationInfo<TDeclaringType, TProperty>[] ToArray()
         {
             return SelectedProperties.ToArray();
         }
@@ -31,7 +29,7 @@ namespace FluentAssertions.Properties.Data
         /// A <see cref="System.Collections.Generic.IEnumerator{T}"/> that can be used to iterate through the collection.
         /// </returns>
         /// <filterpriority>1</filterpriority>
-        public IEnumerator<InstancePropertyInfo<TDeclaringType, TProperty>> GetEnumerator()
+        public IEnumerator<PropertyInvocationInfo<TDeclaringType, TProperty>> GetEnumerator()
         {
             return SelectedProperties.GetEnumerator();
         }

@@ -4,6 +4,7 @@ using FluentAssertions.Properties.Data.Enums;
 using FluentAssertions.Properties.Extensions;
 using System;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace FluentAssertions.Properties.Assertions
 {
@@ -44,15 +45,18 @@ namespace FluentAssertions.Properties.Assertions
         {
             using (AssertionScope assertion = new AssertionScope())
             {
-                foreach (var instancePropertyInfo in Subject)
+                foreach (var propertyInvocationInfo in Subject)
                 {
+                    PropertyInfo propertyInfo = propertyInvocationInfo
+                        .PropertyInfo;
+
                     Execute.Assertion
-                    .ForCondition(instancePropertyInfo.PropertyInfo.CanWrite)
-                    .FailWith("Expected property {0} to be writable, but was not.", instancePropertyInfo.PropertyInfo.Name)
+                    .ForCondition(propertyInfo.CanWrite)
+                    .FailWith("Expected property {0} to be writable, but was not.", propertyInfo.Name)
                     .Then
-                    .ForCondition(AreGetSetOperationsSymetric(instancePropertyInfo, Subject.Value))
+                    .ForCondition(AreGetSetOperationsSymetric(propertyInfo.Name, propertyInvocationInfo.Value))
                     .BecauseOf(because, becauseArgs)
-                    .FailWith("Expected the get and set operations of property {0} to be symetric, but was not.", instancePropertyInfo.PropertyInfo.Name);
+                    .FailWith("Expected the get and set operations of property {0} to be symetric, but was not.", propertyInfo.Name);
                 }
             }
 
@@ -137,24 +141,28 @@ namespace FluentAssertions.Properties.Assertions
 
             using (AssertionScope assertion = new AssertionScope())
             {
-                foreach (var instancePropInfo in Subject)
+                foreach (var propertyInvocationInfo in Subject)
                 {
+                    string propertyName = propertyInvocationInfo
+                        .PropertyInfo
+                        .Name;
+
                     try
                     {
                         if (evalType == PropertyAccessorEvaluation.Setter)
                         {
-                            _propertyInvoker.SetValue(instancePropInfo.PropertyInfo.Name, Subject.Value);
+                            _propertyInvoker.SetValue(propertyName, propertyInvocationInfo.Value);
                         }
                         else if (evalType == PropertyAccessorEvaluation.Getter)
                         {
-                            _propertyInvoker.GetValue<TProperty>(instancePropInfo.PropertyInfo.Name);
+                            _propertyInvoker.GetValue<TProperty>(propertyName);
                         }
 
                         Execute.Assertion
                             .BecauseOf(because, becauseArgs)
                             .FailWith("Expected property {0} of property {1} to throw {2}, but no exception was thrown.",
                                 accessorTypeFailMessagePart,
-                                instancePropInfo.PropertyInfo.Name,
+                                propertyName,
                                 typeof(TException));
                     }
                     catch (Exception ex)
@@ -169,14 +177,14 @@ namespace FluentAssertions.Properties.Assertions
                                 .BecauseOf(because, becauseArgs)
                                 .FailWith("Expected {0} of property {1} to throw {2}, but {3} was thrown. {4}",
                                     accessorTypeFailMessagePart,
-                                    instancePropInfo.PropertyInfo.Name,
+                                    propertyName,
                                     typeof(TException),
                                     ex.GetType(),
                                     ex);
                         }
 
                         propertyExceptions.Add((TException)ex, 
-                            instancePropInfo.PropertyInfo.Name,
+                            propertyName,
                             evalType);
                     }
                 }
@@ -192,17 +200,21 @@ namespace FluentAssertions.Properties.Assertions
 
             using (AssertionScope assertion = new AssertionScope())
             {
-                foreach (var instancePropInfo in Subject)
+                foreach (var propertyInvocationInfo in Subject)
                 {
+                    string propertyName = propertyInvocationInfo
+                        .PropertyInfo
+                        .Name;
+
                     try
                     {
                         if (evalType == PropertyAccessorEvaluation.Setter)
                         {
-                            _propertyInvoker.SetValue(instancePropInfo.PropertyInfo.Name, Subject.Value);
+                            _propertyInvoker.SetValue(propertyName, propertyInvocationInfo.Value);
                         }
                         else if (evalType == PropertyAccessorEvaluation.Getter)
                         {
-                            _propertyInvoker.GetValue<TProperty>(instancePropInfo.PropertyInfo.Name);
+                            _propertyInvoker.GetValue<TProperty>(propertyName);
                         }
                     }
                     catch (Exception ex)
@@ -217,7 +229,7 @@ namespace FluentAssertions.Properties.Assertions
                                 innerScope.Context = evalType.GetDescription();
                                 innerScope.BecauseOf(because, becauseArgs)
                                 .FailWith("Did not expect the {context} of property {0} to throw {1}{reason}, but it threw {2}",
-                                    instancePropInfo.PropertyInfo.Name,
+                                    propertyName,
                                     typeof(TException),
                                     ex);
                             }
@@ -230,13 +242,13 @@ namespace FluentAssertions.Properties.Assertions
                                 Execute.Assertion
                                 .BecauseOf(because, becauseArgs)
                                 .FailWith("Did not expect the {context} of property {0} to throw any exceptions {reason}, but it threw {1}",
-                                    instancePropInfo.PropertyInfo.Name,
+                                    propertyName,
                                     ex);
                             }
                         }
 
                         propertyExceptions.Add((TException)ex, 
-                            instancePropInfo.PropertyInfo.Name,
+                            propertyName,
                             evalType);
                     }
                 }
@@ -245,20 +257,19 @@ namespace FluentAssertions.Properties.Assertions
             return new PropertyExceptionCollectionAssertions<TException>(propertyExceptions);
         }
 
-        private bool AreGetSetOperationsSymetric(InstancePropertyInfo<TDeclaringType, TProperty> instancePropertyInfo,
-            TProperty testData)
+        private bool AreGetSetOperationsSymetric(string propertyName, TProperty value)
         {
             bool isSymmetric = false;
             try
             {
-                _propertyInvoker.SetValue(instancePropertyInfo.PropertyInfo.Name, testData);
-                TProperty got = _propertyInvoker.GetValue<TProperty>(instancePropertyInfo.PropertyInfo.Name);
-                isSymmetric = testData.Equals(got);
+                _propertyInvoker.SetValue(propertyName, value);
+                TProperty got = _propertyInvoker.GetValue<TProperty>(propertyName);
+                isSymmetric = value.Equals(got);
             }
             catch (Exception ex)
             {
                 Execute.Assertion
-                .FailWith($"Did not expect any exceptions for property {instancePropertyInfo.PropertyInfo.Name}, but got {ex}.");
+                .FailWith($"Did not expect any exceptions for property {propertyName}, but got {ex}.");
             }
 
             return isSymmetric;

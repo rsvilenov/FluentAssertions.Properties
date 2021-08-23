@@ -1,4 +1,5 @@
 ﻿using FluentAssertions.Properties.Data;
+using FluentAssertions.Properties.Extensions;
 using FluentAssertions.Types;
 using System.Collections;
 using System.Collections.Generic;
@@ -70,6 +71,22 @@ namespace FluentAssertions.Properties.Selectors
 
                 return this;
             }
+        }
+
+        public PropertyInvocationCollection<TDeclaringType, object> WhenCalledWithValuesFrom(TDeclaringType source)
+        {
+            var propertyInvocationInfos = new List<PropertyInvocationInfo<TDeclaringType, object>>();
+            var propertyInvoker = new PropertyInvoker<TDeclaringType>(source);
+            
+            foreach (PropertyInfo propInfo in typeof(TDeclaringType)
+                .GetPublicOrInternalProperties()
+                .Where(pi => SelectedProperties.Any(ipi => ipi.PropertyInfo.Name == pi.Name)))
+            {
+                object value = propertyInvoker.GetValue<object>(propInfo.Name);
+                propertyInvocationInfos.Add(new PropertyInvocationInfo<TDeclaringType, object>(propInfo, value));
+            }
+
+            return new PropertyInvocationCollection<TDeclaringType, object>(Instance, propertyInvocationInfos);
         }
 
         /// <summary>

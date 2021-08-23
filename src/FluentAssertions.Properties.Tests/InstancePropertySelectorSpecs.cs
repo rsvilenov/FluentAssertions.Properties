@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using FluentAssertions.Properties.Extensions;
 using System.Text;
 using Xunit;
 
@@ -29,7 +30,8 @@ namespace FluentAssertions.Properties.Tests
         {
             // Arrange
             var testObj = new TestClass();
-            int expectedPublicOrInternalPropertyCount = GetPublicOrInternalInstanceProperties<TestClass>()
+            int expectedPublicOrInternalPropertyCount = typeof(TestClass)
+                .GetPublicOrInternalProperties()
                 .Count();
 
             // Act
@@ -50,17 +52,6 @@ namespace FluentAssertions.Properties.Tests
 
             // Assert
             act.Should().Throw<ArgumentNullException>();
-        }
-
-        private IEnumerable<PropertyInfo> GetPublicOrInternalInstanceProperties<T>()
-        {
-            return typeof(T)
-                .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                .Where(propertyInfo =>
-                {
-                    MethodInfo getter = propertyInfo.GetGetMethod(nonPublic: true);
-                    return (getter != null) && (getter.IsPublic || getter.IsAssembly);
-                });
         }
 
         private class TestClass
