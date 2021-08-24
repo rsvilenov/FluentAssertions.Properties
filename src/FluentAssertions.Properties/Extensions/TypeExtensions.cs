@@ -9,7 +9,7 @@ namespace FluentAssertions.Properties.Extensions
     {
         public static Type GetActualTypeIfNullable(this Type type)
         {
-            if (CheckIfTypeIsNullableValueType(type))
+            if (IsNullableValueType(type))
             {
                 var valueProperty = type.GetProperty("Value");
                 type = valueProperty.PropertyType;
@@ -18,11 +18,9 @@ namespace FluentAssertions.Properties.Extensions
             return type;
         }
 
-        public static bool CheckIfTypeIsNullableValueType(this Type type)
+        public static bool IsNullableValueType(this Type type)
         {
-            return 
-                type.IsGenericType 
-                && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+            return Nullable.GetUnderlyingType(type) != null;
         }
 
         public static IEnumerable<PropertyInfo> GetPublicOrInternalProperties(this Type type)

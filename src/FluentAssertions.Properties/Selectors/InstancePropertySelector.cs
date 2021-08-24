@@ -22,10 +22,10 @@ namespace FluentAssertions.Properties.Selectors
             var properties = new List<InstancePropertyInfo<TDeclaringType>>();
 
             Type type = instance.GetType();
-            foreach (PropertyInfo propInfo in type.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+            foreach (PropertyInfo propInfo in type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
             {
                 if ((propertyNames == null || propertyNames.Contains(propInfo.Name))
-                    && IsPropertyPublicOrInternal(propInfo))
+                    && propInfo.HasPublicOrInternalGetter())
                 {
 
                     properties.Add(new InstancePropertyInfo<TDeclaringType>(propInfo));
@@ -36,16 +36,9 @@ namespace FluentAssertions.Properties.Selectors
             SelectedProperties = properties;
         }
 
-        private InstancePropertySelector(TDeclaringType instance, IEnumerable<InstancePropertyInfo<TDeclaringType>> selectedPropertyInfos)
+        private InstancePropertySelector(TDeclaringType instance, IEnumerable<InstancePropertyInfo<TDeclaringType>> instancePropertyInfos)
+            : base(instance, instancePropertyInfos)
         {
-            Instance = instance;
-            SelectedProperties = selectedPropertyInfos;
-        }
-
-        private bool IsPropertyPublicOrInternal(PropertyInfo propertyInfo)
-        {
-            MethodInfo getter = propertyInfo.GetGetMethod(nonPublic: true);
-            return (getter != null) && (getter.IsPublic || getter.IsAssembly);
         }
 
         /// <summary>
@@ -81,8 +74,7 @@ namespace FluentAssertions.Properties.Selectors
             get
             {
                 var filteredProperties = SelectedProperties
-                    .Where(property => property.PropertyInfo.PropertyType.IsValueType ||
-                        property.PropertyInfo.PropertyType.CheckIfTypeIsNullableValueType());
+                    .Where(property => property.PropertyInfo.PropertyType.IsValueType);
 
                 return new InstancePropertyOfValueTypeSelector<TDeclaringType>(Instance, filteredProperties);
             }
@@ -93,8 +85,7 @@ namespace FluentAssertions.Properties.Selectors
             get
             {
                 var filteredProperties = SelectedProperties
-                    .Where(property => !property.PropertyInfo.PropertyType.IsValueType &&
-                        !property.PropertyInfo.PropertyType.CheckIfTypeIsNullableValueType());
+                    .Where(property => !property.PropertyInfo.PropertyType.IsValueType);
 
                 return CloneFiltered(filteredProperties);
             }

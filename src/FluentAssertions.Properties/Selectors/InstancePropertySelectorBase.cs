@@ -2,6 +2,7 @@
 using FluentAssertions.Properties.Extensions;
 using FluentAssertions.Properties.Invocation;
 using FluentAssertions.Types;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,15 +10,24 @@ using System.Reflection;
 
 namespace FluentAssertions.Properties.Selectors
 {
-    public abstract class InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo, TSelector> 
+    public abstract class InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo, TSelector>
         : IEnumerable<TInstancePropertyInfo>
         where TInstancePropertyInfo : InstancePropertyInfo<TDeclaringType>
         where TSelector : InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo, TSelector>
     {
-        internal protected IEnumerable<TInstancePropertyInfo> SelectedProperties { get; set; } = new List<TInstancePropertyInfo>();
-        internal protected TDeclaringType Instance { get; set; }
-
+        protected IEnumerable<TInstancePropertyInfo> SelectedProperties { get; set; } = new List<TInstancePropertyInfo>();
+        protected TDeclaringType Instance { get; set; }
         protected abstract TSelector CloneFiltered(IEnumerable<TInstancePropertyInfo> filteredProperties);
+
+        protected InstancePropertySelectorBase()
+        { 
+        }
+        
+        protected InstancePropertySelectorBase(TDeclaringType instance, IEnumerable<TInstancePropertyInfo> instancePropertyInfos)
+        {
+            Instance = instance;
+            SelectedProperties = instancePropertyInfos.ToList();
+        }
 
         public TSelector ThatAreWritable
         {
@@ -40,8 +50,6 @@ namespace FluentAssertions.Properties.Selectors
                 return CloneFiltered(filteredProperties);
             }
         }
-
-
 
         public TSelector ThatAreVirtual
         {
@@ -85,6 +93,40 @@ namespace FluentAssertions.Properties.Selectors
 
                 return CloneFiltered(filteredProperties);
             }
+        }
+
+        public TSelector ThatAreNotInternal
+        {
+            get
+            {
+                var filteredProperties = SelectedProperties
+                    .Where(property =>
+                    {
+                        var getMethod = property.PropertyInfo.GetGetMethod();
+                        return !(getMethod == null || getMethod.IsFamily);
+                    });
+
+                return CloneFiltered(filteredProperties);
+            }
+        }
+
+        public TSelector ThatAreNotInheritted
+        {
+            get
+            {
+                var filteredProperties = SelectedProperties
+                    .Where(property => property.PropertyInfo.DeclaringType.Equals(property.InstanceType));
+
+                return CloneFiltered(filteredProperties);
+            }
+        }
+
+        public TSelector OfTypeMatching(Predicate<PropertyInfo> condition)
+        {
+            var filteredProperties = SelectedProperties
+                .Where(p => condition(p.PropertyInfo));
+
+            return CloneFiltered(filteredProperties);
         }
 
         public PropertyInvocationCollection<TDeclaringType, object> WhenCalledWithValuesFrom(TDeclaringType source)

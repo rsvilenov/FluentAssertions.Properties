@@ -10,16 +10,9 @@ namespace FluentAssertions.Properties.Selectors
         InstancePropertySelectorBase<TDeclaringType, InstancePropertyInfo<TDeclaringType, TProperty>, InstancePropertyWithKnownTypeSelector<TDeclaringType, TProperty>>
         
     {
-        internal InstancePropertyWithKnownTypeSelector(TDeclaringType instance, InstancePropertyInfo<TDeclaringType, TProperty> instancePropertyInfo)
-               : this(instance, new[] { instancePropertyInfo })
-        {
-
-        }
-
         internal InstancePropertyWithKnownTypeSelector(TDeclaringType instance, IEnumerable<InstancePropertyInfo<TDeclaringType, TProperty>> instancePropertyInfos)
+            : base(instance, instancePropertyInfos)
         {
-            Instance = instance;
-            SelectedProperties = instancePropertyInfos;
         }
 
         public InstancePropertyWithKnownTypeSelector<TDeclaringType, TProperty> HavingValue(TProperty value)

@@ -11,9 +11,8 @@ namespace FluentAssertions.Properties.Selectors
         : InstancePropertySelectorBase<TDeclaringType, InstancePropertyInfo<TDeclaringType>, InstancePropertyOfValueTypeSelector<TDeclaringType>>
     {
         internal InstancePropertyOfValueTypeSelector(TDeclaringType instance, IEnumerable<InstancePropertyInfo<TDeclaringType>> instancePropertyInfos)
+            : base(instance, instancePropertyInfos)
         {
-            Instance = instance;
-            SelectedProperties = instancePropertyInfos;
         }
 
         public InstancePropertyOfValueTypeSelector<TDeclaringType> ThatHaveDefaultValue
@@ -32,7 +31,7 @@ namespace FluentAssertions.Properties.Selectors
             get
             {
                 var filteredProperties = SelectedProperties
-                    .Where(property => CheckIfValueIsDefault(property.PropertyInfo));
+                    .Where(property => !property.PropertyInfo.PropertyType.IsNullableValueType());
 
                 return CloneFiltered(filteredProperties);
             }
@@ -43,7 +42,7 @@ namespace FluentAssertions.Properties.Selectors
             get
             {
                 var filteredProperties = SelectedProperties
-                    .Where(property => !CheckIfValueIsDefault(property.PropertyInfo));
+                    .Where(property => property.PropertyInfo.PropertyType.IsNullableValueType());
 
                 return CloneFiltered(filteredProperties);
             }
@@ -56,7 +55,7 @@ namespace FluentAssertions.Properties.Selectors
 
         private bool CheckIfValueIsDefault(PropertyInfo propertyInfo)
         {
-            Type actualType = propertyInfo.PropertyType.CheckIfTypeIsNullableValueType()
+            Type actualType = propertyInfo.PropertyType.IsNullableValueType()
                 ? propertyInfo.PropertyType.GetActualTypeIfNullable()
                 : propertyInfo.PropertyType;
 

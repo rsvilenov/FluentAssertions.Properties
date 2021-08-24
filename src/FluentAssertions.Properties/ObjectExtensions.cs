@@ -1,13 +1,17 @@
 ﻿using FluentAssertions.Properties.Extensions;
 using FluentAssertions.Properties.Selectors;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace FluentAssertions.Properties
 {
     public static class ObjectExtensions
     {
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static InstancePropertySelector<TDeclaringType> Properties<TDeclaringType>(this TDeclaringType instance, params Expression<Func<TDeclaringType, object>>[] properties)
         {
             var propertyNames = properties.Any()
@@ -17,6 +21,7 @@ namespace FluentAssertions.Properties
             return new InstancePropertySelector<TDeclaringType>(instance, propertyNames);
         }
 
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static InstancePropertyWithKnownTypeSelector<TDeclaringType, TProperty> Properties<TDeclaringType, TProperty>(this TDeclaringType instance, params Expression<Func<TDeclaringType, TProperty>>[] properties)
         {
             var propertyNames = properties.Any()

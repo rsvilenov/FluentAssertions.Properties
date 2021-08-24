@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 namespace FluentAssertions.Properties.Data
 {
@@ -14,6 +15,8 @@ namespace FluentAssertions.Properties.Data
             { }
 
         public PropertyInfo PropertyInfo { get; internal set; }
+
+        public Type InstanceType => typeof(TDeclaringType);
     }
 
     public class InstancePropertyInfo<TDeclaringType, TProperty> : InstancePropertyInfo<TDeclaringType>
