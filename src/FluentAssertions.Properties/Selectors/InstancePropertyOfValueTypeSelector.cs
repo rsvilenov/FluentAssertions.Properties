@@ -1,26 +1,29 @@
 ﻿using FluentAssertions.Properties.Data;
 using FluentAssertions.Properties.Extensions;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
 namespace FluentAssertions.Properties.Selectors
 {
-    public class InstancePropertyOfValueTypeSelector<TDeclaringType> : InstancePropertySelectorBase<TDeclaringType, InstancePropertyInfo<TDeclaringType>>
+    public class InstancePropertyOfValueTypeSelector<TDeclaringType> 
+        : InstancePropertySelectorBase<TDeclaringType, InstancePropertyInfo<TDeclaringType>, InstancePropertyOfValueTypeSelector<TDeclaringType>>
     {
-        internal InstancePropertyOfValueTypeSelector(InstancePropertySelectorBase<TDeclaringType, InstancePropertyInfo<TDeclaringType>> instancePropertySelector)
-            : base(instancePropertySelector)
+        internal InstancePropertyOfValueTypeSelector(TDeclaringType instance, IEnumerable<InstancePropertyInfo<TDeclaringType>> instancePropertyInfos)
         {
+            Instance = instance;
+            SelectedProperties = instancePropertyInfos;
         }
 
         public InstancePropertyOfValueTypeSelector<TDeclaringType> ThatHaveDefaultValue
         {
             get
             {
-                SelectedProperties = SelectedProperties
+                var filteredProperties = SelectedProperties
                     .Where(property => CheckIfValueIsDefault(property.PropertyInfo));
 
-                return this;
+                return CloneFiltered(filteredProperties);
             }
         }
 
@@ -28,10 +31,10 @@ namespace FluentAssertions.Properties.Selectors
         {
             get
             {
-                SelectedProperties = SelectedProperties
+                var filteredProperties = SelectedProperties
                     .Where(property => CheckIfValueIsDefault(property.PropertyInfo));
 
-                return this;
+                return CloneFiltered(filteredProperties);
             }
         }
 
@@ -39,11 +42,16 @@ namespace FluentAssertions.Properties.Selectors
         {
             get
             {
-                SelectedProperties = SelectedProperties
+                var filteredProperties = SelectedProperties
                     .Where(property => !CheckIfValueIsDefault(property.PropertyInfo));
 
-                return this;
+                return CloneFiltered(filteredProperties);
             }
+        }
+
+        protected override InstancePropertyOfValueTypeSelector<TDeclaringType> CloneFiltered(IEnumerable<InstancePropertyInfo<TDeclaringType>> filteredProperties)
+        {
+            return new InstancePropertyOfValueTypeSelector<TDeclaringType>(Instance, filteredProperties);
         }
 
         private bool CheckIfValueIsDefault(PropertyInfo propertyInfo)

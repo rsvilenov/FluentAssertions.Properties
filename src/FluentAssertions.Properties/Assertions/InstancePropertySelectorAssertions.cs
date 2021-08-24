@@ -8,11 +8,12 @@ using System.Linq;
 namespace FluentAssertions.Properties.Data
 {
     [DebuggerNonUserCode]
-    public class InstancePropertySelectorAssertions<TDeclaringType, TInstancePropertyInfo>
-        : InstancePropertySelectorAssertions<InstancePropertySelectorAssertions<TDeclaringType, TInstancePropertyInfo>, TDeclaringType, TInstancePropertyInfo>
+    public class InstancePropertySelectorAssertions<TDeclaringType, TInstancePropertyInfo, TSelector>
+        : InstancePropertySelectorAssertions<InstancePropertySelectorAssertions<TDeclaringType, TInstancePropertyInfo, TSelector>, TDeclaringType, TInstancePropertyInfo, TSelector>
         where TInstancePropertyInfo : InstancePropertyInfo<TDeclaringType>
+        where TSelector : InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo, TSelector>
     {
-        internal InstancePropertySelectorAssertions(InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo> value)
+        internal InstancePropertySelectorAssertions(InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo, TSelector> value)
             : base (value)
         {
         }
@@ -22,11 +23,12 @@ namespace FluentAssertions.Properties.Data
     /// Contains a number of methods to assert that a <see cref="bool"/> is in the expected state.
     /// </summary>
     [DebuggerNonUserCode]
-    public class InstancePropertySelectorAssertions<TAssertions, TDeclaringType, TInstancePropertyInfo>
-        where TAssertions : InstancePropertySelectorAssertions<TAssertions, TDeclaringType, TInstancePropertyInfo>
+    public class InstancePropertySelectorAssertions<TAssertions, TDeclaringType, TInstancePropertyInfo, TSelector>
+        where TAssertions : InstancePropertySelectorAssertions<TAssertions, TDeclaringType, TInstancePropertyInfo, TSelector>
         where TInstancePropertyInfo : InstancePropertyInfo<TDeclaringType>
+        where TSelector : InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo, TSelector>
     {
-        internal InstancePropertySelectorAssertions(InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo> value)
+        internal InstancePropertySelectorAssertions(InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo, TSelector> value)
         {
             Subject = value; 
         }
@@ -34,7 +36,7 @@ namespace FluentAssertions.Properties.Data
         /// <summary>
         /// Gets the object which value is being asserted.
         /// </summary>
-        public InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo> Subject { get; }
+        public InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo, TSelector> Subject { get; }
 
         public AndConstraint<TAssertions> HaveCount(int expectedCount, string because = "", params object[] becauseArgs)
         {

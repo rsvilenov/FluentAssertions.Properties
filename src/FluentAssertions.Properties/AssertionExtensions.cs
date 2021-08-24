@@ -14,15 +14,17 @@ namespace FluentAssertions.Properties
         }
 
         [Pure]
-        public static InstancePropertySelectorAssertions<TDeclaringType, InstancePropertyInfo<TDeclaringType, TProperty>> Should<TDeclaringType, TProperty>(this InstancePropertySelectorBase<TDeclaringType, InstancePropertyInfo<TDeclaringType, TProperty>> actualValue)
+        public static InstancePropertySelectorAssertions<TDeclaringType, InstancePropertyInfo<TDeclaringType, TProperty>, TSelector> Should<TDeclaringType, TProperty, TSelector>(this InstancePropertySelectorBase<TDeclaringType, InstancePropertyInfo<TDeclaringType, TProperty>, TSelector> actualValue)
+            where TSelector : InstancePropertySelectorBase<TDeclaringType, InstancePropertyInfo<TDeclaringType, TProperty>, TSelector>
         {
-            return new InstancePropertySelectorAssertions<TDeclaringType, InstancePropertyInfo<TDeclaringType, TProperty>>(actualValue);
+            return new InstancePropertySelectorAssertions<TDeclaringType, InstancePropertyInfo<TDeclaringType, TProperty>, TSelector>(actualValue);
         }
 
         [Pure]
-        public static InstancePropertySelectorAssertions<TDeclaringType, InstancePropertyInfo<TDeclaringType>> Should<TDeclaringType>(this InstancePropertySelectorBase<TDeclaringType, InstancePropertyInfo<TDeclaringType>> actualValue)
+        public static InstancePropertySelectorAssertions<TDeclaringType, InstancePropertyInfo<TDeclaringType>, TSelector> Should<TDeclaringType, TSelector>(this InstancePropertySelectorBase<TDeclaringType, InstancePropertyInfo<TDeclaringType>, TSelector> actualValue)
+            where TSelector : InstancePropertySelectorBase<TDeclaringType, InstancePropertyInfo<TDeclaringType>, TSelector>
         {
-            return new InstancePropertySelectorAssertions<TDeclaringType, InstancePropertyInfo<TDeclaringType>>(actualValue);
+            return new InstancePropertySelectorAssertions<TDeclaringType, InstancePropertyInfo<TDeclaringType>, TSelector>(actualValue);
         }
 
         public static PropertyInvocationCollectionAssertions<TDeclaringType, TProperty> Should<TDeclaringType, TProperty>(this PropertyInvocationCollection<TDeclaringType, TProperty> actualValue)

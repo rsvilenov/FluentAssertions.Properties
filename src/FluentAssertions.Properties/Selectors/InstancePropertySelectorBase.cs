@@ -9,62 +9,81 @@ using System.Reflection;
 
 namespace FluentAssertions.Properties.Selectors
 {
-    public abstract class InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo> : IEnumerable<TInstancePropertyInfo>
+    public abstract class InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo, TSelector> 
+        : IEnumerable<TInstancePropertyInfo>
         where TInstancePropertyInfo : InstancePropertyInfo<TDeclaringType>
+        where TSelector : InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo, TSelector>
     {
         internal protected IEnumerable<TInstancePropertyInfo> SelectedProperties { get; set; } = new List<TInstancePropertyInfo>();
         internal protected TDeclaringType Instance { get; set; }
 
-        internal InstancePropertySelectorBase() { }
-        internal InstancePropertySelectorBase(InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo> instancePropertySelector)
-        {
-            Instance = instancePropertySelector.Instance;
-            SelectedProperties = instancePropertySelector.SelectedProperties;
-        }
+        protected abstract TSelector CloneFiltered(IEnumerable<TInstancePropertyInfo> filteredProperties);
 
-        public InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo> ThatAreWritable
+        public TSelector ThatAreWritable
         {
             get
             {
-                SelectedProperties = SelectedProperties
+                var filteredProperties = SelectedProperties
                     .Where(p => p.PropertyInfo.CanWrite);
 
-                return this;
+                return CloneFiltered(filteredProperties);
             }
         }
 
-        public InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo> ThatAreReadOnly
+        public TSelector ThatAreReadOnly
         {
             get
             {
-                SelectedProperties = SelectedProperties
+                var filteredProperties = SelectedProperties
                     .Where(p => !p.PropertyInfo.CanWrite);
 
-                return this;
+                return CloneFiltered(filteredProperties);
             }
         }
 
 
 
-        public InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo> ThatAreVirtual
+        public TSelector ThatAreVirtual
         {
             get
             {
-                SelectedProperties = SelectedProperties
+                var filteredProperties = SelectedProperties
                     .Where(property => property.PropertyInfo.GetMethod.IsVirtual);
 
-                return this;
+                return CloneFiltered(filteredProperties);
             }
         }
 
-        public InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo> ThatAreNotVirtual
+        public TSelector ThatAreNotVirtual
         {
             get
             {
-                SelectedProperties = SelectedProperties
+                var filteredProperties = SelectedProperties
                     .Where(property => !property.PropertyInfo.GetMethod.IsVirtual);
 
-                return this;
+                return CloneFiltered(filteredProperties); ;
+            }
+        }
+
+        public TSelector ThatAreOfPrimitiveTypes
+        {
+            get
+            {
+                var filteredProperties = SelectedProperties
+                    .Where(property => property.PropertyInfo.PropertyType.IsPrimitive);
+
+                return CloneFiltered(filteredProperties);
+            }
+        }
+
+        public TSelector ThatAreNotOfPrimitiveTypes
+        {
+            get
+            {
+                var filteredProperties = SelectedProperties
+                    .Where(property => !property.PropertyInfo.PropertyType.IsPrimitive);
+
+                return CloneFiltered(filteredProperties);
             }
         }
 

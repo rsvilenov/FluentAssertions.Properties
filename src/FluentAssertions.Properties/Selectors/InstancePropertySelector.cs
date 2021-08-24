@@ -7,7 +7,8 @@ using System.Reflection;
 
 namespace FluentAssertions.Properties.Selectors
 {
-    public class InstancePropertySelector<TDeclaringType> :  InstancePropertySelectorBase<TDeclaringType, InstancePropertyInfo<TDeclaringType>>
+    public class InstancePropertySelector<TDeclaringType> 
+        :  InstancePropertySelectorBase<TDeclaringType, InstancePropertyInfo<TDeclaringType>, InstancePropertySelector<TDeclaringType>>
     {
         internal InstancePropertySelector(TDeclaringType instance, IEnumerable<string> propertyNames = null)
         {
@@ -35,6 +36,12 @@ namespace FluentAssertions.Properties.Selectors
             SelectedProperties = properties;
         }
 
+        private InstancePropertySelector(TDeclaringType instance, IEnumerable<InstancePropertyInfo<TDeclaringType>> selectedPropertyInfos)
+        {
+            Instance = instance;
+            SelectedProperties = selectedPropertyInfos;
+        }
+
         private bool IsPropertyPublicOrInternal(PropertyInfo propertyInfo)
         {
             MethodInfo getter = propertyInfo.GetGetMethod(nonPublic: true);
@@ -46,11 +53,11 @@ namespace FluentAssertions.Properties.Selectors
         /// </summary>
         public InstancePropertyWithKnownTypeSelector<TDeclaringType, TProperty> OfType<TProperty>()
         {
-            var selectors = SelectedProperties
+            var selectedProperties = SelectedProperties
                 .Where(property => property.PropertyInfo.PropertyType == typeof(TProperty))
                 .Select(p => new InstancePropertyInfo<TDeclaringType, TProperty>(p));
 
-            return new InstancePropertyWithKnownTypeSelector<TDeclaringType, TProperty>(Instance, selectors);
+            return new InstancePropertyWithKnownTypeSelector<TDeclaringType, TProperty>(Instance, selectedProperties);
         }
 
         /// <summary>
@@ -58,22 +65,26 @@ namespace FluentAssertions.Properties.Selectors
         /// </summary>
         public InstancePropertySelector<TDeclaringType> NotOfType<TProperty>()
         {
-            SelectedProperties = SelectedProperties
+            var filteredProperties = SelectedProperties
                 .Where(property => property.PropertyInfo.PropertyType != typeof(TProperty));
 
-            return this;
+            return CloneFiltered(filteredProperties);
+        }
+
+        protected override InstancePropertySelector<TDeclaringType> CloneFiltered(IEnumerable<InstancePropertyInfo<TDeclaringType>> filteredProperties)
+        {
+            return new InstancePropertySelector<TDeclaringType>(Instance, filteredProperties);
         }
 
         public InstancePropertyOfValueTypeSelector<TDeclaringType> ThatAreOfValueTypes
         {
             get
             {
-                SelectedProperties = SelectedProperties
+                var filteredProperties = SelectedProperties
                     .Where(property => property.PropertyInfo.PropertyType.IsValueType ||
-                        (property.PropertyInfo.PropertyType.CheckIfTypeIsNullableValueType()
-                            && property.PropertyInfo.PropertyType.GetActualTypeIfNullable().IsValueType));
+                        property.PropertyInfo.PropertyType.CheckIfTypeIsNullableValueType());
 
-                return new InstancePropertyOfValueTypeSelector<TDeclaringType>(this);
+                return new InstancePropertyOfValueTypeSelector<TDeclaringType>(Instance, filteredProperties);
             }
         }
 
@@ -81,35 +92,13 @@ namespace FluentAssertions.Properties.Selectors
         {
             get
             {
-                SelectedProperties = SelectedProperties
+                var filteredProperties = SelectedProperties
                     .Where(property => !property.PropertyInfo.PropertyType.IsValueType &&
-                        (property.PropertyInfo.PropertyType.CheckIfTypeIsNullableValueType()
-                            && !property.PropertyInfo.PropertyType.GetActualTypeIfNullable().IsValueType));
+                        !property.PropertyInfo.PropertyType.CheckIfTypeIsNullableValueType());
 
-                return this;
+                return CloneFiltered(filteredProperties);
             }
         }
 
-
-        ///// <summary>
-        ///// Only select the properties that are decorated with an attribute of the specified type.
-        ///// </summary>
-        //public InstancePropertySelector<TDeclaringType> ThatAreDecoratedWith<TAttribute>()
-        //    where TAttribute : Attribute
-        //{
-        //    SelectedProperties = SelectedProperties.Where(property => property.IsDecoratedWith<TAttribute>());
-        //    return this;
-        //}
-
-
-        ///// <summary>
-        ///// Only select the properties that are not decorated with an attribute of the specified type.
-        ///// </summary>
-        //public PropertyInfoSelector ThatAreNotDecoratedWith<TAttribute>()
-        //    where TAttribute : Attribute
-        //{
-        //    selectedProperties = selectedProperties.Where(property => !property.IsDecoratedWith<TAttribute>());
-        //    return this;
-        //}
     }
 }

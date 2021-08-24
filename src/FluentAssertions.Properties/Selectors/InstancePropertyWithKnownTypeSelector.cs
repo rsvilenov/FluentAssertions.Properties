@@ -7,7 +7,7 @@ using System.Linq;
 namespace FluentAssertions.Properties.Selectors
 {
     public class InstancePropertyWithKnownTypeSelector<TDeclaringType, TProperty> :
-        InstancePropertySelectorBase<TDeclaringType, InstancePropertyInfo<TDeclaringType, TProperty>>
+        InstancePropertySelectorBase<TDeclaringType, InstancePropertyInfo<TDeclaringType, TProperty>, InstancePropertyWithKnownTypeSelector<TDeclaringType, TProperty>>
         
     {
         internal InstancePropertyWithKnownTypeSelector(TDeclaringType instance, InstancePropertyInfo<TDeclaringType, TProperty> instancePropertyInfo)
@@ -26,11 +26,11 @@ namespace FluentAssertions.Properties.Selectors
         {
             var propertyInvoker = InvocationContext.PropertyInvokerFactory.CreatePropertyInvoker<TDeclaringType>(Instance);
             
-            SelectedProperties = SelectedProperties
+            var filteredProperties = SelectedProperties
                 .Where(p => p.PropertyInfo.HasPublicOrInternalGetter()
                     && propertyInvoker.GetValue<TProperty>(p.PropertyInfo.Name).Equals(value));
 
-            return this;
+            return CloneFiltered(filteredProperties);
         }
 
         public PropertyInvocationCollection<TDeclaringType, TProperty> WhenCalledWith(TProperty value)
@@ -41,6 +41,11 @@ namespace FluentAssertions.Properties.Selectors
             return new PropertyInvocationCollection<TDeclaringType, TProperty>(
                 Instance,
                 propertyInvocationInfos);
+        }
+
+        protected override InstancePropertyWithKnownTypeSelector<TDeclaringType, TProperty> CloneFiltered(IEnumerable<InstancePropertyInfo<TDeclaringType, TProperty>> filteredProperties)
+        {
+            return new InstancePropertyWithKnownTypeSelector<TDeclaringType, TProperty>(Instance, filteredProperties);
         }
     }
 }
