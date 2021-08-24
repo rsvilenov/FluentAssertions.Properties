@@ -24,7 +24,7 @@ namespace FluentAssertions.Properties.Selectors
 
         public InstancePropertyWithKnownTypeSelector<TDeclaringType, TProperty> HavingValue(TProperty value)
         {
-            var propertyInvoker = new ReflectionPropertyInvoker<TDeclaringType>(Instance);
+            var propertyInvoker = InvocationContext.PropertyInvokerFactory.CreatePropertyInvoker<TDeclaringType>(Instance);
             
             SelectedProperties = SelectedProperties
                 .Where(p => p.PropertyInfo.HasPublicOrInternalGetter()

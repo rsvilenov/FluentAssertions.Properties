@@ -28,7 +28,7 @@ namespace FluentAssertions.Properties.Assertions
         internal PropertyInvocationCollectionAssertions(PropertyInvocationCollection<TDeclaringType, TProperty> value)
         {
             Subject = value;
-            _propertyInvoker = new ReflectionPropertyInvoker<TDeclaringType>(value.Instance);
+            _propertyInvoker = InvocationContext.PropertyInvokerFactory.CreatePropertyInvoker<TDeclaringType>(value.Instance);
         }
 
         /// <summary>

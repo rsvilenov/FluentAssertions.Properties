@@ -71,7 +71,7 @@ namespace FluentAssertions.Properties.Selectors
         public PropertyInvocationCollection<TDeclaringType, object> WhenCalledWithValuesFrom(TDeclaringType source)
         {
             var propertyInvocationInfos = new List<PropertyInvocationInfo<TDeclaringType, object>>();
-            var propertyInvoker = new ReflectionPropertyInvoker<TDeclaringType>(source);
+            var propertyInvoker = InvocationContext.PropertyInvokerFactory.CreatePropertyInvoker<TDeclaringType>(source);
             
             foreach (PropertyInfo propInfo in typeof(TDeclaringType)
                 .GetPublicOrInternalProperties()
