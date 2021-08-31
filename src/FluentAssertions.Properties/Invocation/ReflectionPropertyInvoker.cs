@@ -8,20 +8,38 @@
             _instance = instance;
         }
 
+        public void SetValue(string propertyName, object testData)
+        {
+            SetValueInternal(propertyName, testData);
+        }
+
         public void SetValue<TProperty>(string propertyName, TProperty testData)
+        {
+            SetValueInternal(propertyName, testData);
+        }
+
+        public object GetValue(string propertyName)
+        {
+            return GetValueInternal(propertyName);
+        }
+        
+        public TProperty GetValue<TProperty>(string propertyName)
+        {
+           return (TProperty)GetValueInternal(propertyName);
+        }
+
+        private void SetValueInternal(string propertyName, object testData)
         {
             _instance.GetType()
                 .GetProperty(propertyName)
-                .GetSetMethod()
-                .Invoke(_instance, new object[] { testData });
+                .SetValue(_instance, testData);
         }
 
-        public TProperty GetValue<TProperty>(string propertyName)
+        public object GetValueInternal(string propertyName)
         {
-           return (TProperty)_instance.GetType()
-                .GetProperty(propertyName)
-                .GetGetMethod()
-                .Invoke(_instance, null);
+            return _instance.GetType()
+                 .GetProperty(propertyName)
+                 .GetValue(_instance);
         }
     }
 }

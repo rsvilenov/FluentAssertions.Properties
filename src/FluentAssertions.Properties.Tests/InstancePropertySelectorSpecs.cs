@@ -318,7 +318,7 @@ namespace FluentAssertions.Properties.Tests
         {
             // Arrange
             const string inherittedPropertyName = "BaseClassProperty";
-            var testObj = new TestClass();
+            var testObj = new TestSubClass();
 
             // Act
             var selectedProperties = testObj
@@ -336,16 +336,15 @@ namespace FluentAssertions.Properties.Tests
         public void When_selecting_properties_of_specific_types_should_succeed()
         {
             // Arrange
-            var testObj = new TestClass();
-            var expectedPropertyInfos = typeof(TestClass)
+            var testObj = new TestClassPublicPropertiesOnly();
+            var expectedPropertyInfos = typeof(TestClassPublicPropertiesOnly)
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .Where(propertyInfo => propertyInfo.PropertyType.Equals(typeof(string)));
 
             // Act
             var selectedProperties = testObj
                 .Properties()
-                .OfType<string>()
-                .ThatAreNotInternal;
+                .OfType<string>();
 
             // Assert
             selectedProperties
@@ -375,8 +374,178 @@ namespace FluentAssertions.Properties.Tests
                 .BeEquivalentTo(expectedPropertyInfos);
         }
 
+        [Fact]
+        public void When_selecting_properties_return_types_method_count_should_match_test_object_public_property_count()
+        {
+            // Arrange
+            var testObj = new TestClassPublicPropertiesOnly();
+            var expectedCount = typeof(TestClassPublicPropertiesOnly)
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Length;
+
+            // Act
+            var selectedPropertyReturnTypes = testObj
+                .Properties()
+                .ReturnTypes();
+
+            // Assert
+            selectedPropertyReturnTypes
+                .Count()
+                .Should()
+                .Be(expectedCount);
+        }
+
+        [Fact]
+        public void When_selecting_properties_return_types_methods_first_type_should_match_first_property_type_of_test_object()
+        {
+            // Arrange
+            var testObj = new TestClass();
+
+            // Act
+            var firstPropertyReturnType = testObj
+                .Properties()
+                .OfType<string>()
+                .ReturnTypes()
+                .First();
+
+            // Assert
+            firstPropertyReturnType
+                .Should()
+                .Be(typeof(string));
+        }
+
+        [Fact]
+        public void When_selecting_properties_to_array_count_should_match_test_object_public_property_types()
+        {
+            // Arrange
+            var testObj = new TestClassPublicPropertiesOnly();
+            var expectedPropertyTypes = typeof(TestClassPublicPropertiesOnly)
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Select(pi => pi.PropertyType);
+
+            // Act
+            var selectedPropertyArray = testObj
+                .Properties()
+                .ToArray();
+
+            // Assert
+            selectedPropertyArray
+                .Select(ipi => ipi.PropertyInfo.PropertyType)
+                .Should()
+                .BeEquivalentTo(expectedPropertyTypes);
+        }
+
+        [Fact]
+        public void When_selecting_properties_is_used_as_enumerable_its_result_should_match_test_object_public_property_types()
+        {
+            // Arrange
+            var testObj = new TestClassPublicPropertiesOnly();
+            var expectedPropertyTypes = typeof(TestClassPublicPropertiesOnly)
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Select(pi => pi.PropertyType);
+
+            // Act
+            var selectedPropertyList = testObj
+                .Properties()
+                .ToList();
+
+            // Assert
+            selectedPropertyList
+                .Select(ipi => ipi.PropertyInfo.PropertyType)
+                .Should()
+                .BeEquivalentTo(expectedPropertyTypes);
+        }
+
+        [Fact]
+        public void When_selecting_properties_of_value_types_that_are_nullable_should_succeed()
+        {
+            // Arrange
+            var testObj = new TestClassValueTypePropertiesOnly();
+            var expectedPropertyTypes = typeof(TestClassValueTypePropertiesOnly)
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(pi => Nullable.GetUnderlyingType(pi.PropertyType) != null)
+                .Select(pi => pi.PropertyType);
+
+            // Act
+            var selectedPropertyList = testObj
+                .Properties()
+                .ThatAreOfValueTypes
+                .ThatAreNullable;
+
+            // Assert
+            selectedPropertyList
+                .Select(ipi => ipi.PropertyInfo.PropertyType)
+                .Should()
+                .BeEquivalentTo(expectedPropertyTypes);
+        }
+
+        [Fact]
+        public void When_selecting_properties_of_value_types_that_are_not_nullable_should_succeed()
+        {
+            // Arrange
+            var testObj = new TestClassValueTypePropertiesOnly();
+            var expectedPropertyTypes = typeof(TestClassValueTypePropertiesOnly)
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(pi => Nullable.GetUnderlyingType(pi.PropertyType) == null)
+                .Select(pi => pi.PropertyType);
+
+            // Act
+            var selectedPropertyList = testObj
+                .Properties()
+                .ThatAreOfValueTypes
+                .ThatAreNotNullable;
+
+            // Assert
+            selectedPropertyList
+                .Select(ipi => ipi.PropertyInfo.PropertyType)
+                .Should()
+                .BeEquivalentTo(expectedPropertyTypes);
+        }
+
+        [Fact]
+        public void When_selecting_properties_of_value_types_that_have_default_value_should_succeed()
+        {
+            // Arrange
+            var testObj = new TestClassValueTypePropertiesOnly();
+
+            // Act
+            var selectedPropertyList = testObj
+                .Properties()
+                .ThatAreOfValueTypes
+                .ThatHaveDefaultValue;
+
+            // Assert
+            selectedPropertyList
+                .Select(ipi => ipi.PropertyInfo.Name)
+                .Should()
+                .NotContain(s => s.EndsWith(TestClassValueTypePropertiesOnly.NonDefaultValueSuffix));
+        }
+
         private class EmptyTestClass
         { }
+
+        private class TestClassPublicPropertiesOnly
+        {
+            public int IntProperty { get; set; }
+            public double DoubleProperty { get; set; }
+            public string StringProperty { get; set; }
+            public string ReadOnlyStringProperty { get; }
+        }
+
+        private class TestClassValueTypePropertiesOnly
+        {
+            public const string NonDefaultValueSuffix = "WithNonDefaultValue";
+            public int IntProperty { get; set; }
+            public int? NullableIntProperty { get; set; }
+            public int IntPropertyWithNonDefaultValue { get; set; } = 1;
+            public double DoubleProperty { get; set; }
+            public double? NullableDoubleProperty { get; set; }
+            public double DoublePropertyWithNonDefaultValue { get; set; } = 1d;
+            public bool BoolProperty { get; set; }
+            public bool? NullableBoolProperty { get; set; }
+            public bool BoolPropertyWithNonDefaultValue { get; set; } = true;
+        }
+
 
         private class TestClass : TestClassBase
         {
@@ -391,6 +560,15 @@ namespace FluentAssertions.Properties.Tests
             public EmptyTestClass UserTypeProperty { get; set; }
 
             public virtual bool VirtualProperty { get; set; }
+        }
+
+        private class TestSubClass : TestClassBase
+        {
+            public int IntProperty { get; set; }
+            public double DoubleProperty { get; set; }
+            public string StringProperty { get; set; }
+            internal string InternalStringProperty { get; set; }
+            public string ReadOnlyStringProperty { get; }
         }
 
         public class TestClassBase

@@ -138,7 +138,7 @@ namespace FluentAssertions.Properties.Selectors
                 .GetPublicOrInternalProperties()
                 .Where(pi => SelectedProperties.Any(ipi => ipi.PropertyInfo.Name == pi.Name)))
             {
-                object value = propertyInvoker.GetValue<object>(propInfo.Name);
+                object value = propertyInvoker.GetValue(propInfo.Name);
                 propertyInvocationInfos.Add(new PropertyInvocationInfo<TDeclaringType, object>(propInfo, value));
             }
 

@@ -1,5 +1,6 @@
 ﻿using FluentAssertions.Properties.Data;
 using FluentAssertions.Properties.Extensions;
+using FluentAssertions.Properties.Invocation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,17 +56,19 @@ namespace FluentAssertions.Properties.Selectors
 
         private bool CheckIfValueIsDefault(PropertyInfo propertyInfo)
         {
-            Type actualType = propertyInfo.PropertyType.IsNullableValueType()
+            bool isNullableValueType = propertyInfo.PropertyType.IsNullableValueType();
+            Type actualType = isNullableValueType
                 ? propertyInfo.PropertyType.GetActualTypeIfNullable()
                 : propertyInfo.PropertyType;
 
             object defaultValue = Activator
                 .CreateInstance(actualType);
-
-            return propertyInfo
-                .GetGetMethod()
-                .Invoke(Instance, null)
-                .Equals(defaultValue);
+            IPropertyInvoker propertyInvoker = InvocationContext.PropertyInvokerFactory.CreatePropertyInvoker<TDeclaringType>(Instance);
+            object value = propertyInvoker.GetValue(propertyInfo.Name);
+            
+            return isNullableValueType 
+                ? value == null
+                : value.Equals(defaultValue);
         }
     }
 }
