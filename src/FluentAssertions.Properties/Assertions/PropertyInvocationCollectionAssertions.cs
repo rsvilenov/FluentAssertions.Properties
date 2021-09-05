@@ -51,16 +51,28 @@ namespace FluentAssertions.Properties.Assertions
                     PropertyInfo propertyInfo = propertyInvocationInfo
                         .PropertyInfo;
 
-                    Execute.Assertion
-                    .ForCondition(propertyInfo.CanWrite)
-                    .FailWith("Expected property {0} to have public or internal getter, but did not.", propertyInfo.Name)
-                    .Then
-                    .ForCondition(propertyInfo.CanWrite)
-                    .FailWith("Expected property {0} to be writable, but was not.", propertyInfo.Name)
-                    .Then
-                    .ForCondition(AreGetSetOperationsSymetric(propertyInfo.Name, propertyInvocationInfo.Value))
-                    .BecauseOf(because, becauseArgs)
-                    .FailWith("Expected the get and set operations of property {0} to be symetric, but was not.", propertyInfo.Name);
+                    if (!propertyInfo.CanWrite)
+                    {
+                        Execute
+                            .Assertion
+                            .BecauseOf(because, becauseArgs)
+                            .FailWith("Expected property {0} to have public or internal getter, but did not.", propertyInfo.Name);
+                    }
+                    else if (!propertyInfo.CanWrite)
+                    {
+                        Execute
+                            .Assertion
+                            .BecauseOf(because, becauseArgs)
+                            .FailWith("Expected property {0} to be writable, but was not.", propertyInfo.Name);
+                    }
+                    else
+                    {
+                        Execute
+                            .Assertion
+                            .ForCondition(AreGetSetOperationsSymetric(propertyInfo.Name, propertyInvocationInfo.Value))
+                            .BecauseOf(because, becauseArgs)
+                            .FailWith("Expected the get and set operations of property {0} to be symetric, but was not.", propertyInfo.Name);
+                    }
 
                 }
             }

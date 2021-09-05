@@ -9,7 +9,7 @@ using Xunit;
 
 namespace FluentAssertions.Properties.Tests
 {
-    public class InstancePropertySelectorSpecs
+    public class SelectorsSpecs
     {
         [Fact]
         public void When_selecting_properties_of_a_class_it_should_not_throw()
@@ -119,7 +119,7 @@ namespace FluentAssertions.Properties.Tests
             // Act
             var selectedProperties = testObj
                 .Properties()
-                .ThatAreOfValueTypes;
+                .ThatAreOfValueType;
 
             // Assert
             selectedProperties
@@ -141,7 +141,7 @@ namespace FluentAssertions.Properties.Tests
             // Act
             var selectedProperties = testObj
                 .Properties()
-                .ThatAreOfReferenceTypes;
+                .ThatAreOfReferenceType;
 
             // Assert
             selectedProperties
@@ -267,7 +267,7 @@ namespace FluentAssertions.Properties.Tests
             // Act
             var selectedProperties = testObj
                 .Properties()
-                .ThatAreOfValueTypes;
+                .ThatAreOfValueType;
 
             // Assert
             selectedProperties
@@ -469,7 +469,7 @@ namespace FluentAssertions.Properties.Tests
             // Act
             var selectedPropertyList = testObj
                 .Properties()
-                .ThatAreOfValueTypes
+                .ThatAreOfValueType
                 .ThatAreNullable;
 
             // Assert
@@ -492,7 +492,7 @@ namespace FluentAssertions.Properties.Tests
             // Act
             var selectedPropertyList = testObj
                 .Properties()
-                .ThatAreOfValueTypes
+                .ThatAreOfValueType
                 .ThatAreNotNullable;
 
             // Assert
@@ -511,7 +511,7 @@ namespace FluentAssertions.Properties.Tests
             // Act
             var selectedPropertyList = testObj
                 .Properties()
-                .ThatAreOfValueTypes
+                .ThatAreOfValueType
                 .ThatHaveDefaultValue;
 
             // Assert

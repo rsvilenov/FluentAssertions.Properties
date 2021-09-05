@@ -69,7 +69,7 @@ namespace FluentAssertions.Properties.Selectors
             return new InstancePropertySelector<TDeclaringType>(Instance, filteredProperties);
         }
 
-        public InstancePropertyOfValueTypeSelector<TDeclaringType> ThatAreOfValueTypes
+        public InstancePropertyOfValueTypeSelector<TDeclaringType> ThatAreOfValueType
         {
             get
             {
@@ -80,7 +80,7 @@ namespace FluentAssertions.Properties.Selectors
             }
         }
 
-        public InstancePropertySelector<TDeclaringType> ThatAreOfReferenceTypes
+        public InstancePropertySelector<TDeclaringType> ThatAreOfReferenceType
         {
             get
             {
