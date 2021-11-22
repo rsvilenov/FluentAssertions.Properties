@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Xunit;
 using Moq;
+using Xunit.Sdk;
 
 namespace FluentAssertions.Properties.Tests
 {
@@ -26,16 +27,91 @@ namespace FluentAssertions.Properties.Tests
                 .ProvideSymmetricAccess();
         }
 
+        [Fact]
+        public void When_selected_assymetric_properties_are_called_with_values_from_source_object_assert_should_fail()
+        {
+            // Arrange
+            var testPropertyMock = new Mock<ITestProperties>();
+            testPropertyMock.Setup(o => o.StringProperty).Returns(Guid.NewGuid().ToString());
+            testPropertyMock.Setup(o => o.IntProperty).Returns(new Random().Next());
+
+            var valueSourceMock = new Mock<ITestProperties>();
+            valueSourceMock.Setup(o => o.StringProperty).Returns(Guid.NewGuid().ToString());
+            valueSourceMock.Setup(o => o.IntProperty).Returns(new Random().Next());
+
+            var symmetricProperties = testPropertyMock
+                .Object
+                .Properties(p => p.StringProperty, p => p.IntProperty);
+
+            // Act & Assert
+            Action action = () =>
+                symmetricProperties
+                    .WhenCalledWithValuesFrom(valueSourceMock.Object)
+                    .Should()
+                    .ProvideSymmetricAccess();
+
+            action
+                .Should()
+                .Throw<XunitException>()
+                .WithMessage("Expected the get and set operations of property*");
+        }
+
+        [Fact]
+        public void When_selected_getter_only_properties_are_called_with_values_from_source_object_assert_should_fail()
+        {
+            // Arrange
+            var testPropertyMock = new Mock<ITestProperties>();
+
+            var valueSourceMock = new Mock<ITestProperties>();
+            valueSourceMock.Setup(o => o.ReadOnlyStringProperty).Returns(Guid.NewGuid().ToString());
+
+            var symmetricProperties = testPropertyMock
+                .Object
+                .Properties(p => p.ReadOnlyStringProperty);
+
+            // Act & Assert
+            Action action = () =>
+                symmetricProperties
+                    .WhenCalledWithValuesFrom(valueSourceMock.Object)
+                    .Should()
+                    .ProvideSymmetricAccess();
+
+            action
+                .Should()
+                .Throw<XunitException>()
+                .WithMessage("Expected property * to be writable, but was not.");
+        }
+
+        [Fact]
+        public void When_selected_properties_throw_from_getter_assert_should_match_thrown_exception_type()
+        {
+            // Arrange
+            var testPropertyMock = new Mock<ITestProperties>();
+
+            var valueSourceMock = new Mock<ITestProperties>();
+            valueSourceMock.Setup(o => o.StringProperty).Throws<TestException>();
+
+            var symmetricProperties = testPropertyMock
+                .Object
+                .Properties(p => p.StringProperty);
+
+            // Act & Assert
+            symmetricProperties
+                .WhenCalledWithValuesFrom(valueSourceMock.Object)
+                .Should()
+                .ThrowFromGetter<TestException>();
+        }
+
         public interface ITestProperties
         {
             string StringProperty { get; set; }
             int IntProperty { get; set; }
             string ReadOnlyStringProperty { get; }
-            string WriteOnlyStringProperty { set; }
         }
 
         public class TestException : Exception
         { 
+            public TestException() { }
             public TestException(string message = null, Exception innerException = null) : base(message, innerException) { }
         }
     }

@@ -2,7 +2,7 @@
 {
     internal static class InvocationContext
     {
-        internal static PropertyInvokerFactory PropertyInvokerFactory 
-            = new PropertyInvokerFactory();
+        internal static IPropertyInvokerFactory PropertyInvokerFactory { get; set; } 
+            =  new PropertyInvokerFactory();
     }
 }

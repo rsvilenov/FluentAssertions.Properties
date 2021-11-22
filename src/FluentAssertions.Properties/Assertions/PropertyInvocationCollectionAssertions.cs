@@ -51,7 +51,7 @@ namespace FluentAssertions.Properties.Assertions
                     PropertyInfo propertyInfo = propertyInvocationInfo
                         .PropertyInfo;
 
-                    if (!propertyInfo.CanWrite)
+                    if (!propertyInfo.CanRead)
                     {
                         Execute
                             .Assertion
@@ -71,7 +71,7 @@ namespace FluentAssertions.Properties.Assertions
                             .Assertion
                             .ForCondition(AreGetSetOperationsSymetric(propertyInfo.Name, propertyInvocationInfo.Value))
                             .BecauseOf(because, becauseArgs)
-                            .FailWith("Expected the get and set operations of property {0} to be symetric, but was not.", propertyInfo.Name);
+                            .FailWith("Expected the get and set operations of property {0} to be symetric, but were not.", propertyInfo.Name);
                     }
 
                 }
