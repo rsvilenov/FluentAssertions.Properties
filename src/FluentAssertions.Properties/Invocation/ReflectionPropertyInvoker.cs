@@ -1,4 +1,6 @@
-﻿namespace FluentAssertions.Properties.Invocation
+﻿using System.Reflection;
+
+namespace FluentAssertions.Properties.Invocation
 {
     internal class ReflectionPropertyInvoker<TDeclaringType> : IPropertyInvoker
     {
@@ -30,16 +32,30 @@
 
         private void SetValueInternal(string propertyName, object testData)
         {
-            _instance.GetType()
-                .GetProperty(propertyName)
-                .SetValue(_instance, testData);
+            try
+            {
+                _instance.GetType()
+                    .GetProperty(propertyName)
+                    .SetValue(_instance, testData);
+            }
+            catch (TargetInvocationException tex)
+            {
+                throw tex.InnerException;
+            }
         }
 
         public object GetValueInternal(string propertyName)
         {
-            return _instance.GetType()
-                 .GetProperty(propertyName)
-                 .GetValue(_instance);
+            try
+            {
+                return _instance.GetType()
+                     .GetProperty(propertyName)
+                     .GetValue(_instance);
+            }
+            catch(TargetInvocationException tex)
+            {
+                throw tex.InnerException;
+            }
         }
     }
 }

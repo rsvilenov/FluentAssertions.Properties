@@ -69,7 +69,7 @@ namespace FluentAssertions.Properties.Assertions
                     {
                         Execute
                             .Assertion
-                            .ForCondition(AreGetSetOperationsSymetric(propertyInfo.Name, propertyInvocationInfo.Value))
+                            .ForCondition(AreGetSetOperationsSymetric(propertyInfo.Name, propertyInvocationInfo.ValueDelegate.Invoke()))
                             .BecauseOf(because, becauseArgs)
                             .FailWith("Expected the get and set operations of property {0} to be symetric, but were not.", propertyInfo.Name);
                     }
@@ -166,9 +166,11 @@ namespace FluentAssertions.Properties.Assertions
 
                     try
                     {
+                        TProperty value = propertyInvocationInfo.ValueDelegate.Invoke();
+
                         if (evalType == PropertyAccessorEvaluation.Setter)
                         {
-                            _propertyInvoker.SetValue(propertyName, propertyInvocationInfo.Value);
+                            _propertyInvoker.SetValue(propertyName, value);
                         }
                         else if (evalType == PropertyAccessorEvaluation.Getter)
                         {
@@ -184,9 +186,7 @@ namespace FluentAssertions.Properties.Assertions
                     }
                     catch (Exception ex)
                     {
-                        bool exceptionTypeMatches = matchExactExceptionType
-                            ? ex.GetType().Equals(typeof(TException))
-                            : ex is TException;
+                        bool exceptionTypeMatches = MatchExceptionType<TException>(matchExactExceptionType, ex);
 
                         if (!exceptionTypeMatches)
                         {
@@ -200,7 +200,7 @@ namespace FluentAssertions.Properties.Assertions
                                     ex);
                         }
 
-                        propertyExceptions.Add((TException)ex, 
+                        propertyExceptions.Add((TException)ex,
                             propertyName,
                             evalType);
                     }
@@ -208,6 +208,13 @@ namespace FluentAssertions.Properties.Assertions
             }
 
             return new PropertyExceptionCollectionAssertions<TException>(propertyExceptions);
+        }
+
+        private static bool MatchExceptionType<TException>(bool matchExactExceptionType, Exception ex) where TException : Exception
+        {
+            return matchExactExceptionType
+                ? ex.GetType().Equals(typeof(TException))
+                : ex is TException;
         }
 
         private PropertyExceptionCollectionAssertions<TException> NotThrow<TException>(PropertyAccessorEvaluation evalType, bool matchExactExceptionType, string because = "", params object[] becauseArgs)
@@ -225,9 +232,11 @@ namespace FluentAssertions.Properties.Assertions
 
                     try
                     {
+                        TProperty value = propertyInvocationInfo.ValueDelegate.Invoke();
+
                         if (evalType == PropertyAccessorEvaluation.Setter)
                         {
-                            _propertyInvoker.SetValue(propertyName, propertyInvocationInfo.Value);
+                            _propertyInvoker.SetValue(propertyName, value);
                         }
                         else if (evalType == PropertyAccessorEvaluation.Getter)
                         {
@@ -236,9 +245,8 @@ namespace FluentAssertions.Properties.Assertions
                     }
                     catch (Exception ex)
                     {
-                        bool exceptionTypeMatches = matchExactExceptionType
-                            ? ex.GetType().Equals(typeof(TException))
-                            : ex is TException;
+                        bool exceptionTypeMatches = MatchExceptionType<TException>(matchExactExceptionType, ex);
+
                         if (exceptionTypeMatches)
                         {
                             using (var innerScope = Execute.Assertion)
