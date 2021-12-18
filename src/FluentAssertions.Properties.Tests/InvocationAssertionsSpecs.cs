@@ -108,10 +108,14 @@ namespace FluentAssertions.Properties.Tests
         {
             // Arrange
             var testPropertyMock = new Mock<ITestProperties>();
-            testPropertyMock.SetupSet(o => o.StringProperty = string.Empty).Throws<TestException>();
+            testPropertyMock
+                .SetupSet(o => o.StringProperty = string.Empty)
+                .Throws<TestException>();
 
             var valueSourceMock = new Mock<ITestProperties>(); 
-            valueSourceMock.Setup(o => o.StringProperty).Returns(Guid.NewGuid().ToString());
+            valueSourceMock
+                .Setup(o => o.StringProperty)
+                .Returns(Guid.NewGuid().ToString());
 
             var symmetricProperties = testPropertyMock
                 .Object
@@ -134,12 +138,16 @@ namespace FluentAssertions.Properties.Tests
         {
             // Arrange
             var testPropertyMock = new Mock<ITestProperties>();
-            testPropertyMock.SetupSet(o => o.StringProperty = string.Empty).Throws<TestException>();
+            string guid = Guid.NewGuid().ToString();
+            testPropertyMock
+                .SetupSet(o => o.StringProperty = guid)
+                .Throws<TestException>();
 
             var valueSourceMock = new Mock<ITestProperties>();
-            valueSourceMock.Setup(o => o.StringProperty).Returns(Guid.NewGuid().ToString());
+            valueSourceMock
+                .Setup(o => o.StringProperty)
+                .Returns(guid);
 
-            //testPropertyMock.Object.StringProperty = "";
             var symmetricProperties = testPropertyMock
                 .Object
                 .Properties(p => p.StringProperty);
