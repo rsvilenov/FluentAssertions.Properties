@@ -2,6 +2,27 @@
 
 namespace FluentAssertions.Properties.Invocation
 {
+    internal class ReflectionPropertyInvoker<TDeclaringType, TProperty> : IPropertyInvoker<TProperty>
+    {
+        private readonly IPropertyInvoker _nonGenericPropertyInvoker;
+
+        public ReflectionPropertyInvoker(TDeclaringType instance)
+        {
+            _nonGenericPropertyInvoker = new ReflectionPropertyInvoker<TDeclaringType>(instance);
+        }
+
+        public TProperty GetValue(string propertyName)
+        {
+            return (TProperty)_nonGenericPropertyInvoker.GetValue(propertyName);
+        }
+
+        public void SetValue(string propertyName, TProperty testData)
+        {
+            _nonGenericPropertyInvoker.SetValue(propertyName, testData);
+        }
+    }
+
+
     internal class ReflectionPropertyInvoker<TDeclaringType> : IPropertyInvoker
     {
         private readonly TDeclaringType _instance;
@@ -11,26 +32,6 @@ namespace FluentAssertions.Properties.Invocation
         }
 
         public void SetValue(string propertyName, object testData)
-        {
-            SetValueInternal(propertyName, testData);
-        }
-
-        public void SetValue<TProperty>(string propertyName, TProperty testData)
-        {
-            SetValueInternal(propertyName, testData);
-        }
-
-        public object GetValue(string propertyName)
-        {
-            return GetValueInternal(propertyName);
-        }
-        
-        public TProperty GetValue<TProperty>(string propertyName)
-        {
-           return (TProperty)GetValueInternal(propertyName);
-        }
-
-        private void SetValueInternal(string propertyName, object testData)
         {
             try
             {
@@ -44,7 +45,7 @@ namespace FluentAssertions.Properties.Invocation
             }
         }
 
-        public object GetValueInternal(string propertyName)
+        public object GetValue(string propertyName)
         {
             try
             {
@@ -52,7 +53,7 @@ namespace FluentAssertions.Properties.Invocation
                      .GetProperty(propertyName)
                      .GetValue(_instance);
             }
-            catch(TargetInvocationException tex)
+            catch (TargetInvocationException tex)
             {
                 throw tex.InnerException;
             }

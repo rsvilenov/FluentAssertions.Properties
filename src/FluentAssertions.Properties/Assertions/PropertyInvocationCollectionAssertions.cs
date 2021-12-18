@@ -23,16 +23,16 @@ namespace FluentAssertions.Properties.Assertions
     public class PropertyInvocationCollectionAssertions<TAssertions, TDeclaringType, TProperty>
         where TAssertions : PropertyInvocationCollectionAssertions<TAssertions, TDeclaringType, TProperty>
     {
-        private readonly IPropertyInvoker _propertyInvoker;
+        private readonly IPropertyInvoker<TProperty> _propertyInvoker;
 
         internal PropertyInvocationCollectionAssertions(PropertyInvocationCollection<TDeclaringType, TProperty> value)
         {
             Subject = value;
-            _propertyInvoker = InvocationContext.PropertyInvokerFactory.CreatePropertyInvoker<TDeclaringType>(value.Instance);
+            _propertyInvoker = InvocationContext.PropertyInvokerFactory.CreatePropertyInvoker<TDeclaringType, TProperty>(value.Instance);
         }
 
         /// <summary>
-        /// Gets the object which value is being asserted.
+        /// Gets the object whose value is being asserted.
         /// </summary>
         public PropertyInvocationCollection<TDeclaringType, TProperty> Subject { get; }
 
@@ -174,7 +174,7 @@ namespace FluentAssertions.Properties.Assertions
                         }
                         else if (evalType == PropertyAccessorEvaluation.Getter)
                         {
-                            _propertyInvoker.GetValue<TProperty>(propertyName);
+                            _propertyInvoker.GetValue(propertyName);
                         }
 
                         Execute.Assertion
@@ -240,7 +240,7 @@ namespace FluentAssertions.Properties.Assertions
                         }
                         else if (evalType == PropertyAccessorEvaluation.Getter)
                         {
-                            _propertyInvoker.GetValue<TProperty>(propertyName);
+                            _propertyInvoker.GetValue(propertyName);
                         }
                     }
                     catch (Exception ex)
@@ -288,7 +288,7 @@ namespace FluentAssertions.Properties.Assertions
             try
             {
                 _propertyInvoker.SetValue(propertyName, value);
-                TProperty got = _propertyInvoker.GetValue<TProperty>(propertyName);
+                TProperty got = _propertyInvoker.GetValue(propertyName);
                 isSymmetric = value.Equals(got);
             }
             catch (Exception ex)

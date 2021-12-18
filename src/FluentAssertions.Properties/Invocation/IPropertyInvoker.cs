@@ -2,9 +2,13 @@
 {
     internal interface IPropertyInvoker
     {
-        void SetValue<TProperty>(string propertyName, TProperty testData);
         void SetValue(string propertyName, object testData);
-        TProperty GetValue<TProperty>(string propertyName);
         object GetValue(string propertyName);
+    }
+
+    internal interface IPropertyInvoker<TProperty>
+    {
+        void SetValue(string propertyName, TProperty testData);
+        TProperty GetValue(string propertyName);
     }
 }
