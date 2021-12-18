@@ -83,13 +83,14 @@ namespace FluentAssertions.Properties.Tests
         }
 
         [Fact]
-        public void When_selected_properties_throw_from_getter_assert_should_match_thrown_exception_type()
+        public void When_selected_properties_throw_from_getter_ThrowFromGetter_assert_should_succeed()
         {
             // Arrange
             var testPropertyMock = new Mock<ITestProperties>();
+            testPropertyMock.Setup(o => o.StringProperty).Throws<TestException>();
 
             var valueSourceMock = new Mock<ITestProperties>();
-            valueSourceMock.Setup(o => o.StringProperty).Throws<TestException>();
+            valueSourceMock.Setup(o => o.StringProperty).Returns(Guid.NewGuid().ToString());
 
             var symmetricProperties = testPropertyMock
                 .Object
@@ -100,6 +101,54 @@ namespace FluentAssertions.Properties.Tests
                 .WhenCalledWithValuesFrom(valueSourceMock.Object)
                 .Should()
                 .ThrowFromGetter<TestException>();
+        }
+
+        [Fact]
+        public void When_selected_properties_throw_from_setter_ThrowFromGetter_assert_should_fail()
+        {
+            // Arrange
+            var testPropertyMock = new Mock<ITestProperties>();
+            testPropertyMock.SetupSet(o => o.StringProperty = string.Empty).Throws<TestException>();
+
+            var valueSourceMock = new Mock<ITestProperties>(); 
+            valueSourceMock.Setup(o => o.StringProperty).Returns(Guid.NewGuid().ToString());
+
+            var symmetricProperties = testPropertyMock
+                .Object
+                .Properties(p => p.StringProperty);
+
+            // Act & Assert
+            Action assertion = () => symmetricProperties
+                .WhenCalledWithValuesFrom(valueSourceMock.Object)
+                .Should()
+                .ThrowFromGetter<TestException>();
+
+            assertion
+                .Should()
+                .Throw<XunitException>()
+                .WithMessage("Expected property \"getter\" of property * to throw *");
+        }
+
+        [Fact]
+        public void When_selected_properties_throw_from_setter_ThrowFromSetter_assert_should_succeed()
+        {
+            // Arrange
+            var testPropertyMock = new Mock<ITestProperties>();
+            testPropertyMock.SetupSet(o => o.StringProperty = string.Empty).Throws<TestException>();
+
+            var valueSourceMock = new Mock<ITestProperties>();
+            valueSourceMock.Setup(o => o.StringProperty).Returns(Guid.NewGuid().ToString());
+
+            //testPropertyMock.Object.StringProperty = "";
+            var symmetricProperties = testPropertyMock
+                .Object
+                .Properties(p => p.StringProperty);
+
+            // Act & Assert
+            symmetricProperties
+                .WhenCalledWithValuesFrom(valueSourceMock.Object)
+                .Should()
+                .ThrowFromSetter<TestException>();
         }
 
         public interface ITestProperties
