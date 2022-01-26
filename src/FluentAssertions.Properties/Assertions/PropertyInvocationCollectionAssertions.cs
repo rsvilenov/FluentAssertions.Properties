@@ -50,15 +50,8 @@ namespace FluentAssertions.Properties.Assertions
                 {
                     PropertyInfo propertyInfo = propertyInvocationInfo
                         .PropertyInfo;
-
-                    if (!propertyInfo.CanRead)
-                    {
-                        Execute
-                            .Assertion
-                            .BecauseOf(because, becauseArgs)
-                            .FailWith("Expected property {0} to have public or internal getter, but did not.", propertyInfo.Name);
-                    }
-                    else if (!propertyInfo.CanWrite)
+                    
+                    if (!propertyInfo.CanWrite)
                     {
                         Execute
                             .Assertion
@@ -102,31 +95,6 @@ namespace FluentAssertions.Properties.Assertions
                     becauseArgs));
         }
 
-        public AndConstraint<TAssertions> NotThrowFromSetter<TException>(string because = "", params object[] becauseArgs)
-            where TException : Exception
-        {
-            ExceptionStackTrace.StartFromCurrentFrame(() =>
-               NotThrow<Exception>(
-                    PropertyAccessorEvaluation.Setter,
-                    matchExactExceptionType: true,
-                    because,
-                    becauseArgs));
-
-            return new AndConstraint<TAssertions>((TAssertions)this);
-        }
-
-        public AndConstraint<TAssertions> NotThrowFromSetter(string because = "", params object[] becauseArgs)
-        {
-            ExceptionStackTrace.StartFromCurrentFrame(() =>
-                NotThrow<Exception>(
-                    PropertyAccessorEvaluation.Setter,
-                    matchExactExceptionType: true,
-                    because,
-                    becauseArgs));
-
-            return new AndConstraint<TAssertions>((TAssertions)this);
-        }
-
         public PropertyExceptionCollectionAssertions<TException> ThrowFromSetterExactly<TException>(string because = "", params object[] becauseArgs)
             where TException : Exception
         {
@@ -166,16 +134,7 @@ namespace FluentAssertions.Properties.Assertions
 
                     try
                     {
-                        TProperty value = propertyInvocationInfo.ValueDelegate.Invoke();
-
-                        if (evalType == PropertyAccessorEvaluation.Setter)
-                        {
-                            _propertyInvoker.SetValue(propertyName, value);
-                        }
-                        else if (evalType == PropertyAccessorEvaluation.Getter)
-                        {
-                            _propertyInvoker.GetValue(propertyName);
-                        }
+                        CallPropertyAccessors(evalType, propertyInvocationInfo, propertyName);
 
                         Execute.Assertion
                             .BecauseOf(because, becauseArgs)
@@ -192,7 +151,7 @@ namespace FluentAssertions.Properties.Assertions
                         {
                             Execute.Assertion
                                 .BecauseOf(because, becauseArgs)
-                                .FailWith("Expected {0} of property {1} to throw {2}, but {3} was thrown. {4}",
+                                .FailWith("Expected property {0} of property {1} to throw {2}, but {3} was thrown. {4}",
                                     accessorTypeFailMessagePart,
                                     propertyName,
                                     typeof(TException),
@@ -217,69 +176,18 @@ namespace FluentAssertions.Properties.Assertions
                 : ex is TException;
         }
 
-        private PropertyExceptionCollectionAssertions<TException> NotThrow<TException>(PropertyAccessorEvaluation evalType, bool matchExactExceptionType, string because = "", params object[] becauseArgs)
-            where TException : Exception
+        private void CallPropertyAccessors(PropertyAccessorEvaluation evalType, PropertyInvocationInfo<TDeclaringType, TProperty> propertyInvocationInfo, string propertyName)
         {
-            PropertyExceptionCollection<TException> propertyExceptions = new PropertyExceptionCollection<TException>();
+            TProperty value = propertyInvocationInfo.ValueDelegate.Invoke();
 
-            using (AssertionScope assertion = new AssertionScope())
+            if (evalType == PropertyAccessorEvaluation.Setter)
             {
-                foreach (var propertyInvocationInfo in Subject)
-                {
-                    string propertyName = propertyInvocationInfo
-                        .PropertyInfo
-                        .Name;
-
-                    try
-                    {
-                        TProperty value = propertyInvocationInfo.ValueDelegate.Invoke();
-
-                        if (evalType == PropertyAccessorEvaluation.Setter)
-                        {
-                            _propertyInvoker.SetValue(propertyName, value);
-                        }
-                        else if (evalType == PropertyAccessorEvaluation.Getter)
-                        {
-                            _propertyInvoker.GetValue(propertyName);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        bool exceptionTypeMatches = MatchExceptionType<TException>(matchExactExceptionType, ex);
-
-                        if (exceptionTypeMatches)
-                        {
-                            using (var innerScope = Execute.Assertion)
-                            {
-                                innerScope.Context = evalType.GetDescription();
-                                innerScope.BecauseOf(because, becauseArgs)
-                                .FailWith("Did not expect the {context} of property {0} to throw {1}{reason}, but it threw {2}",
-                                    propertyName,
-                                    typeof(TException),
-                                    ex);
-                            }
-                        }
-                        else
-                        {
-                            using (var innerScope = Execute.Assertion)
-                            {
-                                innerScope.Context = evalType.GetDescription();
-                                Execute.Assertion
-                                .BecauseOf(because, becauseArgs)
-                                .FailWith("Did not expect the {context} of property {0} to throw any exceptions {reason}, but it threw {1}",
-                                    propertyName,
-                                    ex);
-                            }
-                        }
-
-                        propertyExceptions.Add((TException)ex, 
-                            propertyName,
-                            evalType);
-                    }
-                }
+                _propertyInvoker.SetValue(propertyName, value);
             }
-
-            return new PropertyExceptionCollectionAssertions<TException>(propertyExceptions);
+            else if (evalType == PropertyAccessorEvaluation.Getter)
+            {
+                _propertyInvoker.GetValue(propertyName);
+            }
         }
 
         private bool AreGetSetOperationsSymetric(string propertyName, TProperty value)
@@ -294,7 +202,7 @@ namespace FluentAssertions.Properties.Assertions
             catch (Exception ex)
             {
                 Execute.Assertion
-                .FailWith($"Did not expect any exceptions for property {propertyName}, but got {ex}.");
+                    .FailWith($"Did not expect any exceptions for property {propertyName}, but got {ex}.");
             }
 
             return isSymmetric;

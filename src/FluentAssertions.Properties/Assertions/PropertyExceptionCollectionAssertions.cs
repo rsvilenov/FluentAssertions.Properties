@@ -155,6 +155,7 @@ namespace FluentAssertions.Properties.Assertions
             return new PropertyExceptionCollectionAssertions<TInnerException>(innerExceptionCollection, _innerExceptionStack);
         }
 
+        // TODO: The TException will always be System.Exception for lists where the generic parameter is the broad <Exception>.
         private string GetInnerExceptionStack<TInnerException>() 
             where TInnerException : Exception
         {
