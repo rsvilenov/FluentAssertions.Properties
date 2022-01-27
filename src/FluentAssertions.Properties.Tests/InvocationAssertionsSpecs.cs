@@ -2,6 +2,7 @@
 using System;
 using Xunit;
 using Xunit.Sdk;
+using FluentAssertions.Properties.Tests.TestObjects;
 
 namespace FluentAssertions.Properties.Tests
 {
@@ -239,20 +240,6 @@ namespace FluentAssertions.Properties.Tests
                 .Should()
                 .Throw<XunitException>()
                 .WithMessage("Expected property \"setter\" of property * to throw *");
-        }
-
-        public interface ITestProperties
-        {
-            string StringProperty { get; set; }
-            int IntProperty { get; set; }
-            string ReadOnlyStringProperty { get; }
-            string WriteOnlyStringProperty { set; }
-        }
-
-        public class TestException : Exception
-        { 
-            public TestException() { }
-            public TestException(string message = null, Exception innerException = null) : base(message, innerException) { }
         }
     }
 }

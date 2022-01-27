@@ -1,10 +1,8 @@
-﻿using FluentAssertions.Properties.Selectors;
+﻿using FluentAssertions.Properties.Extensions;
+using FluentAssertions.Properties.Selectors;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using FluentAssertions.Properties.Extensions;
-using System.Text;
 using Xunit;
 
 namespace FluentAssertions.Properties.Tests

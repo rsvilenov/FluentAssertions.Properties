@@ -108,7 +108,7 @@ namespace FluentAssertions.Properties.Assertions
             {
                 foreach (PropertyException<TException> pex in _exceptionCollection)
                 {
-                    if (pex.Exception.InnerException != null)
+                    if (pex.Exception.InnerException == null)
                     {
                         // format the message beforehand, so that FailWith() will not enclose the placeholders with brackets
                         string failMessage = string.Format("the {0} exception has no inner exception.",

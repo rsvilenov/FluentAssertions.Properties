@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FluentAssertions.Properties.Tests.TestableObjects
+namespace FluentAssertions.Properties.Tests.TestObjects
 {
     public class SampleDto
     {

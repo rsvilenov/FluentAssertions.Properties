@@ -1,5 +1,5 @@
 using AutoFixture;
-using FluentAssertions.Properties.Tests.TestableObjects;
+using FluentAssertions.Properties.Tests.TestObjects;
 using System;
 using System.ComponentModel;
 using System.Linq;
