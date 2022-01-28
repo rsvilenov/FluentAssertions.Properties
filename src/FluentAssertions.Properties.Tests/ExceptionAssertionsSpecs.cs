@@ -60,12 +60,11 @@ namespace FluentAssertions.Properties.Tests
         }
 
         [Fact]
-        public void When_selected_properties_throw_from_getter_ThrowFromGetter_InnerException_WithMessage_assert_should_succeed()
+        public void When_selected_properties_throw_from_getter_ThrowFromGetter_InnerException_assert_should_succeed()
         {
             // Arrange
-            string exceptionMessage = Guid.NewGuid().ToString();
             var testPropertyMock = new Mock<ITestProperties>();
-            testPropertyMock.Setup(o => o.StringProperty).Throws(new TestException(exceptionMessage, new TestException($"Inner {exceptionMessage}")));
+            testPropertyMock.Setup(o => o.StringProperty).Throws(new TestException(string.Empty, new TestException()));
 
             var valueSourceMock = new Mock<ITestProperties>();
             valueSourceMock.Setup(o => o.StringProperty).Returns(Guid.NewGuid().ToString());
@@ -83,11 +82,10 @@ namespace FluentAssertions.Properties.Tests
         }
 
         [Fact]
-        public void When_selected_properties_throw_from_getter_with_bad_inner_exception_ThrowFromGetter_InnerException_WithMessage_assert_should_succeed()
+        public void When_selected_properties_throw_from_getter_with_bad_inner_exception_ThrowFromGetter_InnerException_assert_should_fail()
         {
             // Arrange
-            string exceptionMessage = Guid.NewGuid().ToString();
-            var exception = new TestException(exceptionMessage, new InvalidCastException($"Inner {exceptionMessage}"));
+            var exception = new TestException(string.Empty, new InvalidCastException());
             var testPropertyMock = new Mock<ITestProperties>();
             testPropertyMock.Setup(o => o.StringProperty).Throws(exception);
 
@@ -109,6 +107,161 @@ namespace FluentAssertions.Properties.Tests
                 .Should()
                 .Throw<XunitException>()
                 .WithMessage($"Expected inner \"{nameof(TestException)}->{nameof(TestException)}\" for the getter of property \"{nameof(ITestProperties.StringProperty)}\", but found*.");
+        }
+
+
+        [Fact]
+        public void When_selected_properties_throw_from_getter_ThrowFromGetter_InnerExceptionExactly_assert_should_succeed()
+        {
+            // Arrange
+            var testPropertyMock = new Mock<ITestProperties>();
+            testPropertyMock.Setup(o => o.StringProperty).Throws(new TestException(string.Empty, new TestException()));
+
+            var valueSourceMock = new Mock<ITestProperties>();
+            valueSourceMock.Setup(o => o.StringProperty).Returns(Guid.NewGuid().ToString());
+
+            var symmetricProperties = testPropertyMock
+                .Object
+                .Properties(p => p.StringProperty);
+
+            // Act & Assert
+            symmetricProperties
+                .WhenCalledWithValuesFrom(valueSourceMock.Object)
+                .Should()
+                .ThrowFromGetter<TestException>()
+                .WithInnerExceptionExactly<TestException>();
+        }
+
+        [Fact]
+        public void When_selected_properties_throw_from_getter_ThrowFromGetter_InnerExceptionExactly_assert_for_base_exception_class_should_fail()
+        {
+            // Arrange
+            var testPropertyMock = new Mock<ITestProperties>();
+            testPropertyMock.Setup(o => o.StringProperty).Throws(new TestException(string.Empty, new TestException()));
+
+            var valueSourceMock = new Mock<ITestProperties>();
+            valueSourceMock.Setup(o => o.StringProperty).Returns(Guid.NewGuid().ToString());
+
+            var symmetricProperties = testPropertyMock
+                .Object
+                .Properties(p => p.StringProperty);
+
+            // Act & Assert
+            Action assertion = () => symmetricProperties
+                .WhenCalledWithValuesFrom(valueSourceMock.Object)
+                .Should()
+                .ThrowFromGetter<TestException>()
+                .WithInnerExceptionExactly<Exception>();
+
+            assertion
+                .Should()
+                .Throw<XunitException>()
+                .WithMessage($"Expected inner \"{nameof(TestException)}->{nameof(Exception)}\" for the getter of property \"{nameof(ITestProperties.StringProperty)}\", but found*.");
+        }
+
+        [Fact]
+        public void When_selected_properties_throw_from_getter_an_exception_without_inner_exception_ThrowFromGetter_InnerException_assert_should_fail()
+        {
+            // Arrange
+            var testPropertyMock = new Mock<ITestProperties>();
+            testPropertyMock.Setup(o => o.StringProperty).Throws(new TestException());
+
+            var valueSourceMock = new Mock<ITestProperties>();
+            valueSourceMock.Setup(o => o.StringProperty).Returns(Guid.NewGuid().ToString());
+
+            var symmetricProperties = testPropertyMock
+                .Object
+                .Properties(p => p.StringProperty);
+
+            // Act & Assert
+            Action assertion = () => symmetricProperties
+                .WhenCalledWithValuesFrom(valueSourceMock.Object)
+                .Should()
+                .ThrowFromGetter<TestException>()
+                .WithInnerException<Exception>();
+
+            assertion
+                .Should()
+                .Throw<XunitException>()
+                .WithMessage($"Expected inner \"{nameof(TestException)}->{nameof(Exception)}\" for the getter of property \"{nameof(ITestProperties.StringProperty)}\", but the thrown exception has no inner exception.");
+        }
+
+        [Fact]
+        public void When_selected_properties_throw_from_getter_an_exception_without_inner_exception_ThrowFromGetter_InnerExceptionExactly_assert_should_fail()
+        {
+            // Arrange
+            var testPropertyMock = new Mock<ITestProperties>();
+            testPropertyMock.Setup(o => o.StringProperty).Throws(new TestException());
+
+            var valueSourceMock = new Mock<ITestProperties>();
+            valueSourceMock.Setup(o => o.StringProperty).Returns(Guid.NewGuid().ToString());
+
+            var symmetricProperties = testPropertyMock
+                .Object
+                .Properties(p => p.StringProperty);
+
+            // Act & Assert
+            Action assertion = () => symmetricProperties
+                .WhenCalledWithValuesFrom(valueSourceMock.Object)
+                .Should()
+                .ThrowFromGetter<TestException>()
+                .WithInnerExceptionExactly<Exception>();
+
+            assertion
+                .Should()
+                .Throw<XunitException>()
+                .WithMessage($"Expected inner \"{nameof(TestException)}->{nameof(Exception)}\" for the getter of property \"{nameof(ITestProperties.StringProperty)}\", but the thrown exception has no inner exception.");
+        }
+
+        [Fact]
+        public void When_selected_properties_throw_from_getter_ThrowFromGetter_Where_assert_for_the_exception_message_should_succeed()
+        {
+            // Arrange
+            string exceptionMessage = Guid.NewGuid().ToString();
+            var testPropertyMock = new Mock<ITestProperties>();
+            testPropertyMock.Setup(o => o.StringProperty).Throws(new TestException(exceptionMessage));
+
+            var valueSourceMock = new Mock<ITestProperties>();
+            valueSourceMock.Setup(o => o.StringProperty).Returns(Guid.NewGuid().ToString());
+
+            var symmetricProperties = testPropertyMock
+                .Object
+                .Properties(p => p.StringProperty);
+
+            // Act & Assert
+            symmetricProperties
+                .WhenCalledWithValuesFrom(valueSourceMock.Object)
+                .Should()
+                .ThrowFromGetter<TestException>()
+                .Where(ex => ex.Message == exceptionMessage);
+        }
+
+        [Fact]
+        public void When_selected_properties_throw_from_getter_ThrowFromGetter_Where_assert_for_a_wrong_exception_message_should_fail()
+        {
+            // Arrange
+            string exceptionMessage = Guid.NewGuid().ToString();
+            var testPropertyMock = new Mock<ITestProperties>();
+            testPropertyMock.Setup(o => o.StringProperty).Throws(new TestException(exceptionMessage));
+
+            var valueSourceMock = new Mock<ITestProperties>();
+            valueSourceMock.Setup(o => o.StringProperty).Returns(Guid.NewGuid().ToString());
+
+            var symmetricProperties = testPropertyMock
+                .Object
+                .Properties(p => p.StringProperty);
+
+            // Act & Assert
+            Action assertion = () => symmetricProperties
+                .WhenCalledWithValuesFrom(valueSourceMock.Object)
+                .Should()
+                .ThrowFromGetter<TestException>()
+                .Where(ex => ex.Message == "some text");
+
+            assertion
+                .Should()
+                .Throw<XunitException>()
+                .WithMessage($"Expected an exception \"{nameof(TestException)}->{nameof(Exception)}\" for the getter of property \"{nameof(ITestProperties.StringProperty)}\" where *, but the condition was not met by:*");
         }
     }
 }

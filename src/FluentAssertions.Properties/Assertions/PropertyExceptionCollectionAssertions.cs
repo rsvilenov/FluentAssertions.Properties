@@ -68,7 +68,7 @@ namespace FluentAssertions.Properties.Assertions
                         innerScope.Context = pex.AccessorEvaluationType.GetDescription();
                         innerScope.ForCondition(condition(pex.Exception))
                         .BecauseOf(because, becauseArgs)
-                        .FailWith("Expected exception{0} for the {context} of property {1} where {2}{reason}, but the condition was not met by:{3}{3}{4}.",
+                        .FailWith("Expected an exception {0} for the {context} of property {1} where {2}{reason}, but the condition was not met by:{3}{3}{4}.",
                             GetInnerExceptionStack<TException>(),
                             pex.PropertyName,
                             exceptionExpression.Body,
