@@ -169,7 +169,7 @@ namespace FluentAssertions.Properties.Assertions
             return new PropertyExceptionCollectionAssertions<TException>(propertyExceptions);
         }
 
-        private static bool MatchExceptionType<TException>(bool matchExactExceptionType, Exception ex) where TException : Exception
+        private bool MatchExceptionType<TException>(bool matchExactExceptionType, Exception ex) where TException : Exception
         {
             return matchExactExceptionType
                 ? ex.GetType().Equals(typeof(TException))
