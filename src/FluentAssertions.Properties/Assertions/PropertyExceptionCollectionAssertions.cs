@@ -29,8 +29,6 @@ namespace FluentAssertions.Properties.Assertions
             _innerExceptionPedigree = innerExceptionPedigree.ToList();
         }
 
-        public PropertyExceptionCollectionAssertions<TException> And => this;
-
         public virtual PropertyExceptionCollectionAssertions<TException> WithMessage(string expectedWildcardPattern, string because = "",
                     params object[] becauseArgs)
         {

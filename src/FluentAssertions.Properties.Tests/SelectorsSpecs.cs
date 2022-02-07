@@ -1,5 +1,6 @@
 ﻿using FluentAssertions.Properties.Extensions;
 using FluentAssertions.Properties.Selectors;
+using FluentAssertions.Properties.Tests.TestObjects;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -7,7 +8,7 @@ using Xunit;
 
 namespace FluentAssertions.Properties.Tests
 {
-    public class SelectorsSpecs
+    public partial class SelectorsSpecs
     {
         [Fact]
         public void When_selecting_properties_of_a_class_it_should_not_throw()
@@ -518,62 +519,5 @@ namespace FluentAssertions.Properties.Tests
                 .Should()
                 .NotContain(s => s.EndsWith(TestClassValueTypePropertiesOnly.NonDefaultValueSuffix));
         }
-
-        private class EmptyTestClass
-        { }
-
-        private class TestClassPublicPropertiesOnly
-        {
-            public int IntProperty { get; set; }
-            public double DoubleProperty { get; set; }
-            public string StringProperty { get; set; }
-            public string ReadOnlyStringProperty { get; }
-        }
-
-        private class TestClassValueTypePropertiesOnly
-        {
-            public const string NonDefaultValueSuffix = "WithNonDefaultValue";
-            public int IntProperty { get; set; }
-            public int? NullableIntProperty { get; set; }
-            public int IntPropertyWithNonDefaultValue { get; set; } = 1;
-            public double DoubleProperty { get; set; }
-            public double? NullableDoubleProperty { get; set; }
-            public double DoublePropertyWithNonDefaultValue { get; set; } = 1d;
-            public bool BoolProperty { get; set; }
-            public bool? NullableBoolProperty { get; set; }
-            public bool BoolPropertyWithNonDefaultValue { get; set; } = true;
-        }
-
-
-        private class TestClass : TestClassBase
-        {
-            public int IntProperty { get; set; }
-            public double DoubleProperty { get; set; }
-            public string StringProperty { get; set; }
-            private string PrivateStringProperty { get; set; }
-            internal string InternalStringProperty { get; set; }
-            public string ReadOnlyStringProperty { get; }
-
-            public int? NullableValueTypeProperty { get; set; }
-            public EmptyTestClass UserTypeProperty { get; set; }
-
-            public virtual bool VirtualProperty { get; set; }
-        }
-
-        private class TestSubClass : TestClassBase
-        {
-            public int IntProperty { get; set; }
-            public double DoubleProperty { get; set; }
-            public string StringProperty { get; set; }
-            internal string InternalStringProperty { get; set; }
-            public string ReadOnlyStringProperty { get; }
-        }
-
-        public class TestClassBase
-        {
-            public bool BaseClassProperty { get; set; }
-        }
     }
-
-
 }

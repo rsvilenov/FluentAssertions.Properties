@@ -28,7 +28,7 @@ namespace FluentAssertions.Properties.Assertions
                 .ThatAreWritable
                 .WhenCalledWithValuesFrom(new Fixture().Create<SampleDto>())
                 .Should()
-                .ProvideSymmetricAccess();
+                .ProvideSymmetricAccess(); 
 
             //sampleDto.Properties().Should().BeOfPrimitiveType();
             //Action test = () => throw new ArgumentException();
