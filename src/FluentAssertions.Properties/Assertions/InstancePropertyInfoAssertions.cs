@@ -103,7 +103,7 @@ namespace FluentAssertions.Properties.Assertions
         {
             ExceptionStackTrace.StartFromCurrentFrame(() =>
                Execute.Assertion
-                        .ForCondition(Subject.PropertyInfo.PropertyType.IsPrimitive)
+                        .ForCondition(!Subject.PropertyInfo.PropertyType.IsPrimitive)
                         .BecauseOf(because, becauseArgs)
                         .FailWith("Expected property {0} not to be of primitive type, but was.", Subject.PropertyInfo.Name));
 
