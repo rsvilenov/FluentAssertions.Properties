@@ -56,14 +56,15 @@ namespace FluentAssertions.Properties.Assertions
         public AndConstraint<TAssertions> BeWritable(string because = "", params object[] becauseArgs)
         {
             ExceptionStackTrace.StartFromCurrentFrame(() =>
-               Subject.PropertyInfo.Should().BeWritable(because, becauseArgs));
+                BeWritableInternal(null, because, because));
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
 
         public AndConstraint<TAssertions> BeWritable(CSharpAccessModifier accessModifier, string because = "", params object[] becauseArgs)
         {
             ExceptionStackTrace.StartFromCurrentFrame(() =>
-               Subject.PropertyInfo.Should().BeWritable(accessModifier, because, becauseArgs));
+                BeWritableInternal(accessModifier, because, because));
+                
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
 
@@ -128,6 +129,23 @@ namespace FluentAssertions.Properties.Assertions
                         .ForCondition(!Subject.PropertyInfo.PropertyType.IsValueType)
                         .BecauseOf(because, becauseArgs)
                         .FailWith("Expected property {0} to be of reference type, but was not.", Subject.PropertyInfo.Name));
+
+            return new AndConstraint<TAssertions>((TAssertions)this);
+        }
+
+        private AndConstraint<TAssertions> BeWritableInternal(CSharpAccessModifier? accessModifier, string because = "", params object[] becauseArgs)
+        {
+            Execute.Assertion
+                    .ForCondition(Subject.PropertyInfo.CanWrite)
+                    .BecauseOf(because, becauseArgs)
+                    .FailWith(
+                        "Expected {context:property} {0} to have a setter{reason}.",
+                        Subject.PropertyInfo);
+
+            if (accessModifier.HasValue)
+            {
+                Subject.PropertyInfo.GetSetMethod(nonPublic: true).Should().HaveAccessModifier(accessModifier.Value, because, becauseArgs);
+            }
 
             return new AndConstraint<TAssertions>((TAssertions)this);
         }

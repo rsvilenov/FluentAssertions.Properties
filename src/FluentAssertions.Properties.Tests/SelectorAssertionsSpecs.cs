@@ -219,5 +219,35 @@ namespace FluentAssertions.Properties.Tests
                 .Throw<Xunit.Sdk.XunitException>()
                 .WithMessage("Expected property * not to be virtual, but it is.");
         }
+
+        [Fact]
+        public void When_selecting_all_read_only_properties_BeReadable_should_succeed()
+        {
+            // Arrange
+            var testObj = new TestClass();
+            var selector =
+                testObj.Properties().ThatAreReadOnly;
+
+            // Act & Assert
+            selector.Should().BeReadable();
+        }
+
+        [Fact]
+        public void When_selecting_all_read_only_properties_BeWritable_should_fail()
+        {
+            // Arrange
+            var testObj = new TestClass();
+            var selector =
+                testObj.Properties().ThatAreReadOnly;
+
+            // Act & Assert
+            Action assertion = ()
+                => selector.Should().BeWritable();
+
+            assertion
+                .Should()
+                .Throw<Xunit.Sdk.XunitException>()
+                .WithMessage("Expected property * to have a setter.");
+        }
     }
 }
