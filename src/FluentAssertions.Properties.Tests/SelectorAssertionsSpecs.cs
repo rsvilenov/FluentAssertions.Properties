@@ -221,18 +221,6 @@ namespace FluentAssertions.Properties.Tests
         }
 
         [Fact]
-        public void When_selecting_all_read_only_properties_BeReadable_should_succeed()
-        {
-            // Arrange
-            var testObj = new TestClass();
-            var selector =
-                testObj.Properties().ThatAreReadOnly;
-
-            // Act & Assert
-            selector.Should().BeReadable();
-        }
-
-        [Fact]
         public void When_selecting_all_read_only_properties_BeWritable_should_fail()
         {
             // Arrange
@@ -248,6 +236,81 @@ namespace FluentAssertions.Properties.Tests
                 .Should()
                 .Throw<Xunit.Sdk.XunitException>()
                 .WithMessage("Expected property * to have a setter.");
+        }
+
+        [Fact]
+        public void When_selecting_all_properties_with_internal_setter_BeWritable_with_internal_access_modifier_should_succeed()
+        {
+            // Arrange
+            var testObj = new TestClass();
+            var selector =
+                testObj.Properties(p => p.StringPropertyWithInternalSetter);
+
+            // Act & Assert
+            selector.Should().BeWritable(Common.CSharpAccessModifier.Internal);
+        }
+
+        [Fact]
+        public void When_selecting_all_properties_with_internal_setter_BeWritable_with_public_access_modifier_should_fail()
+        {
+            // Arrange
+            var testObj = new TestClass();
+            var selector =
+                testObj.Properties(p => p.StringPropertyWithInternalSetter);
+
+            // Act & Assert
+            Action assertion = ()
+                => selector.Should().BeWritable(Common.CSharpAccessModifier.Public);
+
+            assertion
+                .Should()
+                .Throw<Xunit.Sdk.XunitException>()
+                .WithMessage("Expected method * to be Public, but it is Internal.");
+        }
+
+        [Fact]
+        public void When_selecting_all_properties_with_internal_setter_BeWritable_without_access_modifier_should_succeed()
+        {
+            // Arrange
+            var testObj = new TestClass();
+            var selector =
+                testObj.Properties(p => p.StringPropertyWithInternalSetter);
+
+            // Act & Assert
+            selector.Should().BeWritable();
+        }
+
+        [Fact]
+        public void When_selecting_all_properties_with_private_setter_BeWritable_with_public_access_modifier_should_fail()
+        {
+            // Arrange
+            var testObj = new TestClass();
+            var selector =
+                testObj.Properties(p => p.StringPropertyWithPrivateSetter);
+
+            // Act & Assert
+            Action assertion = ()
+                => selector.Should().BeWritable(Common.CSharpAccessModifier.Public);
+
+            assertion
+                .Should()
+                .Throw<Xunit.Sdk.XunitException>()
+                .WithMessage("Expected method * to be Public, but it is Private.");
+        }
+
+        [Fact]
+        public void When_selecting_all_properties_with_private_setter_BeWritable_without_access_modifier_should_succeed()
+        {
+            // Arrange
+            var testObj = new TestClass();
+            var selector =
+                testObj.Properties(p => p.StringPropertyWithPrivateSetter);
+
+            // Act & Assert
+            selector.Should().BeWritable(); 
+            // The property is still writable despite the fact that the setter is a private one.
+            // This is how PropertyInfo.BeWritable() method of the original FluentAssertions library behaves
+            // and this is also the behavior of reflection's PropertyInfo.CanWrite property.
         }
     }
 }

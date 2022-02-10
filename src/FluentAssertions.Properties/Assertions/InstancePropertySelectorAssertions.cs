@@ -163,63 +163,6 @@ namespace FluentAssertions.Properties.Data
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
 
-        public AndConstraint<TAssertions> BeReadable(string because = "", params object[] becauseArgs)
-        {
-            return ExceptionStackTrace.StartFromCurrentFrame(() =>
-                                    BeReadableInternal(because, becauseArgs));
-        }
-
-        private AndConstraint<TAssertions> BeReadableInternal(string because, params object[] becauseArgs)
-        {
-            using (AssertionScope scope = new AssertionScope())
-            {
-                foreach (var subject in Subject)
-                {
-                    subject.Should().BeReadable(because, becauseArgs);
-                }
-            }
-
-            return new AndConstraint<TAssertions>((TAssertions)this);
-        }
-
-        public AndConstraint<TAssertions> BeReadable(CSharpAccessModifier accessModifier, string because = "", params object[] becauseArgs)
-        {
-            return ExceptionStackTrace.StartFromCurrentFrame(() =>
-                                 BeReadableInternal(accessModifier, because, becauseArgs));
-        }
-
-        private AndConstraint<TAssertions> BeReadableInternal(CSharpAccessModifier accessModifier, string because, params object[] becauseArgs)
-        {
-            using (AssertionScope scope = new AssertionScope())
-            {
-                foreach (var subject in Subject)
-                {
-                    subject.Should().BeReadable(accessModifier, because, becauseArgs);
-                }
-            }
-
-            return new AndConstraint<TAssertions>((TAssertions)this);
-        }
-
-        public AndConstraint<TAssertions> NotBeReadable(string because = "", params object[] becauseArgs)
-        {
-            return ExceptionStackTrace.StartFromCurrentFrame(() =>
-                                    NotBeReadableInternal(because, becauseArgs));
-        }
-        
-        private AndConstraint<TAssertions> NotBeReadableInternal(string because, params object[] becauseArgs)
-        {
-            using (AssertionScope scope = new AssertionScope())
-            {
-                foreach (var subject in Subject)
-                {
-                    subject.Should().NotBeReadable(because, becauseArgs);
-                }
-            }
-
-            return new AndConstraint<TAssertions>((TAssertions)this);
-        }
-
         public AndConstraint<TAssertions> BeWritable(string because = "", params object[] becauseArgs)
         {
             return ExceptionStackTrace.StartFromCurrentFrame(() =>

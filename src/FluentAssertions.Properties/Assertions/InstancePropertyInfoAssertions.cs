@@ -32,27 +32,6 @@ namespace FluentAssertions.Properties.Assertions
         /// </summary>
         public InstancePropertyInfo<TDeclaringType> Subject { get; }
 
-        public AndConstraint<TAssertions> BeReadable(string because = "", params object[] becauseArgs)
-        {
-            ExceptionStackTrace.StartFromCurrentFrame(() =>
-                Subject.PropertyInfo.Should().BeReadable(because, becauseArgs));
-            return new AndConstraint<TAssertions>((TAssertions)this);
-        }
-        
-        public AndConstraint<TAssertions> BeReadable(CSharpAccessModifier accessModifier, string because = "", params object[] becauseArgs)
-        {
-            ExceptionStackTrace.StartFromCurrentFrame(() =>
-               Subject.PropertyInfo.Should().BeReadable(accessModifier, because, becauseArgs));
-            return new AndConstraint<TAssertions>((TAssertions)this);
-        }
-
-        public AndConstraint<TAssertions> NotBeReadable(string because = "", params object[] becauseArgs)
-        {
-            ExceptionStackTrace.StartFromCurrentFrame(() =>
-               Subject.PropertyInfo.Should().NotBeReadable(because, becauseArgs));
-            return new AndConstraint<TAssertions>((TAssertions)this);
-        }
-
         public AndConstraint<TAssertions> BeWritable(string because = "", params object[] becauseArgs)
         {
             ExceptionStackTrace.StartFromCurrentFrame(() =>

@@ -5,6 +5,8 @@
         public int IntProperty { get; set; }
         public double DoubleProperty { get; set; }
         public string StringProperty { get; set; }
+        public string StringPropertyWithInternalSetter { get; internal set; }
+        public string StringPropertyWithPrivateSetter { get; private set; }
         private string PrivateStringProperty { get; set; }
         internal string InternalStringProperty { get; set; }
         public string ReadOnlyStringProperty { get; }
