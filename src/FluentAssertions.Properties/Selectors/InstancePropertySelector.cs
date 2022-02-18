@@ -22,12 +22,10 @@ namespace FluentAssertions.Properties.Selectors
             var properties = new List<InstancePropertyInfo<TDeclaringType>>();
 
             Type type = instance.GetType();
-            foreach (PropertyInfo propInfo in type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+            foreach (PropertyInfo propInfo in type.GetPublicOrInternalProperties())
             {
-                if ((propertyNames == null || propertyNames.Contains(propInfo.Name))
-                    && propInfo.HasPublicOrInternalGetter())
+                if (propertyNames == null || propertyNames.Contains(propInfo.Name))
                 {
-
                     properties.Add(new InstancePropertyInfo<TDeclaringType>(propInfo));
                 }
             }
