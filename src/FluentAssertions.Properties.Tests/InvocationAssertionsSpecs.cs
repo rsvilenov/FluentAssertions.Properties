@@ -3,6 +3,7 @@ using System;
 using Xunit;
 using Xunit.Sdk;
 using FluentAssertions.Properties.Tests.TestObjects;
+using FluentAssertions.Properties.Tests.Extensions;
 
 namespace FluentAssertions.Properties.Tests
 {
@@ -240,6 +241,61 @@ namespace FluentAssertions.Properties.Tests
                 .Should()
                 .Throw<XunitException>()
                 .WithMessage("Expected property \"setter\" of property * to throw *");
+        }
+
+        [Fact]
+        public void When_selecting_properties_of_string_type_WhenCalledWith_ProvideSymmetricAccess_assert_should_succeed()
+        {
+            // Arrange
+            var testObj = new TestClassPublicPropertiesOnly();
+            string testValue = Guid.NewGuid().ToString();
+            testObj.StringProperty = testValue;
+
+            // Act & Assert
+            testObj
+                .Properties()
+                .ThatAreWritable
+                .OfType<string>()
+                .WhenCalledWith(testValue)
+                .Should()
+                .ProvideSymmetricAccess();
+        }
+
+        [Fact]
+        public void When_selecting_a_single_property_WhenCalledWith_ThrowFromSetter_assert_should_fail()
+        {
+            // Arrange
+            var testPropertyMock = new Mock<ITestProperties>();
+            string guid = Guid.NewGuid().ToString();
+            testPropertyMock
+                .SetupSet(o => o.StringProperty = guid)
+                .Throws<TestException>();
+
+            // Act & Assert
+            testPropertyMock
+                .Object
+                .Properties(p => p.StringProperty)
+                .WhenCalledWith(guid)
+                .Should()
+                .ThrowFromSetter<TestException>();
+        }
+
+        [Fact]
+        public void When_selecting_properties_WhenCalledWith_count_with_nongeneric_enumerable_should_succeed()
+        {
+            // Arrange
+            var testPropertyMock = new Mock<ITestProperties>();
+            string guid = Guid.NewGuid().ToString();
+
+            // Act & Assert
+            testPropertyMock
+                .Object
+                .Properties(p => p.StringProperty)
+                .WhenCalledWith(guid)
+                .AsNonGenericEnumerable()
+                .Count()
+                .Should()
+                .Be(1);
         }
     }
 }

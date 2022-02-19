@@ -37,7 +37,7 @@ namespace FluentAssertions.Properties.Invocation
             {
                 _instance.GetType()
                     .GetProperty(propertyName)
-                    .SetValue(_instance, testData);
+                    ?.SetValue(_instance, testData);
             }
             catch (TargetInvocationException tex)
             {
@@ -51,7 +51,7 @@ namespace FluentAssertions.Properties.Invocation
             {
                 return _instance.GetType()
                      .GetProperty(propertyName)
-                     .GetValue(_instance);
+                     ?.GetValue(_instance);
             }
             catch (TargetInvocationException tex)
             {

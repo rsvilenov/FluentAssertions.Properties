@@ -1,8 +1,10 @@
 ﻿using FluentAssertions.Properties.Extensions;
 using FluentAssertions.Properties.Selectors;
+using FluentAssertions.Properties.Tests.Extensions;
 using FluentAssertions.Properties.Tests.TestObjects;
 using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using Xunit;
 
@@ -23,7 +25,21 @@ namespace FluentAssertions.Properties.Tests
         }
 
         [Fact]
-        public void When_selecting_properties_of_a_class_should_succeed()
+        public void When_selecting_properties_with_invalid_expression_type_should_throw()
+        {
+            Expression<Func<TestClass, object>> unsupportedExpression = (a) => null;
+
+            // Arrange
+            var testObj = new TestClass();
+            Func<InstancePropertySelector<TestClass>> act = () =>
+                testObj.Properties(unsupportedExpression);
+
+            // Act & Assert
+            act.Should().Throw<NotSupportedException>();
+        }
+
+        [Fact]
+        public void When_selecting_properties_of_a_class_selection_should_succeed()
         {
             // Arrange
             var testObj = new TestClass();
@@ -38,6 +54,27 @@ namespace FluentAssertions.Properties.Tests
                 .Select(ipi => ipi.PropertyInfo)
                 .Should()
                 .BeEquivalentTo(expectedPropertyInfos);
+        }
+
+        [Fact]
+        public void When_selecting_properties_of_a_class_count_via_nongeneric_enumerable_should_succeed()
+        {
+            // Arrange
+            var testObj = new TestClass();
+            var expectedPropertyCount = typeof(TestClass)
+                .GetPublicOrInternalProperties()
+                .Count();
+
+            // Act
+            int propertyCountViaNonGenericEnumerable = testObj
+                .Properties()
+                .AsNonGenericEnumerable()
+                .Count();
+
+            // Assert
+            propertyCountViaNonGenericEnumerable
+                .Should()
+                .Be(expectedPropertyCount);
         }
 
         [Fact]
@@ -519,5 +556,56 @@ namespace FluentAssertions.Properties.Tests
                 .Should()
                 .NotContain(s => s.EndsWith(TestClassValueTypePropertiesOnly.NonDefaultValueSuffix));
         }
+
+        [Fact]
+        public void When_selecting_properties_of_string_type_that_have_no_value_HavingValue_should_return_no_properties()
+        {
+            // Arrange
+            var testObj = new TestClass();
+            string testValue = Guid.NewGuid().ToString();
+
+            // Act
+            var selectedPropertyList = testObj
+                .Properties()
+                .OfType<string>()
+                .HavingValue(testValue);
+
+            // Assert
+            var selectedPropertyNames = selectedPropertyList
+                .Select(ipi => ipi.PropertyInfo.Name);
+
+            selectedPropertyNames
+                .Should()
+                .HaveCount(0);
+        }
+
+        [Fact]
+        public void When_selecting_properties_of_string_type_that_have_value_HavingValue_should_succeed()
+        {
+            // Arrange
+            var testObj = new TestClass();
+            string testValue = Guid.NewGuid().ToString();
+            testObj.StringProperty = testValue;
+
+            // Act
+            var selectedPropertyList = testObj
+                .Properties()
+                .OfType<string>()
+                .HavingValue(testValue);
+
+            // Assert
+            var selectedPropertyNames = selectedPropertyList
+                .Select(ipi => ipi.PropertyInfo.Name);
+
+            selectedPropertyNames
+                .Should()
+                .HaveCount(1);
+
+            selectedPropertyNames
+                .Single()
+                .Should()
+                .Be(nameof(testObj.StringProperty));
+        }
+
     }
 }

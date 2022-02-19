@@ -21,7 +21,7 @@ namespace FluentAssertions.Properties.Selectors
             
             var filteredProperties = SelectedProperties
                 .Where(p => p.PropertyInfo.HasPublicOrInternalGetter()
-                    && propertyInvoker.GetValue(p.PropertyInfo.Name).Equals(value));
+                    && propertyInvoker.GetValue(p.PropertyInfo.Name)?.Equals(value) == true);
 
             return CloneFiltered(filteredProperties);
         }
