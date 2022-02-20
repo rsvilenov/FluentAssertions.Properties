@@ -56,7 +56,7 @@ namespace FluentAssertions.Properties.Assertions
                         Execute
                             .Assertion
                             .BecauseOf(because, becauseArgs)
-                            .FailWith("Expected property {0} to be writable, but was not.", propertyInfo.Name);
+                            .FailWith("Expected property {0} to be writable{reason}, but was not.", propertyInfo.Name);
                     }
                     else
                     {
@@ -64,7 +64,7 @@ namespace FluentAssertions.Properties.Assertions
                             .Assertion
                             .ForCondition(AreGetSetOperationsSymetric(propertyInfo.Name, propertyInvocationInfo.ValueDelegate.Invoke()))
                             .BecauseOf(because, becauseArgs)
-                            .FailWith("Expected the get and set operations of property {0} to be symetric, but were not.", propertyInfo.Name);
+                            .FailWith("Expected the get and set operations of property {0} to be symetric{reason}, but were not.", propertyInfo.Name);
                     }
 
                 }
@@ -138,7 +138,7 @@ namespace FluentAssertions.Properties.Assertions
 
                         Execute.Assertion
                             .BecauseOf(because, becauseArgs)
-                            .FailWith("Expected property {0} of property {1} to throw {2}, but no exception was thrown.",
+                            .FailWith("Expected property {0} of property {1} to throw {2}{reason}, but no exception was thrown.",
                                 accessorTypeFailMessagePart,
                                 propertyName,
                                 typeof(TException));
@@ -151,7 +151,7 @@ namespace FluentAssertions.Properties.Assertions
                         {
                             Execute.Assertion
                                 .BecauseOf(because, becauseArgs)
-                                .FailWith("Expected property {0} of property {1} to throw {2}, but {3} was thrown. {4}",
+                                .FailWith("Expected property {0} of property {1} to throw {2}{reason}, but {3} was thrown. {4}",
                                     accessorTypeFailMessagePart,
                                     propertyName,
                                     typeof(TException),

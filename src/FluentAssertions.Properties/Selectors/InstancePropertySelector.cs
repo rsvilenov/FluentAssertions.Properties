@@ -12,11 +12,6 @@ namespace FluentAssertions.Properties.Selectors
     {
         internal InstancePropertySelector(TDeclaringType instance, IEnumerable<string> propertyNames = null)
         {
-            if (instance == null)
-            {
-                throw new ArgumentNullException(paramName: nameof(instance));
-            }
-
             Instance = instance;
 
             var properties = new List<InstancePropertyInfo<TDeclaringType>>();
@@ -42,13 +37,13 @@ namespace FluentAssertions.Properties.Selectors
         /// <summary>
         /// Only select the properties that return the specified type
         /// </summary>
-        public InstancePropertyWithKnownTypeSelector<TDeclaringType, TProperty> OfType<TProperty>()
+        public InstancePropertyOfKnownTypeSelector<TDeclaringType, TProperty> OfType<TProperty>()
         {
             var selectedProperties = SelectedProperties
                 .Where(property => property.PropertyInfo.PropertyType == typeof(TProperty))
                 .Select(p => new InstancePropertyInfo<TDeclaringType, TProperty>(p));
 
-            return new InstancePropertyWithKnownTypeSelector<TDeclaringType, TProperty>(Instance, selectedProperties);
+            return new InstancePropertyOfKnownTypeSelector<TDeclaringType, TProperty>(Instance, selectedProperties);
         }
 
         /// <summary>

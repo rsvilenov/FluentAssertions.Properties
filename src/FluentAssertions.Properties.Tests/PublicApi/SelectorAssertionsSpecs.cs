@@ -1,10 +1,10 @@
-﻿using FluentAssertions.Properties.Selectors;
-using FluentAssertions.Properties.Tests.TestObjects;
+﻿using FluentAssertions.Properties.Tests.PublicApi.TestObjects;
+using FluentAssertions.Common;
 using System;
 using System.Linq;
 using Xunit;
 
-namespace FluentAssertions.Properties.Tests
+namespace FluentAssertions.Properties.Tests.PublicApi
 {
     public class SelectorAssertionsSpecs
     {
@@ -247,7 +247,7 @@ namespace FluentAssertions.Properties.Tests
                 testObj.Properties(p => p.StringPropertyWithInternalSetter);
 
             // Act & Assert
-            selector.Should().BeWritable(Common.CSharpAccessModifier.Internal);
+            selector.Should().BeWritable(CSharpAccessModifier.Internal);
         }
 
         [Fact]
@@ -260,7 +260,7 @@ namespace FluentAssertions.Properties.Tests
 
             // Act & Assert
             Action assertion = ()
-                => selector.Should().BeWritable(Common.CSharpAccessModifier.Public);
+                => selector.Should().BeWritable(CSharpAccessModifier.Public);
 
             assertion
                 .Should()
@@ -290,7 +290,7 @@ namespace FluentAssertions.Properties.Tests
 
             // Act & Assert
             Action assertion = ()
-                => selector.Should().BeWritable(Common.CSharpAccessModifier.Public);
+                => selector.Should().BeWritable(CSharpAccessModifier.Public);
 
             assertion
                 .Should()

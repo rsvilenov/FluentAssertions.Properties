@@ -1,14 +1,16 @@
-﻿using FluentAssertions.Properties.Extensions;
+﻿using FluentAssertions;
+using FluentAssertions.Properties.Extensions;
 using FluentAssertions.Properties.Selectors;
 using FluentAssertions.Properties.Tests.Extensions;
-using FluentAssertions.Properties.Tests.TestObjects;
+using FluentAssertions.Properties.Tests.PublicApi.TestObjects;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using Xunit;
 
-namespace FluentAssertions.Properties.Tests
+namespace FluentAssertions.Properties.Tests.PublicApi
 {
     public partial class SelectorsSpecs
     {
@@ -25,12 +27,134 @@ namespace FluentAssertions.Properties.Tests
         }
 
         [Fact]
-        public void When_selecting_properties_with_invalid_expression_type_should_throw()
+        public void When_selecting_specific_properties_of_known_type_it_should_not_throw()
         {
-            Expression<Func<TestClass, object>> unsupportedExpression = (a) => null;
-
             // Arrange
             var testObj = new TestClass();
+            Func<InstancePropertyOfKnownTypeSelector<TestClass, string>> act = () =>
+                testObj.Properties(p => p.StringProperty);
+
+            // Act & Assert
+            act.Should().NotThrow();
+        }
+
+        [Fact]
+        public void When_selecting_properties_from_null_object_it_shoud_throw()
+        {
+            // Arrange
+            TestClass testObj = null;
+            Func<InstancePropertySelector<TestClass>> act = () =>
+                testObj.Properties();
+
+            // Act & Assert
+            act.Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void When_selecting_specific_properties_from_null_object_it_shoud_throw()
+        {
+            // Arrange
+            TestClass testObj = null;
+            Func<InstancePropertyOfKnownTypeSelector<TestClass, string>> act = () =>
+                testObj.Properties(p => p.StringProperty);
+
+            // Act & Assert
+            act.Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void When_selecting_specific_properties_of_known_type_selected_properties_should_match_the_expected_ones()
+        {
+            // Arrange
+            var testObj = new TestClass();
+
+            // Act
+            var selectedProperties = testObj
+                .Properties(p => p.StringProperty);
+
+            // Assert
+            selectedProperties
+                .Select(ipi => ipi.PropertyInfo.Name)
+                .Should()
+                .HaveCount(1)
+                .And
+                .ContainSingle(nameof(TestClass.StringProperty));
+        }
+
+        [Fact]
+        public void When_selecting_properties_of_known_type_from_class_with_no_properties_selected_property_collection_should_be_empty()
+        {
+            // Arrange
+            var testObj = new EmptyTestClass();
+
+            // Act
+            var selectedProperties = testObj
+                .Properties<EmptyTestClass, string>();
+
+            // Assert
+            selectedProperties
+                ?.Count()
+                .Should()
+                .Be(0);
+        }
+
+        [Fact]
+        public void When_selecting_properties_of_known_type_from_class_property_collection_should_match_expected()
+        {
+            // Arrange
+            var testObj = new TestClass();
+            var expectedPropertyInfos = typeof(TestClass)
+                .GetPublicOrInternalProperties()
+                .Where(pi => pi.PropertyType == typeof(string));
+
+            // Act
+            var selectedProperties = testObj
+                .Properties<TestClass, string>();
+
+            // Assert
+            selectedProperties
+                .Select(ipi => ipi.PropertyInfo)
+                .Should()
+                .BeEquivalentTo(expectedPropertyInfos);
+        }
+
+        [Fact]
+        public void When_selecting_specific_properties_of_various_types_selected_properties_should_match_the_expected_ones()
+        {
+            // Arrange
+            var testObj = new TestClass();
+
+            // Act
+            var selectedPropertyNames = testObj
+                .Properties(p => p.StringProperty, p => p.IntProperty)
+                .Select(ipi => ipi.PropertyInfo.Name);
+
+            // Assert
+            selectedPropertyNames
+                .Should()
+                .HaveCount(2)
+                .And
+                .Contain(nameof(TestClass.StringProperty), nameof(TestClass.StringProperty));
+        }
+
+        [Fact]
+        public void When_selecting_specific_properties_of_various_types_it_should_not_throw()
+        {
+            // Arrange
+            var testObj = new TestClass();
+            Func<InstancePropertySelector<TestClass>> act = () =>
+                testObj.Properties(p => p.StringProperty, p => p.IntProperty);
+
+            // Act & Assert
+            act.Should().NotThrow();
+        }
+
+        [Fact]
+        public void When_selecting_properties_with_invalid_expression_type_should_throw()
+        {
+            // Arrange
+            var testObj = new TestClass();
+            Expression<Func<TestClass, object>> unsupportedExpression = (a) => null;
             Func<InstancePropertySelector<TestClass>> act = () =>
                 testObj.Properties(unsupportedExpression);
 
@@ -95,7 +219,7 @@ namespace FluentAssertions.Properties.Tests
             var testObj = new EmptyTestClass();
             Action act = () => testObj.Properties();
 
-            // Assert
+            // Act & Assert
             act.Should().NotThrow();
         }
 

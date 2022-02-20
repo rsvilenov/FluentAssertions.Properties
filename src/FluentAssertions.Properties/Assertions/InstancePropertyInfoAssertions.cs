@@ -74,7 +74,7 @@ namespace FluentAssertions.Properties.Assertions
                Execute.Assertion
                         .ForCondition(Subject.PropertyInfo.PropertyType.IsPrimitive)
                         .BecauseOf(because, becauseArgs)
-                        .FailWith("Expected property {0} to be of primitive type, but was not.", Subject.PropertyInfo.Name));
+                        .FailWith("Expected property {0} to be of primitive type{reason}, but was not.", Subject.PropertyInfo.Name));
 
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
@@ -85,7 +85,7 @@ namespace FluentAssertions.Properties.Assertions
                Execute.Assertion
                         .ForCondition(!Subject.PropertyInfo.PropertyType.IsPrimitive)
                         .BecauseOf(because, becauseArgs)
-                        .FailWith("Expected property {0} not to be of primitive type, but was.", Subject.PropertyInfo.Name));
+                        .FailWith("Expected property {0} not to be of primitive type{reason}, but was.", Subject.PropertyInfo.Name));
 
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
@@ -96,7 +96,7 @@ namespace FluentAssertions.Properties.Assertions
                Execute.Assertion
                         .ForCondition(Subject.PropertyInfo.PropertyType.IsValueType)
                         .BecauseOf(because, becauseArgs)
-                        .FailWith("Expected property {0} to be of value type, but was not.", Subject.PropertyInfo.Name));
+                        .FailWith("Expected property {0} to be of value type{reason}, but was not.", Subject.PropertyInfo.Name));
 
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
@@ -107,7 +107,7 @@ namespace FluentAssertions.Properties.Assertions
                Execute.Assertion
                         .ForCondition(!Subject.PropertyInfo.PropertyType.IsValueType)
                         .BecauseOf(because, becauseArgs)
-                        .FailWith("Expected property {0} to be of reference type, but was not.", Subject.PropertyInfo.Name));
+                        .FailWith("Expected property {0} to be of reference type{reason}, but was not.", Subject.PropertyInfo.Name));
 
             return new AndConstraint<TAssertions>((TAssertions)this);
         }

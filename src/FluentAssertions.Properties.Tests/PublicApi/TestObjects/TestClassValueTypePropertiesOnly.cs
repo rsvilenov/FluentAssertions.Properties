@@ -1,4 +1,4 @@
-﻿namespace FluentAssertions.Properties.Tests.TestObjects
+﻿namespace FluentAssertions.Properties.Tests.PublicApi.TestObjects
 {
     public class TestClassValueTypePropertiesOnly
     {

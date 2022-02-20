@@ -1,4 +1,5 @@
-﻿using FluentAssertions.Properties.Data;
+﻿using FluentAssertions.Properties.Common;
+using FluentAssertions.Properties.Data;
 using FluentAssertions.Properties.Extensions;
 using FluentAssertions.Properties.Invocation;
 using FluentAssertions.Types;
@@ -131,6 +132,8 @@ namespace FluentAssertions.Properties.Selectors
 
         public PropertyInvocationCollection<TDeclaringType, object> WhenCalledWithValuesFrom(TDeclaringType source)
         {
+            Guard.ThrowIfArgumentIsNull(source, nameof(source));
+
             var propertyInvocationInfos = new List<PropertyInvocationInfo<TDeclaringType, object>>();
             var propertyInvoker = InvocationContext.PropertyInvokerFactory.CreatePropertyInvoker<TDeclaringType>(source);
             

@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace FluentAssertions.Properties.Extensions
 {
-    public static class TypeExtensions
+    internal static class TypeExtensions
     {
         public static Type GetActualTypeIfNullable(this Type type)
         {

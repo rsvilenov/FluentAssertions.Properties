@@ -44,7 +44,7 @@ namespace FluentAssertions.Properties.Data
                Execute.Assertion
                 .ForCondition(Subject.Count() == expectedCount)
                 .BecauseOf(because, becauseArgs)
-                .FailWith("Expected property count of type {0} to be {1}, but was not.", typeof(TDeclaringType), expectedCount));
+                .FailWith("Expected property count of type {0} to be {1}{reason}, but was not.", typeof(TDeclaringType), expectedCount));
 
             return new AndConstraint<TAssertions>((TAssertions)this);
         }

@@ -6,22 +6,21 @@ using System.Linq;
 
 namespace FluentAssertions.Properties.Selectors
 {
-    public class InstancePropertyWithKnownTypeSelector<TDeclaringType, TProperty> :
-        InstancePropertySelectorBase<TDeclaringType, InstancePropertyInfo<TDeclaringType, TProperty>, InstancePropertyWithKnownTypeSelector<TDeclaringType, TProperty>>
+    public class InstancePropertyOfKnownTypeSelector<TDeclaringType, TProperty> :
+        InstancePropertySelectorBase<TDeclaringType, InstancePropertyInfo<TDeclaringType, TProperty>, InstancePropertyOfKnownTypeSelector<TDeclaringType, TProperty>>
         
     {
-        internal InstancePropertyWithKnownTypeSelector(TDeclaringType instance, IEnumerable<InstancePropertyInfo<TDeclaringType, TProperty>> instancePropertyInfos)
+        internal InstancePropertyOfKnownTypeSelector(TDeclaringType instance, IEnumerable<InstancePropertyInfo<TDeclaringType, TProperty>> instancePropertyInfos)
             : base(instance, instancePropertyInfos)
         {
         }
 
-        public InstancePropertyWithKnownTypeSelector<TDeclaringType, TProperty> HavingValue(TProperty value)
+        public InstancePropertyOfKnownTypeSelector<TDeclaringType, TProperty> HavingValue(TProperty value)
         {
             var propertyInvoker = InvocationContext.PropertyInvokerFactory.CreatePropertyInvoker<TDeclaringType>(Instance);
             
             var filteredProperties = SelectedProperties
-                .Where(p => p.PropertyInfo.HasPublicOrInternalGetter()
-                    && propertyInvoker.GetValue(p.PropertyInfo.Name)?.Equals(value) == true);
+                .Where(p => propertyInvoker.GetValue(p.PropertyInfo.Name)?.Equals(value) == true);
 
             return CloneFiltered(filteredProperties);
         }
@@ -36,9 +35,9 @@ namespace FluentAssertions.Properties.Selectors
                 propertyInvocationInfos);
         }
 
-        protected override InstancePropertyWithKnownTypeSelector<TDeclaringType, TProperty> CloneFiltered(IEnumerable<InstancePropertyInfo<TDeclaringType, TProperty>> filteredProperties)
+        protected override InstancePropertyOfKnownTypeSelector<TDeclaringType, TProperty> CloneFiltered(IEnumerable<InstancePropertyInfo<TDeclaringType, TProperty>> filteredProperties)
         {
-            return new InstancePropertyWithKnownTypeSelector<TDeclaringType, TProperty>(Instance, filteredProperties);
+            return new InstancePropertyOfKnownTypeSelector<TDeclaringType, TProperty>(Instance, filteredProperties);
         }
     }
 }
