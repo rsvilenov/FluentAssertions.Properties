@@ -71,6 +71,28 @@ namespace FluentAssertions.Properties.Tests.PublicApi
         }
 
         [Fact]
+        public void When_selecting_all_properties_of_nonprimitive_types_BeOfPrimitiveType_with_reason_arg_it_should_fail_with_the_given_reason()
+        {
+            // Arrange
+            var testObj = new TestClass();
+            var selector =
+                testObj.Properties().ThatAreNotOfPrimitiveTypes;
+            string because = Guid.NewGuid().ToString();
+            string becauseWithFormat = $"{because}{{0}}{{1}}";
+            string becauseArg1 = Guid.NewGuid().ToString();
+            string becauseArg2 = Guid.NewGuid().ToString();
+
+            // Act & Assert
+            Action assertion = ()
+                => selector.Should().BeOfPrimitiveType(becauseWithFormat, becauseArg1, becauseArg2);
+
+            assertion
+                .Should()
+                .Throw<Xunit.Sdk.XunitException>()
+                .WithMessage($"Expected property * to be of primitive type because {because}{becauseArg1}{becauseArg2}, but was not.");
+        }
+
+        [Fact]
         public void When_selecting_all_properties_of_nonprimitive_types_NotBeOfPrimitiveType_should_succeed()
         {
             // Arrange
@@ -98,6 +120,28 @@ namespace FluentAssertions.Properties.Tests.PublicApi
                 .Should()
                 .Throw<Xunit.Sdk.XunitException>()
                 .WithMessage("Expected property * not to be of primitive type, but was.");
+        }
+
+        [Fact]
+        public void When_selecting_all_properties_of_primitive_types_NotBeOfPrimitiveType_with_reason_arg_should_fail_with_the_given_reason()
+        {
+            // Arrange
+            var testObj = new TestClass();
+            var selector =
+                testObj.Properties().ThatAreOfPrimitiveTypes; 
+            string because = Guid.NewGuid().ToString();
+            string becauseWithFormat = $"{because}{{0}}{{1}}";
+            string becauseArg1 = Guid.NewGuid().ToString();
+            string becauseArg2 = Guid.NewGuid().ToString();
+
+            // Act & Assert
+            Action assertion = ()
+                => selector.Should().NotBeOfPrimitiveType(becauseWithFormat, becauseArg1, becauseArg2);
+
+            assertion
+                .Should()
+                .Throw<Xunit.Sdk.XunitException>()
+                .WithMessage($"Expected property * not to be of primitive type because {because}{becauseArg1}{becauseArg2}, but was.");
         }
 
         [Fact]
@@ -129,6 +173,28 @@ namespace FluentAssertions.Properties.Tests.PublicApi
                 .Throw<Xunit.Sdk.XunitException>()
                 .WithMessage("Expected property * to be of value type, but was not.");
         }
+        
+        [Fact]
+        public void When_selecting_all_properties_of_reference_types_BeOfValueType_with_reason_arg_it_should_fail_with_the_given_reason()
+        {
+            // Arrange
+            var testObj = new TestClass();
+            var selector =
+                testObj.Properties().ThatAreOfReferenceType;
+            string because = Guid.NewGuid().ToString();
+            string becauseWithFormat = $"{because}{{0}}{{1}}";
+            string becauseArg1 = Guid.NewGuid().ToString();
+            string becauseArg2 = Guid.NewGuid().ToString();
+
+            // Act & Assert
+            Action assertion = ()
+                => selector.Should().BeOfValueType(becauseWithFormat, becauseArg1, becauseArg2);
+
+            assertion
+                .Should()
+                .Throw<Xunit.Sdk.XunitException>()
+                .WithMessage($"Expected property * to be of value type because {because}{becauseArg1}{becauseArg2}, but was not.");
+        }
 
         [Fact]
         public void When_selecting_all_properties_of_reference_types_BeOfReferenceType_should_succeed()
@@ -158,6 +224,28 @@ namespace FluentAssertions.Properties.Tests.PublicApi
                 .Should()
                 .Throw<Xunit.Sdk.XunitException>()
                 .WithMessage("Expected property * to be of reference type, but was not.");
+        }
+        
+        [Fact]
+        public void When_selecting_all_properties_of_value_types_BeOfReferenceType_with_reason_arg_should_fail_with_the_given_reason()
+        {
+            // Arrange
+            var testObj = new TestClass();
+            var selector =
+                testObj.Properties().ThatAreOfValueType;
+            string because = Guid.NewGuid().ToString();
+            string becauseWithFormat = $"{because}{{0}}{{1}}";
+            string becauseArg1 = Guid.NewGuid().ToString();
+            string becauseArg2 = Guid.NewGuid().ToString();
+
+            // Act & Assert
+            Action assertion = ()
+                => selector.Should().BeOfReferenceType(becauseWithFormat, becauseArg1, becauseArg2);
+
+            assertion
+                .Should()
+                .Throw<Xunit.Sdk.XunitException>()
+                .WithMessage($"Expected property * to be of reference type because {because}{becauseArg1}{becauseArg2}, but was not.");
         }
 
         [Fact]
@@ -236,6 +324,28 @@ namespace FluentAssertions.Properties.Tests.PublicApi
                 .Should()
                 .Throw<Xunit.Sdk.XunitException>()
                 .WithMessage("Expected property * to have a setter.");
+        }
+        
+        [Fact]
+        public void When_selecting_all_read_only_properties_BeWritable_with_reason_arg_should_fail_with_the_given_reason()
+        {
+            // Arrange
+            var testObj = new TestClass();
+            var selector =
+                testObj.Properties().ThatAreReadOnly;
+            string because = Guid.NewGuid().ToString();
+            string becauseWithFormat = $"{because}{{0}}{{1}}";
+            string becauseArg1 = Guid.NewGuid().ToString();
+            string becauseArg2 = Guid.NewGuid().ToString();
+
+            // Act & Assert
+            Action assertion = ()
+                => selector.Should().BeWritable(because, becauseArg1, becauseArg2);
+
+            assertion
+                .Should()
+                .Throw<Xunit.Sdk.XunitException>()
+                .WithMessage($"Expected property * to have a setter because {because}{becauseArg1}{becauseArg2}.");
         }
 
         [Fact]

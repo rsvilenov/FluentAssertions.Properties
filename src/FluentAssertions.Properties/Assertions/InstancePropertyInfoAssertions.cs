@@ -35,14 +35,14 @@ namespace FluentAssertions.Properties.Assertions
         public AndConstraint<TAssertions> BeWritable(string because = "", params object[] becauseArgs)
         {
             ExceptionStackTrace.StartFromCurrentFrame(() =>
-                BeWritableInternal(null, because, because));
+                BeWritableInternal(null, because, becauseArgs));
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
 
         public AndConstraint<TAssertions> BeWritable(CSharpAccessModifier accessModifier, string because = "", params object[] becauseArgs)
         {
             ExceptionStackTrace.StartFromCurrentFrame(() =>
-                BeWritableInternal(accessModifier, because, because));
+                BeWritableInternal(accessModifier, because, becauseArgs));
                 
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
