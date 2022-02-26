@@ -1,10 +1,7 @@
 ﻿using FluentAssertions.Properties.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
-namespace FluentAssertions.Properties.Tests.PublicApi
+namespace FluentAssertions.Properties.Tests.Extensions
 {
     public class ExtensionMethodTests
     {

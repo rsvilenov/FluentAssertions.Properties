@@ -62,9 +62,9 @@ namespace FluentAssertions.Properties.Assertions
                     {
                         Execute
                             .Assertion
-                            .ForCondition(AreGetSetOperationsSymetric(propertyInfo.Name, propertyInvocationInfo.ValueDelegate.Invoke()))
+                            .ForCondition(AreGetSetOperationsSymmetric(propertyInfo.Name, propertyInvocationInfo.ValueDelegate.Invoke()))
                             .BecauseOf(because, becauseArgs)
-                            .FailWith("Expected the get and set operations of property {0} to be symetric{reason}, but were not.", propertyInfo.Name);
+                            .FailWith("Expected the get and set operations of property {0} to be symmetric{reason}, but were not.", propertyInfo.Name);
                     }
 
                 }
@@ -190,7 +190,7 @@ namespace FluentAssertions.Properties.Assertions
             }
         }
 
-        private bool AreGetSetOperationsSymetric(string propertyName, TProperty value)
+        private bool AreGetSetOperationsSymmetric(string propertyName, TProperty value)
         {
             bool isSymmetric = false;
             try

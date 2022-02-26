@@ -7,7 +7,7 @@ using FluentAssertions.Properties.Tests.Extensions;
 
 namespace FluentAssertions.Properties.Tests.PublicApi
 {
-    public class InvocationAssertionsSpecs
+    public class InvocationAssertionsSpecs : PublicApiTestBase
     {
         [Fact]
         public void When_selected_symmetric_properties_are_called_with_values_from_source_object_ProvideSymmetricAccess_assert_should_succeed()
@@ -28,7 +28,7 @@ namespace FluentAssertions.Properties.Tests.PublicApi
         }
 
         [Fact]
-        public void When_selected_assymetric_properties_are_called_with_values_from_source_object_ProvideSymmetricAccess_assert_should_fail()
+        public void When_selected_asymmetric_properties_are_called_with_values_from_source_object_ProvideSymmetricAccess_assert_should_fail()
         {
             // Arrange
             var testPropertyMock = new Mock<ITestProperties>();
@@ -43,17 +43,19 @@ namespace FluentAssertions.Properties.Tests.PublicApi
                 .Object
                 .Properties(p => p.StringProperty, p => p.IntProperty);
 
+            var assertReason = base.CreateAssertReason();
+
             // Act & Assert
             Action action = () =>
                 symmetricProperties
                     .WhenCalledWithValuesFrom(valueSourceMock.Object)
                     .Should()
-                    .ProvideSymmetricAccess();
+                    .ProvideSymmetricAccess(assertReason.BecauseWithFormat, assertReason.BecauseArg1, assertReason.BecauseArg2);
 
             action
                 .Should()
                 .Throw<XunitException>()
-                .WithMessage("Expected the get and set operations of property *");
+                .WithMessage($"Expected the get and set operations of property * to be symmetric because {assertReason}, but were not.");
         }
 
         [Fact]
@@ -69,17 +71,19 @@ namespace FluentAssertions.Properties.Tests.PublicApi
                 .Object
                 .Properties(p => p.ReadOnlyStringProperty);
 
+            var assertReason = base.CreateAssertReason();
+
             // Act & Assert
             Action action = () =>
                 symmetricProperties
                     .WhenCalledWithValuesFrom(valueSourceMock.Object)
                     .Should()
-                    .ProvideSymmetricAccess();
+                    .ProvideSymmetricAccess(assertReason.BecauseWithFormat, assertReason.BecauseArg1, assertReason.BecauseArg2);
 
             action
                 .Should()
                 .Throw<XunitException>()
-                .WithMessage("Expected property * to be writable, but was not.");
+                .WithMessage($"Expected property * to be writable because {assertReason}, but was not.");
         }
 
         [Fact]
@@ -148,16 +152,18 @@ namespace FluentAssertions.Properties.Tests.PublicApi
                 .Object
                 .Properties(p => p.StringProperty);
 
+            var assertReason = base.CreateAssertReason();
+
             // Act & Assert
             Action assertion = () => symmetricProperties
                 .WhenCalledWithValuesFrom(valueSourceMock.Object)
                 .Should()
-                .ThrowFromGetter<TestException>();
+                .ThrowFromGetter<TestException>(assertReason.BecauseWithFormat, assertReason.BecauseArg1, assertReason.BecauseArg2);
 
             assertion
                 .Should()
                 .Throw<XunitException>()
-                .WithMessage("Expected property \"getter\" of property * to throw *");
+                .WithMessage($"Expected property \"getter\" of property * to throw * because {assertReason}*");
         }
 
         [Fact]
@@ -200,16 +206,18 @@ namespace FluentAssertions.Properties.Tests.PublicApi
                 .Object
                 .Properties(p => p.StringProperty);
 
+            var assertReason = base.CreateAssertReason();
+
             // Act & Assert
             Action assertion = () => symmetricProperties
                 .WhenCalledWithValuesFrom(valueSourceMock.Object)
                 .Should()
-                .ThrowFromGetterExactly<Exception>();
+                .ThrowFromGetterExactly<Exception>(assertReason.BecauseWithFormat, assertReason.BecauseArg1, assertReason.BecauseArg2);
 
             assertion
                 .Should()
                 .Throw<XunitException>()
-                .WithMessage("Expected property \"getter\" of property * to throw *");
+                .WithMessage($"Expected property \"getter\" of property * to throw * because {assertReason}*");
         }
 
         [Fact]
@@ -231,16 +239,18 @@ namespace FluentAssertions.Properties.Tests.PublicApi
                 .Object
                 .Properties(p => p.StringProperty);
 
+            var assertReason = base.CreateAssertReason();
+
             // Act & Assert
             Action assertion = () => symmetricProperties
                 .WhenCalledWithValuesFrom(valueSourceMock.Object)
                 .Should()
-                .ThrowFromSetterExactly<Exception>();
+                .ThrowFromSetterExactly<Exception>(assertReason.BecauseWithFormat, assertReason.BecauseArg1, assertReason.BecauseArg2);
 
             assertion
                 .Should()
                 .Throw<XunitException>()
-                .WithMessage("Expected property \"setter\" of property * to throw *");
+                .WithMessage($"Expected property \"setter\" of property * to throw * because {assertReason}*");
         }
 
         [Fact]
