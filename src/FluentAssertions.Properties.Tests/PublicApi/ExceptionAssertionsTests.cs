@@ -290,6 +290,78 @@ namespace FluentAssertions.Properties.Tests.PublicApi
                 .Throw<XunitException>()
                 .WithMessage($"Expected inner \"{nameof(TestException)}->{nameof(Exception)}\" for the getter of property \"{nameof(ITestProperties.StringProperty)}\", but the thrown exception has no inner exception.");
         }
+        
+        [Fact]
+        public void When_selected_properties_throw_from_getter_an_exception_without_inner_exception_ThrowFromGetter_InnerException_with_reason_param_assert_should_fail_with_expected_reason()
+        {
+            // Arrange
+            var testPropertyMock = new Mock<ITestProperties>();
+            testPropertyMock
+                .Setup(o => o.StringProperty)
+                .Throws(new TestException());
+
+            var valueSourceMock = new Mock<ITestProperties>();
+            valueSourceMock
+                .Setup(o => o.StringProperty)
+                .Returns(Guid.NewGuid().ToString());
+
+            var symmetricProperties = testPropertyMock
+                .Object
+                .Properties(p => p.StringProperty);
+
+            string because = Guid.NewGuid().ToString();
+            string becauseWithFormat = $"{because}{{0}}{{1}}";
+            string becauseArg1 = Guid.NewGuid().ToString();
+            string becauseArg2 = Guid.NewGuid().ToString();
+
+            // Act & Assert
+            Action assertion = () => symmetricProperties
+                .WhenCalledWithValuesFrom(valueSourceMock.Object)
+                .Should()
+                .ThrowFromGetter<TestException>()
+                .WithInnerException<Exception>(becauseWithFormat, becauseArg1, becauseArg2);
+
+            assertion
+                .Should()
+                .Throw<XunitException>()
+                .WithMessage($"Expected inner \"{nameof(TestException)}->{nameof(Exception)}\" because {because}{becauseArg1}{becauseArg2} for the getter of property \"{nameof(ITestProperties.StringProperty)}\", but the thrown exception has no inner exception.");
+        }
+
+        [Fact]
+        public void When_selected_properties_throw_from_getter_an_exception_with_unexpected_inner_exception_ThrowFromGetter_InnerException_with_reason_param_assert_should_fail_with_expected_reason()
+        {
+            // Arrange
+            var testPropertyMock = new Mock<ITestProperties>();
+            testPropertyMock
+                .Setup(o => o.StringProperty)
+                .Throws(new TestException(string.Empty, new InvalidCastException()));
+
+            var valueSourceMock = new Mock<ITestProperties>();
+            valueSourceMock
+                .Setup(o => o.StringProperty)
+                .Returns(Guid.NewGuid().ToString());
+
+            var symmetricProperties = testPropertyMock
+                .Object
+                .Properties(p => p.StringProperty);
+
+            string because = Guid.NewGuid().ToString();
+            string becauseWithFormat = $"{because}{{0}}{{1}}";
+            string becauseArg1 = Guid.NewGuid().ToString();
+            string becauseArg2 = Guid.NewGuid().ToString();
+
+            // Act & Assert
+            Action assertion = () => symmetricProperties
+                .WhenCalledWithValuesFrom(valueSourceMock.Object)
+                .Should()
+                .ThrowFromGetter<TestException>()
+                .WithInnerException<InvalidOperationException>(becauseWithFormat, becauseArg1, becauseArg2);
+
+            assertion
+                .Should()
+                .Throw<XunitException>()
+                .WithMessage($"Expected inner \"{nameof(TestException)}->{nameof(InvalidOperationException)}\" because {because}{becauseArg1}{becauseArg2} for the getter of property \"{nameof(ITestProperties.StringProperty)}\", but found \"{nameof(TestException)}->{nameof(InvalidCastException)}\".");
+        }
 
         [Fact]
         public void When_selected_properties_throw_from_getter_an_exception_without_inner_exception_ThrowFromGetter_InnerExceptionExactly_assert_should_fail()
