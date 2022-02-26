@@ -1,6 +1,5 @@
 ﻿using AutoFixture;
 using FluentAssertions.Properties.Tests.Common;
-using System;
 
 namespace FluentAssertions.Properties.Tests.PublicApi
 {

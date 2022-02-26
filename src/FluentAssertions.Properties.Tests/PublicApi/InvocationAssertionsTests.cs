@@ -7,7 +7,7 @@ using FluentAssertions.Properties.Tests.Extensions;
 
 namespace FluentAssertions.Properties.Tests.PublicApi
 {
-    public class InvocationAssertionsSpecs : PublicApiTestBase
+    public class InvocationAssertionsTests : PublicApiTestBase
     {
         [Fact]
         public void When_selected_symmetric_properties_are_called_with_values_from_source_object_ProvideSymmetricAccess_assert_should_succeed()

@@ -1,10 +1,8 @@
-﻿using FluentAssertions;
-using FluentAssertions.Properties.Extensions;
+﻿using FluentAssertions.Properties.Extensions;
 using FluentAssertions.Properties.Selectors;
 using FluentAssertions.Properties.Tests.Extensions;
 using FluentAssertions.Properties.Tests.PublicApi.TestObjects;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -12,7 +10,7 @@ using Xunit;
 
 namespace FluentAssertions.Properties.Tests.PublicApi
 {
-    public partial class SelectorsSpecs
+    public class SelectorsTests
     {
         [Fact]
         public void When_selecting_properties_of_a_class_it_should_not_throw()

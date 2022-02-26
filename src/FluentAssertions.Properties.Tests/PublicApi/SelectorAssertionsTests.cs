@@ -6,7 +6,7 @@ using Xunit;
 
 namespace FluentAssertions.Properties.Tests.PublicApi
 {
-    public class SelectorAssertionsSpecs : PublicApiTestBase
+    public class SelectorAssertionsTests : PublicApiTestBase
     {
         [Fact]
         public void When_selecting_all_properties_of_a_class_HaveCount_assert_count_should_match()
