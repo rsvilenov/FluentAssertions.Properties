@@ -721,12 +721,40 @@ namespace FluentAssertions.Properties.Tests.PublicApi
 
             selectedPropertyNames
                 .Should()
-                .HaveCount(1);
+                .HaveCount(1)
+                .And
+                .ContainSingle(p => p == nameof(testObj.StringProperty));
+        }
 
-            selectedPropertyNames
-                .Single()
+        [Fact]
+        public void When_using_Properties_selector_over_a_type_and_not_an_instance_it_should_succeed()
+        {
+            var selector = typeof(TestClass).Properties();
+            selector
+                .ToArray()
                 .Should()
-                .Be(nameof(testObj.StringProperty));
+                .NotBeNullOrEmpty()
+                .And
+                .Contain(m => m.Name == nameof(TestClass.StringProperty));
+        }
+
+        [Fact]
+        public void When_using_Properties_selector_on_type_selector_it_should_succeed()
+        {
+            // Arrange
+            Assembly assembly = Assembly.GetExecutingAssembly();
+
+            // Act
+            var selector = assembly
+                .Types()
+                .Properties();
+
+            selector
+                .ToArray()
+                .Should()
+                .NotBeNullOrEmpty()
+                .And
+                .Contain(m => m.Name == nameof(TestClass.StringProperty));
         }
 
     }
