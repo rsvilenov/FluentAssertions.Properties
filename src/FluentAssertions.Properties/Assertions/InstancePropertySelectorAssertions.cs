@@ -163,6 +163,26 @@ namespace FluentAssertions.Properties.Data
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
 
+        public AndConstraint<TAssertions> NotBeWritable(string because = "", params object[] becauseArgs)
+        {
+            return ExceptionStackTrace.StartFromCurrentFrame(() =>
+                                    NotBeWritableInternal(because, becauseArgs));
+        }
+
+
+        private AndConstraint<TAssertions> NotBeWritableInternal(string because, params object[] becauseArgs)
+        {
+            using (AssertionScope scope = new AssertionScope())
+            {
+                foreach (var subject in Subject)
+                {
+                    subject.Should().NotBeWritable(because, becauseArgs);
+                }
+            }
+
+            return new AndConstraint<TAssertions>((TAssertions)this);
+        }
+
         public AndConstraint<TAssertions> BeWritable(string because = "", params object[] becauseArgs)
         {
             return ExceptionStackTrace.StartFromCurrentFrame(() =>
@@ -200,6 +220,5 @@ namespace FluentAssertions.Properties.Data
 
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
-
     }
 }

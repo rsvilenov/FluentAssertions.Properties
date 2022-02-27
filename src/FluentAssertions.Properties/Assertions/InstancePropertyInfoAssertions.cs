@@ -50,7 +50,8 @@ namespace FluentAssertions.Properties.Assertions
         public AndConstraint<TAssertions> NotBeWritable(string because = "", params object[] becauseArgs)
         {
             ExceptionStackTrace.StartFromCurrentFrame(() =>
-               Subject.PropertyInfo.Should().NotBeWritable(because, becauseArgs));
+                NotBeWritableInternal(because, becauseArgs));
+
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
 
@@ -125,6 +126,18 @@ namespace FluentAssertions.Properties.Assertions
             {
                 Subject.PropertyInfo.GetSetMethod(nonPublic: true).Should().HaveAccessModifier(accessModifier.Value, because, becauseArgs);
             }
+
+            return new AndConstraint<TAssertions>((TAssertions)this);
+        }
+
+        private AndConstraint<TAssertions> NotBeWritableInternal(string because = "", params object[] becauseArgs)
+        {
+            Execute.Assertion
+                    .ForCondition(!Subject.PropertyInfo.CanWrite)
+                    .BecauseOf(because, becauseArgs)
+                    .FailWith(
+                        "Expected {context:property} {0} not to have a setter{reason}.",
+                        Subject.PropertyInfo);
 
             return new AndConstraint<TAssertions>((TAssertions)this);
         }

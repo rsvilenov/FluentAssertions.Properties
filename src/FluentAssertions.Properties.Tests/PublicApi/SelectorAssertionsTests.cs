@@ -438,5 +438,39 @@ namespace FluentAssertions.Properties.Tests.PublicApi
             // This is how PropertyInfo.BeWritable() method of the original FluentAssertions library behaves
             // and this is also the behavior of reflection's PropertyInfo.CanWrite property.
         }
+
+        [Fact]
+        public void When_selecting_all_read_only_properties_NotBeWritable_should_succeed()
+        {
+            // Arrange
+            var testObj = new TestClass();
+            var selector =
+                testObj.Properties()
+                .ThatAreReadOnly;
+
+            // Act & Assert
+            selector.Should().NotBeWritable();
+        }
+
+        [Fact]
+        public void When_selecting_properties_that_have_public_internal_or_private_setter_NotBeWritable_should_fail()
+        {
+            // Arrange
+            var testObj = new TestClass();
+            var selector =
+                testObj.Properties(p => p.StringPropertyWithInternalSetter, 
+                    p => p.StringPropertyWithPrivateSetter,
+                    p => p.StringProperty);
+            var assertReason = base.CreateAssertReason();
+
+            // Act & Assert
+            Action assertion = ()
+                => selector.Should().NotBeWritable(assertReason.BecauseWithFormat, assertReason.BecauseArg1, assertReason.BecauseArg2);
+
+            assertion
+                .Should()
+                .Throw<Xunit.Sdk.XunitException>()
+                .WithMessage($"Expected property * not to have a setter because {assertReason}.");
+        }
     }
 }
