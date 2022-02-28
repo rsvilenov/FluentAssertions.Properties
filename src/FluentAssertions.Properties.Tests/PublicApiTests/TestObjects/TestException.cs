@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FluentAssertions.Properties.Tests.PublicApi.TestObjects
+namespace FluentAssertions.Properties.Tests.PublicApiTests.TestObjects
 {
     public class TestException : Exception
     {

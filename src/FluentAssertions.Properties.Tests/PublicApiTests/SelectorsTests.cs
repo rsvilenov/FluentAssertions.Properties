@@ -1,14 +1,14 @@
 ﻿using FluentAssertions.Properties.Extensions;
 using FluentAssertions.Properties.Selectors;
 using FluentAssertions.Properties.Tests.Extensions;
-using FluentAssertions.Properties.Tests.PublicApi.TestObjects;
+using FluentAssertions.Properties.Tests.PublicApiTests.TestObjects;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using Xunit;
 
-namespace FluentAssertions.Properties.Tests.PublicApi
+namespace FluentAssertions.Properties.Tests.PublicApiTests
 {
     public class SelectorsTests
     {

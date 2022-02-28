@@ -1,4 +1,4 @@
-﻿namespace FluentAssertions.Properties.Tests.PublicApi.TestObjects
+﻿namespace FluentAssertions.Properties.Tests.PublicApiTests.TestObjects
 {
     public class TestSubClass : TestClassBase
     {

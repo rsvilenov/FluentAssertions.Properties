@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 namespace FluentAssertions.Properties.Invocation
 {
@@ -35,9 +36,20 @@ namespace FluentAssertions.Properties.Invocation
         {
             try
             {
-                _instance.GetType()
-                    .GetProperty(propertyName)
-                    ?.SetValue(_instance, testData);
+                PropertyInfo propInfo = GetPropertyInfo(propertyName);
+                propInfo.SetValue(_instance, testData);
+            }
+            catch (TargetInvocationException tex)
+            {
+                throw tex.InnerException;
+            }
+        }
+        public object GetValue(string propertyName)
+        {
+            try
+            {
+                var propInfo = GetPropertyInfo(propertyName);
+                return propInfo.GetValue(_instance);
             }
             catch (TargetInvocationException tex)
             {
@@ -45,18 +57,18 @@ namespace FluentAssertions.Properties.Invocation
             }
         }
 
-        public object GetValue(string propertyName)
+        private PropertyInfo GetPropertyInfo(string propertyName)
         {
-            try
+            var propInfo = _instance
+                            .GetType()
+                            .GetProperty(propertyName);
+
+            if (propInfo == null)
             {
-                return _instance.GetType()
-                     .GetProperty(propertyName)
-                     ?.GetValue(_instance);
+                throw new ArgumentException($"Property {propertyName} cannot be found in type {typeof(TDeclaringType)}");
             }
-            catch (TargetInvocationException tex)
-            {
-                throw tex.InnerException;
-            }
+
+            return propInfo;
         }
     }
 }

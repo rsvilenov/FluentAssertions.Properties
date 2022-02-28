@@ -1,10 +1,10 @@
-﻿using FluentAssertions.Properties.Tests.PublicApi.TestObjects;
+﻿using FluentAssertions.Properties.Tests.PublicApiTests.TestObjects;
 using Moq;
 using System;
 using Xunit;
 using Xunit.Sdk;
 
-namespace FluentAssertions.Properties.Tests.PublicApi
+namespace FluentAssertions.Properties.Tests.PublicApiTests
 {
     public class ExceptionAssertionsTests : PublicApiTestBase
     {

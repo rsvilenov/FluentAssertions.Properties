@@ -2,10 +2,10 @@
 using System;
 using Xunit;
 using Xunit.Sdk;
-using FluentAssertions.Properties.Tests.PublicApi.TestObjects;
+using FluentAssertions.Properties.Tests.PublicApiTests.TestObjects;
 using FluentAssertions.Properties.Tests.Extensions;
 
-namespace FluentAssertions.Properties.Tests.PublicApi
+namespace FluentAssertions.Properties.Tests.PublicApiTests
 {
     public class InvocationAssertionsTests : PublicApiTestBase
     {

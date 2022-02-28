@@ -1,10 +1,10 @@
 ﻿using FluentAssertions.Common;
-using FluentAssertions.Properties.Tests.PublicApi.TestObjects;
+using FluentAssertions.Properties.Tests.PublicApiTests.TestObjects;
 using System;
 using System.Linq;
 using Xunit;
 
-namespace FluentAssertions.Properties.Tests.PublicApi
+namespace FluentAssertions.Properties.Tests.PublicApiTests
 {
     public class SelectorAssertionsTests : PublicApiTestBase
     {

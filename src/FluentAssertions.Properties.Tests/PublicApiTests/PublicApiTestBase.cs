@@ -1,7 +1,7 @@
 ﻿using AutoFixture;
 using FluentAssertions.Properties.Tests.Common;
 
-namespace FluentAssertions.Properties.Tests.PublicApi
+namespace FluentAssertions.Properties.Tests.PublicApiTests
 {
     public class PublicApiTestBase
     {
