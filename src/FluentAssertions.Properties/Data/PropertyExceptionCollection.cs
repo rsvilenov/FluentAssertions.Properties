@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FluentAssertions.Properties.Data
 {
@@ -38,6 +39,7 @@ namespace FluentAssertions.Properties.Data
             return _propertyExceptions.GetEnumerator();
         }
 
+        [ExcludeFromCodeCoverage]
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

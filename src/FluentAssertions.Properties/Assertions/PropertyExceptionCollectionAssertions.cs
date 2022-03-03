@@ -27,6 +27,7 @@ namespace FluentAssertions.Properties.Assertions
         {
             _exceptionCollection = exceptionCollection;
             _innerExceptionPedigree = innerExceptionPedigree.ToList();
+            _innerExceptionPedigree.Add(typeof(TException).Name);
         }
 
         public virtual PropertyExceptionCollectionAssertions<TException> WithMessage(string expectedWildcardPattern, string because = "",
@@ -72,7 +73,7 @@ namespace FluentAssertions.Properties.Assertions
                         innerScope.ForCondition(condition(pex.Exception))
                         .BecauseOf(because, becauseArgs)
                         .FailWith("Expected an exception {0} for the {context} of property {1} where {2}{reason}, but the condition was not met by:{3}{3}{4}.",
-                            ConstructExceptionPedigree(pex.Exception),
+                            ConstructExceptionPedigree(),
                             pex.PropertyName,
                             exceptionExpression.Body,
                             Environment.NewLine,
@@ -115,14 +116,14 @@ namespace FluentAssertions.Properties.Assertions
                     {
                         // format the message beforehand, so that FailWith() will not enclose the placeholders with brackets
                         string failMessage = string.Format("the {0} exception has no inner exception.",
-                                _innerExceptionPedigree.Any() ? "inner" : "thrown");
+                                _innerExceptionPedigree.Count > 1 ? "inner" : "thrown");
 
                         using (var innerScope = Execute.Assertion)
                         {
                             innerScope.Context = pex.AccessorEvaluationType.GetDescription();
                             innerScope.BecauseOf(because, becauseArgs)
                             .WithExpectation("Expected inner {0}{reason} for the {context} of property {1}, but ",
-                                ConstructExceptionPedigree(pex.Exception, typeof(TInnerException)),
+                                ConstructExceptionPedigree(typeof(TInnerException)),
                                 pex.PropertyName)
                             .FailWith(failMessage);
                         }
@@ -137,10 +138,10 @@ namespace FluentAssertions.Properties.Assertions
                                 : pex.Exception.InnerException is TInnerException)
                             .BecauseOf(because, becauseArgs)
                             .WithExpectation("Expected inner {0}{reason} for the {context} of property {1}, but ",
-                                ConstructExceptionPedigree(pex.Exception, typeof(TInnerException)),
+                                ConstructExceptionPedigree(typeof(TInnerException)),
                                 pex.PropertyName)
                             .FailWith("found {0}.",
-                                ConstructExceptionPedigree(pex.Exception, pex.Exception.InnerException.GetType()));
+                                ConstructExceptionPedigree(pex.Exception.InnerException.GetType()));
                         }
                     }
                 }
@@ -153,23 +154,14 @@ namespace FluentAssertions.Properties.Assertions
                     pex.AccessorEvaluationType);
             }
 
-            _innerExceptionPedigree.Add(typeof(TInnerException).Name);
-
             return new PropertyExceptionCollectionAssertions<TInnerException>(innerExceptionCollection, _innerExceptionPedigree);
         }
 
-        private string ConstructExceptionPedigree(TException ex, Type lastInnerExType = null)
+        private string ConstructExceptionPedigree(Type lastInnerExType = null)
         {
             const string delimiter = "->";
             StringBuilder sb = new StringBuilder();
-
-            sb.Append(ex.GetType().Name);
-
-            if (_innerExceptionPedigree.Any())
-            {
-                sb.Append(delimiter);
-                sb.Append(string.Join(delimiter, _innerExceptionPedigree));
-            }
+            sb.Append(string.Join(delimiter, _innerExceptionPedigree));
 
             if (lastInnerExType != null)
             {

@@ -300,7 +300,41 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
                 .Throw<XunitException>()
                 .WithMessage($"Expected inner \"{nameof(TestException)}->{nameof(Exception)}\" because {assertReason} for the getter of property \"{nameof(ITestProperties.StringProperty)}\", but the thrown exception has no inner exception.");
         }
-        
+
+        [Fact]
+        public void When_selected_properties_throw_from_getter_an_exception_with_inner_exception_with_no_inner_exception_ThrowFromGetter_InnerException_InnerException_assert_should_fail()
+        {
+            // Arrange
+            var testPropertyMock = new Mock<ITestProperties>();
+            testPropertyMock
+                .Setup(o => o.StringProperty)
+                .Throws(new TestException(string.Empty, new InvalidCastException()));
+
+            var valueSourceMock = new Mock<ITestProperties>();
+            valueSourceMock
+                .Setup(o => o.StringProperty)
+                .Returns(Guid.NewGuid().ToString());
+
+            var symmetricProperties = testPropertyMock
+                .Object
+                .Properties(p => p.StringProperty);
+
+            var assertReason = base.CreateAssertReason();
+
+            // Act & Assert
+            Action assertion = () => symmetricProperties
+                .WhenCalledWithValuesFrom(valueSourceMock.Object)
+                .Should()
+                .ThrowFromGetter<TestException>()
+                .WithInnerException<InvalidCastException>()
+                .WithInnerException<Exception>(assertReason.BecauseWithFormat, assertReason.BecauseArg1, assertReason.BecauseArg2);
+
+            assertion
+                .Should()
+                .Throw<XunitException>()
+                .WithMessage($"Expected inner \"{nameof(TestException)}->{nameof(InvalidCastException)}->{nameof(Exception)}\" because {assertReason} for the getter of property \"{nameof(ITestProperties.StringProperty)}\", but the inner exception has no inner exception.");
+        }
+
         [Fact]
         public void When_selected_properties_throw_from_getter_an_exception_without_inner_exception_ThrowFromGetter_InnerException_with_reason_param_assert_should_fail_with_expected_reason()
         {

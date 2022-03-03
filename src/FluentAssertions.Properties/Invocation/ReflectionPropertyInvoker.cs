@@ -61,7 +61,7 @@ namespace FluentAssertions.Properties.Invocation
         {
             var propInfo = _instance
                             .GetType()
-                            .GetProperty(propertyName);
+                            .GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
             if (propInfo == null)
             {

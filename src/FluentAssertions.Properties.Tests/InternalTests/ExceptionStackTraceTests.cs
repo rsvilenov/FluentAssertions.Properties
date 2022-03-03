@@ -1,7 +1,5 @@
 ﻿using FluentAssertions.Properties.Assertions;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace FluentAssertions.Properties.Tests.InternalTests
