@@ -28,6 +28,22 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
         }
 
         [Fact]
+        public void When_selected_symmetric_properties_are_called_with_null_ProvideSymmetricAccess_assert_should_succeed()
+        {
+            // Arrange
+            var testObj = Mock.Of<ITestProperties>();
+            var valueSourceMock = new Mock<ITestProperties>();;
+            var symmetricProperties = testObj
+                .Properties(p => p.StringProperty);
+
+            // Act & Assert
+            symmetricProperties
+                .WhenCalledWithValuesFrom(valueSourceMock.Object)
+                .Should()
+                .ProvideSymmetricAccess();
+        }
+
+        [Fact]
         public void When_selected_asymmetric_properties_are_called_with_values_from_source_object_ProvideSymmetricAccess_assert_should_fail()
         {
             // Arrange

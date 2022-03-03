@@ -197,7 +197,7 @@ namespace FluentAssertions.Properties.Assertions
             {
                 _propertyInvoker.SetValue(propertyName, value);
                 TProperty got = _propertyInvoker.GetValue(propertyName);
-                isSymmetric = value.Equals(got);
+                isSymmetric = Equals(got, value);
             }
             catch (Exception ex)
             {

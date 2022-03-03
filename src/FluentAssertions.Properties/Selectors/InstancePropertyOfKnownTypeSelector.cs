@@ -1,5 +1,4 @@
 ﻿using FluentAssertions.Properties.Data;
-using FluentAssertions.Properties.Extensions;
 using FluentAssertions.Properties.Invocation;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +19,7 @@ namespace FluentAssertions.Properties.Selectors
             var propertyInvoker = InvocationContext.PropertyInvokerFactory.CreatePropertyInvoker<TDeclaringType>(Instance);
             
             var filteredProperties = SelectedProperties
-                .Where(p => propertyInvoker.GetValue(p.PropertyInfo.Name)?.Equals(value) == true);
+                .Where(p => Equals(propertyInvoker.GetValue(p.PropertyInfo.Name), value));
 
             return CloneFiltered(filteredProperties);
         }

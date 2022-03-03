@@ -727,6 +727,31 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
         }
 
         [Fact]
+        public void When_selecting_properties_of_string_type_that_have_no_value_HavingValue_with_null_should_succeed()
+        {
+            // Arrange
+            var testObj = new TestClass();
+            string testValue = null;
+            testObj.StringProperty = "not null";
+
+            // Act
+            var selectedPropertyList = testObj
+                .Properties()
+                .OfType<string>()
+                .HavingValue(testValue);
+
+            // Assert
+            var selectedPropertyNames = selectedPropertyList
+                .Select(ipi => ipi.PropertyInfo.Name);
+
+            selectedPropertyNames
+                .Should()
+                .NotBeEmpty()
+                .And
+                .NotContain(p => p == nameof(testObj.StringProperty));
+        }
+
+        [Fact]
         public void When_using_Properties_selector_over_a_type_and_not_an_instance_it_should_succeed()
         {
             var selector = typeof(TestClass).Properties();
