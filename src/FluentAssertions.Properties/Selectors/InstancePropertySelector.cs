@@ -2,11 +2,13 @@
 using FluentAssertions.Properties.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
 namespace FluentAssertions.Properties.Selectors
 {
+    [DebuggerNonUserCode]
     public class InstancePropertySelector<TDeclaringType> 
         :  InstancePropertySelectorBase<TDeclaringType, InstancePropertyInfo<TDeclaringType>, InstancePropertySelector<TDeclaringType>>
     {

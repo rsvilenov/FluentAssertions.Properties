@@ -1,6 +1,7 @@
 ﻿using FluentAssertions.Properties.Data;
 using FluentAssertions.Properties.Invocation;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace FluentAssertions.Properties.Selectors

@@ -1,10 +1,12 @@
 ﻿using FluentAssertions.Properties.Assertions;
 using FluentAssertions.Properties.Data;
 using FluentAssertions.Properties.Selectors;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 
 namespace FluentAssertions.Properties
 {
+    [DebuggerNonUserCode]
     public static class AssertionExtensions
     {
         [Pure]

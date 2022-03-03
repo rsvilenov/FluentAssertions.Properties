@@ -3,11 +3,13 @@ using FluentAssertions.Properties.Extensions;
 using FluentAssertions.Properties.Selectors;
 using FluentAssertions.Types;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 
 namespace FluentAssertions.Properties
 {
+    [DebuggerNonUserCode]
     public static class ObjectExtensions
     {
         /// <summary>
