@@ -10,7 +10,7 @@ using System.Reflection;
 namespace FluentAssertions.Properties.Assertions
 {
     /// <summary>
-    /// Contains a number of methods to assert that the selected properties behave in an expected way.
+    /// Contains a number of methods to assert that the selected properties behave in the expected way.
     /// </summary>
     [DebuggerNonUserCode]
     public class PropertyInvocationCollectionAssertions<TDeclaringType, TProperty>
@@ -23,7 +23,7 @@ namespace FluentAssertions.Properties.Assertions
     }
 
     /// <summary>
-    /// Contains a number of methods to assert that the selected properties behave in an expected way.
+    /// Contains a number of methods to assert that the selected properties behave in the expected way.
     /// </summary>
     [DebuggerNonUserCode]
     public class PropertyInvocationCollectionAssertions<TAssertions, TDeclaringType, TProperty>

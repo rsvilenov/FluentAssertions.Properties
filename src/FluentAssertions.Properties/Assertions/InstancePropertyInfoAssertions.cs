@@ -8,7 +8,7 @@ using System;
 namespace FluentAssertions.Properties.Assertions
 {
     /// <summary>
-    /// Contains a number of methods to assert the qualities of a property.
+    /// Contains a number of methods to assert the characteristics of a property.
     /// </summary>
     [DebuggerNonUserCode]
     public class InstancePropertyInfoAssertions<TDeclaringType>
@@ -21,7 +21,7 @@ namespace FluentAssertions.Properties.Assertions
     }
 
     /// <summary>
-    /// Contains a number of methods to assert the qualities of a property.
+    /// Contains a number of methods to assert the characteristics of a property.
     /// </summary>
     [DebuggerNonUserCode]
     public class InstancePropertyInfoAssertions<TAssertions, TDeclaringType>
@@ -33,7 +33,7 @@ namespace FluentAssertions.Properties.Assertions
         }
 
         /// <summary>
-        /// Gets the object which value is being asserted.
+        /// Gets the object whose value is being asserted.
         /// </summary>
         public InstancePropertyInfo<TDeclaringType> Subject { get; }
 

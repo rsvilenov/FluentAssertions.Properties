@@ -10,7 +10,7 @@ using System;
 namespace FluentAssertions.Properties.Data
 {
     /// <summary>
-    /// Contains a number of methods to assert that collection of properties have the expected qualities.
+    /// Contains a number of methods for asserting a selection of properties.
     /// </summary>
     [DebuggerNonUserCode]
     public class InstancePropertySelectorAssertions<TDeclaringType, TInstancePropertyInfo, TSelector>
@@ -25,7 +25,7 @@ namespace FluentAssertions.Properties.Data
     }
 
     /// <summary>
-    /// Contains a number of methods to assert that collection of properties have the expected qualities.
+    /// Contains a number of methods for asserting a selection of properties.
     /// </summary>
     [DebuggerNonUserCode]
     public class InstancePropertySelectorAssertions<TAssertions, TDeclaringType, TInstancePropertyInfo, TSelector>
@@ -39,7 +39,7 @@ namespace FluentAssertions.Properties.Data
         }
 
         /// <summary>
-        /// Gets the subject that is being asserted.
+        /// Gets the object whose value is being asserted.
         /// </summary>
         public InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo, TSelector> Subject { get; }
 
