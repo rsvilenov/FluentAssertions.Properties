@@ -1,12 +1,17 @@
 ﻿using FluentAssertions.Common;
 using FluentAssertions.Execution;
 using FluentAssertions.Properties.Assertions;
+using FluentAssertions.Properties.Common;
 using FluentAssertions.Properties.Selectors;
 using System.Diagnostics;
 using System.Linq;
+using System;
 
 namespace FluentAssertions.Properties.Data
 {
+    /// <summary>
+    /// Contains a number of methods to assert that collection of properties have the expected qualities.
+    /// </summary>
     [DebuggerNonUserCode]
     public class InstancePropertySelectorAssertions<TDeclaringType, TInstancePropertyInfo, TSelector>
         : InstancePropertySelectorAssertions<InstancePropertySelectorAssertions<TDeclaringType, TInstancePropertyInfo, TSelector>, TDeclaringType, TInstancePropertyInfo, TSelector>
@@ -20,7 +25,7 @@ namespace FluentAssertions.Properties.Data
     }
 
     /// <summary>
-    /// Contains a number of methods to assert that a <see cref="bool"/> is in the expected state.
+    /// Contains a number of methods to assert that collection of properties have the expected qualities.
     /// </summary>
     [DebuggerNonUserCode]
     public class InstancePropertySelectorAssertions<TAssertions, TDeclaringType, TInstancePropertyInfo, TSelector>
@@ -34,10 +39,22 @@ namespace FluentAssertions.Properties.Data
         }
 
         /// <summary>
-        /// Gets the object which value is being asserted.
+        /// Gets the subject that is being asserted.
         /// </summary>
         public InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo, TSelector> Subject { get; }
 
+        /// <summary>
+        /// Asserts that the selected properties have a specified count.
+        /// </summary>
+        /// <param name="expectedCount">The expected count of the selected properties.</param>
+        /// <param name="accessModifier">The expected C# access modifier.</param>
+        /// <param name="because">
+        /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
+        /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
+        /// </param>
+        /// <param name="becauseArgs">
+        /// Zero or more objects to format using the placeholders in <paramref name="because" />.
+        /// </param>
         public AndConstraint<TAssertions> HaveCount(int expectedCount, string because = "", params object[] becauseArgs)
         {
             ExceptionStackTrace.StartFromCurrentFrame(() =>
@@ -49,6 +66,17 @@ namespace FluentAssertions.Properties.Data
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
 
+        /// <summary>
+        /// Asserts that the selected properties's types are primitive.
+        /// </summary>
+        /// <param name="accessModifier">The expected C# access modifier.</param>
+        /// <param name="because">
+        /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
+        /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
+        /// </param>
+        /// <param name="becauseArgs">
+        /// Zero or more objects to format using the placeholders in <paramref name="because" />.
+        /// </param>
         public AndConstraint<TAssertions> BeOfPrimitiveType(string because = "", params object[] becauseArgs)
         {
             return ExceptionStackTrace.StartFromCurrentFrame(() => 
@@ -68,6 +96,17 @@ namespace FluentAssertions.Properties.Data
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
 
+        /// <summary>
+        /// Asserts that the selected properties's types are not primitive.
+        /// </summary>
+        /// <param name="accessModifier">The expected C# access modifier.</param>
+        /// <param name="because">
+        /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
+        /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
+        /// </param>
+        /// <param name="becauseArgs">
+        /// Zero or more objects to format using the placeholders in <paramref name="because" />.
+        /// </param>
         public AndConstraint<TAssertions> NotBeOfPrimitiveType(string because = "", params object[] becauseArgs)
         {
             return ExceptionStackTrace.StartFromCurrentFrame(() =>
@@ -87,6 +126,17 @@ namespace FluentAssertions.Properties.Data
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
 
+        /// <summary>
+        /// Asserts that the selected properties are of value type.
+        /// </summary>
+        /// <param name="accessModifier">The expected C# access modifier.</param>
+        /// <param name="because">
+        /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
+        /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
+        /// </param>
+        /// <param name="becauseArgs">
+        /// Zero or more objects to format using the placeholders in <paramref name="because" />.
+        /// </param>
         public AndConstraint<TAssertions> BeOfValueType(string because = "", params object[] becauseArgs)
         {
             return ExceptionStackTrace.StartFromCurrentFrame(() =>
@@ -106,6 +156,17 @@ namespace FluentAssertions.Properties.Data
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
 
+        /// <summary>
+        /// Asserts that the selected properties are of reference type.
+        /// </summary>
+        /// <param name="accessModifier">The expected C# access modifier.</param>
+        /// <param name="because">
+        /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
+        /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
+        /// </param>
+        /// <param name="becauseArgs">
+        /// Zero or more objects to format using the placeholders in <paramref name="because" />.
+        /// </param>
         public AndConstraint<TAssertions> BeOfReferenceType(string because = "", params object[] becauseArgs)
         {
             return ExceptionStackTrace.StartFromCurrentFrame(() =>
@@ -125,6 +186,17 @@ namespace FluentAssertions.Properties.Data
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
 
+        /// <summary>
+        /// Asserts that the selected properties are virtual.
+        /// </summary>
+        /// <param name="accessModifier">The expected C# access modifier.</param>
+        /// <param name="because">
+        /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
+        /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
+        /// </param>
+        /// <param name="becauseArgs">
+        /// Zero or more objects to format using the placeholders in <paramref name="because" />.
+        /// </param>
         public AndConstraint<TAssertions> BeVirtual(string because = "", params object[] becauseArgs)
         {
             return ExceptionStackTrace.StartFromCurrentFrame(() =>
@@ -144,6 +216,17 @@ namespace FluentAssertions.Properties.Data
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
 
+        /// <summary>
+        /// Asserts that the selected properties are not virtual.
+        /// </summary>
+        /// <param name="accessModifier">The expected C# access modifier.</param>
+        /// <param name="because">
+        /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
+        /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
+        /// </param>
+        /// <param name="becauseArgs">
+        /// Zero or more objects to format using the placeholders in <paramref name="because" />.
+        /// </param>
         public AndConstraint<TAssertions> NotBeVirtual(string because = "", params object[] becauseArgs)
         {
             return ExceptionStackTrace.StartFromCurrentFrame(() =>
@@ -163,6 +246,17 @@ namespace FluentAssertions.Properties.Data
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
 
+        /// <summary>
+        /// Asserts that the selected properties do not have a setter.
+        /// </summary>
+        /// <param name="accessModifier">The expected C# access modifier.</param>
+        /// <param name="because">
+        /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
+        /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
+        /// </param>
+        /// <param name="becauseArgs">
+        /// Zero or more objects to format using the placeholders in <paramref name="because" />.
+        /// </param>
         public AndConstraint<TAssertions> NotBeWritable(string because = "", params object[] becauseArgs)
         {
             return ExceptionStackTrace.StartFromCurrentFrame(() =>
@@ -183,6 +277,17 @@ namespace FluentAssertions.Properties.Data
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
 
+        /// <summary>
+        /// Asserts that the selected properties have a setter.
+        /// </summary>
+        /// <param name="accessModifier">The expected C# access modifier.</param>
+        /// <param name="because">
+        /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
+        /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
+        /// </param>
+        /// <param name="becauseArgs">
+        /// Zero or more objects to format using the placeholders in <paramref name="because" />.
+        /// </param>
         public AndConstraint<TAssertions> BeWritable(string because = "", params object[] becauseArgs)
         {
             return ExceptionStackTrace.StartFromCurrentFrame(() =>
@@ -202,8 +307,23 @@ namespace FluentAssertions.Properties.Data
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
 
+        /// <summary>
+        /// Asserts that the selected properties have a setter with the specified C# access modifier.
+        /// </summary>
+        /// <param name="accessModifier">The expected C# access modifier.</param>
+        /// <param name="because">
+        /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
+        /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
+        /// </param>
+        /// <param name="becauseArgs">
+        /// Zero or more objects to format using the placeholders in <paramref name="because" />.
+        /// </param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="accessModifier"/>
+        /// is not a <see cref="CSharpAccessModifier"/> value.</exception>
         public AndConstraint<TAssertions> BeWritable(CSharpAccessModifier accessModifier, string because = "", params object[] becauseArgs)
         {
+            Guard.ThrowIfArgumentIsOutOfRange(accessModifier, nameof(accessModifier));
+
             return ExceptionStackTrace.StartFromCurrentFrame(() =>
                                  BeWritableInternal(accessModifier, because, becauseArgs));
         }

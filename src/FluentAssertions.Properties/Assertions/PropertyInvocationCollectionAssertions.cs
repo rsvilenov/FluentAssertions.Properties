@@ -9,6 +9,9 @@ using System.Reflection;
 
 namespace FluentAssertions.Properties.Assertions
 {
+    /// <summary>
+    /// Contains a number of methods to assert that the selected properties behave in an expected way.
+    /// </summary>
     [DebuggerNonUserCode]
     public class PropertyInvocationCollectionAssertions<TDeclaringType, TProperty>
         : PropertyInvocationCollectionAssertions<PropertyInvocationCollectionAssertions<TDeclaringType, TProperty>, TDeclaringType, TProperty>
@@ -19,6 +22,9 @@ namespace FluentAssertions.Properties.Assertions
         }
     }
 
+    /// <summary>
+    /// Contains a number of methods to assert that the selected properties behave in an expected way.
+    /// </summary>
     [DebuggerNonUserCode]
     public class PropertyInvocationCollectionAssertions<TAssertions, TDeclaringType, TProperty>
         where TAssertions : PropertyInvocationCollectionAssertions<TAssertions, TDeclaringType, TProperty>
@@ -36,6 +42,16 @@ namespace FluentAssertions.Properties.Assertions
         /// </summary>
         public PropertyInvocationCollection<TDeclaringType, TProperty> Subject { get; }
 
+        /// <summary>
+        /// Asserts that the selected properties return the same value as the one that has been assigned to them.
+        /// </summary>
+        /// <param name="because">
+        /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
+        /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
+        /// </param>
+        /// <param name="becauseArgs">
+        /// Zero or more objects to format using the placeholders in <paramref name="because" />.
+        /// </param>
         public AndConstraint<TAssertions> ProvideSymmetricAccess(string because = "", params object[] becauseArgs)
         {
             return ExceptionStackTrace.StartFromCurrentFrame(() =>
@@ -73,6 +89,17 @@ namespace FluentAssertions.Properties.Assertions
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
 
+        /// <summary>
+        /// Asserts that the selected properties throw from their setters an exception of type <typeparamref name="Exception" />.
+        /// </summary>
+        /// <typeparam name="TException">The expected type of exception.</typeparam>
+        /// <param name="because">
+        /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
+        /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
+        /// </param>
+        /// <param name="becauseArgs">
+        /// Zero or more objects to format using the placeholders in <paramref name="because" />.
+        /// </param>
         public PropertyExceptionCollectionAssertions<TException> ThrowFromSetter<TException>(string because = "", params object[] becauseArgs)
             where TException : Exception
         {
@@ -84,6 +111,17 @@ namespace FluentAssertions.Properties.Assertions
                     becauseArgs));
         }
 
+        /// <summary>
+        /// Asserts that the selected properties throw from their getters an exception of type <typeparamref name="Exception" />.
+        /// </summary>
+        /// <typeparam name="TException">The expected type of exception.</typeparam>
+        /// <param name="because">
+        /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
+        /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
+        /// </param>
+        /// <param name="becauseArgs">
+        /// Zero or more objects to format using the placeholders in <paramref name="because" />.
+        /// </param>
         public PropertyExceptionCollectionAssertions<TException> ThrowFromGetter<TException>(string because = "", params object[] becauseArgs)
             where TException : Exception
         {
@@ -95,6 +133,17 @@ namespace FluentAssertions.Properties.Assertions
                     becauseArgs));
         }
 
+        /// <summary>
+        /// Asserts that the selected properties throw from their setters an exception of type <typeparamref name="TException" /> (and not a derived exception type).
+        /// </summary>
+        /// <typeparam name="TException">The expected type of exception.</typeparam>
+        /// <param name="because">
+        /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
+        /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
+        /// </param>
+        /// <param name="becauseArgs">
+        /// Zero or more objects to format using the placeholders in <paramref name="because" />.
+        /// </param>
         public PropertyExceptionCollectionAssertions<TException> ThrowFromSetterExactly<TException>(string because = "", params object[] becauseArgs)
             where TException : Exception
         {
@@ -106,6 +155,17 @@ namespace FluentAssertions.Properties.Assertions
                     becauseArgs));
         }
 
+        /// <summary>
+        /// Asserts that the selected properties throw from their getters an exception of type <typeparamref name="TException" /> (and not a derived exception type).
+        /// </summary>
+        /// <typeparam name="TException">The expected type of exception.</typeparam>
+        /// <param name="because">
+        /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
+        /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
+        /// </param>
+        /// <param name="becauseArgs">
+        /// Zero or more objects to format using the placeholders in <paramref name="because" />.
+        /// </param>
         public PropertyExceptionCollectionAssertions<TException> ThrowFromGetterExactly<TException>(string because = "", params object[] becauseArgs)
             where TException : Exception
         {

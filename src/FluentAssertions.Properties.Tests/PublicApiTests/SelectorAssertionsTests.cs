@@ -394,6 +394,24 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
         }
 
         [Fact]
+        public void When_selecting_all_properties_BeWritable_with_wrong_access_modifier_enum_value_should_fail()
+        {
+            // Arrange
+            var testObj = new TestClass();
+            var selector =
+                testObj.Properties();
+            var nonExistentAccessModifierEnumValue = (CSharpAccessModifier) (-1);
+
+            // Act & Assert
+            Action assertion = ()
+                => selector.Should().BeWritable(nonExistentAccessModifierEnumValue);
+
+            assertion
+                .Should()
+                .Throw<ArgumentOutOfRangeException>();
+        }
+
+        [Fact]
         public void When_selecting_all_properties_with_internal_setter_BeWritable_without_access_modifier_should_succeed()
         {
             // Arrange

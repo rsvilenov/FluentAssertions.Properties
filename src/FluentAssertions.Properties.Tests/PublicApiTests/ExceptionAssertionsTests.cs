@@ -462,6 +462,31 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
         }
 
         [Fact]
+        public void When_selected_properties_throw_from_getter_ThrowFromGetter_Where_assert_with_null_delegate_should_fail()
+        {
+            // Arrange
+            var testPropertyMock = new Mock<ITestProperties>();
+            testPropertyMock
+                .Setup(o => o.StringProperty)
+                .Throws(new TestException());
+
+            var symmetricProperties = testPropertyMock
+                .Object
+                .Properties(p => p.StringProperty);
+
+            Action assertAction = () => symmetricProperties
+                .WhenCalledWith(string.Empty)
+                .Should()
+                .ThrowFromGetter<TestException>()
+                .Where(null);
+
+            // Act & Assert
+            assertAction
+                .Should()
+                .Throw<ArgumentNullException>();
+        }
+
+        [Fact]
         public void When_selected_properties_throw_from_getter_ThrowFromGetter_Where_assert_for_a_wrong_exception_message_should_fail()
         {
             // Arrange

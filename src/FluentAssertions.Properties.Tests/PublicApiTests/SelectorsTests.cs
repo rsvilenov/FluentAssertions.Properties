@@ -781,6 +781,5 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
                 .And
                 .Contain(m => m.Name == nameof(TestClass.StringProperty));
         }
-
     }
 }

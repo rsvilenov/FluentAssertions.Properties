@@ -1,4 +1,5 @@
 ﻿using FluentAssertions.Execution;
+using FluentAssertions.Properties.Common;
 using FluentAssertions.Properties.Data;
 using FluentAssertions.Properties.Extensions;
 using System;
@@ -10,6 +11,9 @@ using System.Text;
 
 namespace FluentAssertions.Properties.Assertions
 {
+    /// <summary>
+    /// Contains a number of methods to assert that the thrown exceptions from the selected properties are in the correct state.
+    /// </summary>
     [DebuggerNonUserCode]
     public class PropertyExceptionCollectionAssertions<TException>
         where TException : Exception
@@ -30,6 +34,20 @@ namespace FluentAssertions.Properties.Assertions
             _innerExceptionPedigree.Add(typeof(TException).Name);
         }
 
+        /// <summary>
+        /// Asserts that the exceptions thrown from the selected properties have a message that matches <paramref name="expectedWildcardPattern" />.
+        /// </summary>
+        /// <param name="expectedWildcardPattern">
+        /// The pattern to match against the exception message.
+        /// For details on the format of this pattern, please consult
+        /// the similar method <see cref="FluentAssertions.Specialized.ExceptionAssertions.WithMessage(string, string, object[])"/>
+        /// <param name="because">
+        /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
+        /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
+        /// </param>
+        /// <param name="becauseArgs">
+        /// Zero or more objects to format using the placeholders in <paramref name="because"/>.
+        /// </param>
         public virtual PropertyExceptionCollectionAssertions<TException> WithMessage(string expectedWildcardPattern, string because = "",
                     params object[] becauseArgs)
         {
@@ -51,10 +69,26 @@ namespace FluentAssertions.Properties.Assertions
             return this;
         }
 
+        /// <summary>
+        /// Asserts that the exceptions thrown from the selected properties match a particular condition.
+        /// </summary>
+        /// <param name="exceptionExpression">
+        /// The condition that the exceptions must match.
+        /// </param>
+        /// <param name="because">
+        /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
+        /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
+        /// </param>
+        /// <param name="becauseArgs">
+        /// Zero or more objects to format using the placeholders in <paramref name="because"/>.
+        /// </param>
+        /// <exception cref="ArgumentNullException"><paramref name="exceptionExpression"/> is <c>null</c>.</exception>
         public virtual PropertyExceptionCollectionAssertions<TException> Where(Expression<Func<TException, bool>> exceptionExpression,
             string because = "",
             params object[] becauseArgs)
         {
+            Guard.ThrowIfArgumentIsNull(exceptionExpression, nameof(exceptionExpression));
+
             return ExceptionStackTrace.StartFromCurrentFrame(() =>
                 WhereInternal(exceptionExpression, because, becauseArgs));
         }
@@ -85,6 +119,18 @@ namespace FluentAssertions.Properties.Assertions
             return this;
         }
 
+        /// <summary>
+        /// Asserts that the exceptions thrown from the selected properties
+        /// contains an inner exception of type <typeparamref name="TInnerException" />.
+        /// </summary>
+        /// <typeparam name="TInnerException">The expected type of the inner exception.</typeparam>
+        /// <param name="because">
+        /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
+        /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
+        /// </param>
+        /// <param name="becauseArgs">
+        /// Zero or more objects to format using the placeholders in <paramref name="because" />.
+        /// </param>
         public PropertyExceptionCollectionAssertions<TInnerException> WithInnerException<TInnerException>(string because = null,
             params object[] becauseArgs)
             where TInnerException : Exception
@@ -92,7 +138,20 @@ namespace FluentAssertions.Properties.Assertions
             return ExceptionStackTrace.StartFromCurrentFrame(() =>
                 WithInnerExceptionInternal<TInnerException>(matchExactType: false, because, becauseArgs));
         }
-    
+
+        /// <summary>
+        /// Asserts that the exceptions thrown from the selected properties
+        /// contains an inner exception of the exact type <typeparamref name="TInnerException" /> 
+        /// (and not a derived exception type).
+        /// </summary>
+        /// <typeparam name="TInnerException">The expected type of the inner exception.</typeparam>
+        /// <param name="because">
+        /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
+        /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
+        /// </param>
+        /// <param name="becauseArgs">
+        /// Zero or more objects to format using the placeholders in <paramref name="because" />.
+        /// </param>
         public PropertyExceptionCollectionAssertions<TInnerException> WithInnerExceptionExactly<TInnerException>(string because = null,
             params object[] becauseArgs)
             where TInnerException : Exception

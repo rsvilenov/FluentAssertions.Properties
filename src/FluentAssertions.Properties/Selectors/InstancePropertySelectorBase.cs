@@ -11,6 +11,11 @@ using System.Reflection;
 
 namespace FluentAssertions.Properties.Selectors
 {
+    /// <summary>
+    /// Allows for fluent selection of class properties of an instance and setting them up for assertion.
+    /// <typeparamref name="TDeclaringType">The type of the instance.</typeparamref>
+    /// <typeparamref name="TInstancePropertyInfo">The type of the <see cref="InstancePropertyInfo{TDeclaringType}"/> for the selected properties.</typeparamref>
+    /// <typeparam name="TSelector">The actual type of the selector.</typeparam>
     public abstract class InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo, TSelector>
         : IEnumerable<TInstancePropertyInfo>
         where TInstancePropertyInfo : InstancePropertyInfo<TDeclaringType>
@@ -30,6 +35,9 @@ namespace FluentAssertions.Properties.Selectors
             SelectedProperties = instancePropertyInfos.ToList();
         }
 
+        /// <summary>
+        /// Only select the properties that have a setter.
+        /// </summary>
         public TSelector ThatAreWritable
         {
             get
@@ -41,6 +49,9 @@ namespace FluentAssertions.Properties.Selectors
             }
         }
 
+        /// <summary>
+        /// Only select the properties that do not have a setter.
+        /// </summary>
         public TSelector ThatAreReadOnly
         {
             get
@@ -52,6 +63,9 @@ namespace FluentAssertions.Properties.Selectors
             }
         }
 
+        /// <summary>
+        /// Only select the properties that are marked as virtual.
+        /// </summary>
         public TSelector ThatAreVirtual
         {
             get
@@ -63,6 +77,9 @@ namespace FluentAssertions.Properties.Selectors
             }
         }
 
+        /// <summary>
+        /// Only select the properties that are not marked as virtual.
+        /// </summary>
         public TSelector ThatAreNotVirtual
         {
             get
@@ -74,6 +91,9 @@ namespace FluentAssertions.Properties.Selectors
             }
         }
 
+        /// <summary>
+        /// Only select the properties whose types are among the primitive ones.
+        /// </summary>
         public TSelector ThatAreOfPrimitiveTypes
         {
             get
@@ -85,6 +105,9 @@ namespace FluentAssertions.Properties.Selectors
             }
         }
 
+        /// <summary>
+        /// Only select the properties whose types are not among the primitive ones.
+        /// </summary>
         public TSelector ThatAreNotOfPrimitiveTypes
         {
             get
@@ -96,6 +119,9 @@ namespace FluentAssertions.Properties.Selectors
             }
         }
 
+        /// <summary>
+        /// Only select the internal properties.
+        /// </summary>
         public TSelector ThatAreNotInternal
         {
             get
@@ -111,6 +137,9 @@ namespace FluentAssertions.Properties.Selectors
             }
         }
 
+        /// <summary>
+        /// Only select the properties that are not internal.
+        /// </summary>
         public TSelector ThatAreNotInheritted
         {
             get
@@ -122,6 +151,10 @@ namespace FluentAssertions.Properties.Selectors
             }
         }
 
+        /// <summary>
+        /// Only select the properties whose <see cref="PropertyInfo"/> matches a given predicate.
+        /// </summary>
+        /// <param name="condition">The filter condition for the properties.</param>
         public TSelector OfTypeMatching(Predicate<PropertyInfo> condition)
         {
             var filteredProperties = SelectedProperties
@@ -130,6 +163,13 @@ namespace FluentAssertions.Properties.Selectors
             return CloneFiltered(filteredProperties);
         }
 
+        /// <summary>
+        /// Prepares the selected properties to be asserted by associating them with the values from a source object of the same type.
+        /// This method does not assign the value to the properties. It just associates the value
+        /// with the property internally in the library, so that the assert step knows how to assert them.        
+        /// </summary>
+        /// <param name="source">The source object whose values to be used.</param>
+        /// <returns>An assertable property invocation collection.</returns>
         public PropertyInvocationCollection<TDeclaringType, object> WhenCalledWithValuesFrom(TDeclaringType source)
         {
             Guard.ThrowIfArgumentIsNull(source, nameof(source));
@@ -149,7 +189,7 @@ namespace FluentAssertions.Properties.Selectors
         }
 
         /// <summary>
-        /// Select return types of the properties
+        /// Select return types of the properties.
         /// </summary>
         public TypeSelector ReturnTypes()
         {

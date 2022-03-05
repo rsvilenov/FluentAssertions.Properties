@@ -9,6 +9,10 @@ using System.Reflection;
 
 namespace FluentAssertions.Properties.Selectors
 {
+    /// <summary>
+    /// Allows for fluent selection of value type properties.
+    /// <typeparamref name="TDeclaringType">The type of the instance.</typeparamref>
+    /// </summary>
     [DebuggerNonUserCode]
     public class InstancePropertyOfValueTypeSelector<TDeclaringType> 
         : InstancePropertySelectorBase<TDeclaringType, InstancePropertyInfo<TDeclaringType>, InstancePropertyOfValueTypeSelector<TDeclaringType>>
@@ -18,6 +22,9 @@ namespace FluentAssertions.Properties.Selectors
         {
         }
 
+        /// <summary>
+        /// Only select the properties whose current value is the default for their type.
+        /// </summary>
         public InstancePropertyOfValueTypeSelector<TDeclaringType> ThatHaveDefaultValue
         {
             get
@@ -29,6 +36,9 @@ namespace FluentAssertions.Properties.Selectors
             }
         }
 
+        /// <summary>
+        /// Only select the properties that are not of nullable value types.
+        /// </summary>
         public InstancePropertyOfValueTypeSelector<TDeclaringType> ThatAreNotNullable
         {
             get
@@ -40,6 +50,9 @@ namespace FluentAssertions.Properties.Selectors
             }
         }
 
+        /// <summary>
+        /// Only select the properties that are of nullable value types.
+        /// </summary>
         public InstancePropertyOfValueTypeSelector<TDeclaringType> ThatAreNullable
         {
             get

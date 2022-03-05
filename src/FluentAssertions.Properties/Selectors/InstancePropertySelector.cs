@@ -8,6 +8,10 @@ using System.Reflection;
 
 namespace FluentAssertions.Properties.Selectors
 {
+    /// <summary>
+    /// Allows for fluent selection of value type properties.
+    /// <typeparamref name="TDeclaringType">The type of the instance.</typeparamref>
+    /// </summary>
     [DebuggerNonUserCode]
     public class InstancePropertySelector<TDeclaringType> 
         :  InstancePropertySelectorBase<TDeclaringType, InstancePropertyInfo<TDeclaringType>, InstancePropertySelector<TDeclaringType>>
@@ -37,7 +41,7 @@ namespace FluentAssertions.Properties.Selectors
         }
 
         /// <summary>
-        /// Only select the properties that return the specified type
+        /// Only select the properties of the specified type.
         /// </summary>
         public InstancePropertyOfKnownTypeSelector<TDeclaringType, TProperty> OfType<TProperty>()
         {
@@ -49,7 +53,7 @@ namespace FluentAssertions.Properties.Selectors
         }
 
         /// <summary>
-        /// Only select the properties that do not return the specified type
+        /// Only select the properties that are not of the specified type
         /// </summary>
         public InstancePropertySelector<TDeclaringType> NotOfType<TProperty>()
         {
@@ -64,6 +68,9 @@ namespace FluentAssertions.Properties.Selectors
             return new InstancePropertySelector<TDeclaringType>(Instance, filteredProperties);
         }
 
+        /// <summary>
+        /// Only select the properties that are of value type.
+        /// </summary>
         public InstancePropertyOfValueTypeSelector<TDeclaringType> ThatAreOfValueType
         {
             get
@@ -75,6 +82,9 @@ namespace FluentAssertions.Properties.Selectors
             }
         }
 
+        /// <summary>
+        /// Only select the properties that are not of reference type.
+        /// </summary>
         public InstancePropertySelector<TDeclaringType> ThatAreOfReferenceType
         {
             get
