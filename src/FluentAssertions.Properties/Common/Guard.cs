@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace FluentAssertions.Properties.Common
 {
     /// <summary>
-    /// A copy of parts of FluentAssertions.Common.Guard class (he original class is internal to FluentAssertions)
+    /// A partial copy of FluentAssertions.Common.Guard class (he original class is internal to FluentAssertions)
     /// </summary>
     internal static class Guard
     {
