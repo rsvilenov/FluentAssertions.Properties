@@ -40,7 +40,8 @@ namespace FluentAssertions.Properties.Assertions
         /// <param name="expectedWildcardPattern">
         /// The pattern to match against the exception message.
         /// For details on the format of this pattern, please consult
-        /// the similar method <see cref="FluentAssertions.Specialized.ExceptionAssertions.WithMessage(string, string, object[])"/>
+        /// the similar method <see cref="FluentAssertions.Specialized.ExceptionAssertions{TException}.WithMessage(string, string, object[])"/>
+        /// </param>
         /// <param name="because">
         /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
         /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.

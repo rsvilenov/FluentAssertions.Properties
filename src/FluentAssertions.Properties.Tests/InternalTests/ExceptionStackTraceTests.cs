@@ -14,7 +14,6 @@ namespace FluentAssertions.Properties.Tests.InternalTests
             Func<object> throwingFunc = () =>
             {
                 throw exception;
-                return null;
             };
 
             // Act

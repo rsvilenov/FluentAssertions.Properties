@@ -27,13 +27,6 @@ namespace FluentAssertions.Properties.Selectors
         /// <param name="value">
         /// The value of the properties that have to be selected. The type of the value is <typeparamref name="TProperty" />.
         /// </param>
-        /// <param name="because">
-        /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
-        /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
-        /// </param>
-        /// <param name="becauseArgs">
-        /// Zero or more objects to format using the placeholders in <paramref name="because" />.
-        /// </param>
         public InstancePropertyOfKnownTypeSelector<TDeclaringType, TProperty> HavingValue(TProperty value)
         {
             var propertyInvoker = InvocationContext.PropertyInvokerFactory.CreatePropertyInvoker<TDeclaringType>(Instance);
@@ -51,13 +44,6 @@ namespace FluentAssertions.Properties.Selectors
         /// </summary>
         /// <param name="value">
         /// The value to be used when asserting the properties. The type of the value is <typeparamref name="TProperty" />.
-        /// </param>
-        /// <param name="because">
-        /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
-        /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
-        /// </param>
-        /// <param name="becauseArgs">
-        /// Zero or more objects to format using the placeholders in <paramref name="because" />.
         /// </param>
         public PropertyInvocationCollection<TDeclaringType, TProperty> WhenCalledWith(TProperty value)
         {

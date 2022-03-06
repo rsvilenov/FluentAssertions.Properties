@@ -39,7 +39,7 @@ namespace FluentAssertions.Properties.Assertions
 
         /// <summary>
         /// Asserts that the selected property has a setter. 
-        /// This method is analogous to <see cref="FluentAssertions.Types.PropertyInfoAssertions.BeWritable(string, object[])"./>
+        /// This method is analogous to <see cref="FluentAssertions.Types.PropertyInfoAssertions.BeWritable(string, object[])"/>.
         /// </summary>
         /// <param name="because">
         /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
@@ -57,7 +57,7 @@ namespace FluentAssertions.Properties.Assertions
 
         /// <summary>
         /// Asserts that the selected property has a setter with the specified C# access modifier.
-        /// This method is analogous to <see cref="FluentAssertions.Types.PropertyInfoAssertions.BeWritable(CSharpAccessModifier, string, object[])"./>
+        /// This method is analogous to <see cref="FluentAssertions.Types.PropertyInfoAssertions.BeWritable(CSharpAccessModifier, string, object[])"/>.
         /// </summary>
         /// <param name="accessModifier">The expected C# access modifier.</param>
         /// <param name="because">
@@ -81,7 +81,7 @@ namespace FluentAssertions.Properties.Assertions
 
         /// <summary>
         /// Asserts that the selected property does not have a setter.
-        /// This method is analogous to <see cref="FluentAssertions.Types.PropertyInfoAssertions.NotBeWritable(string, object[])"./>
+        /// This method is analogous to <see cref="FluentAssertions.Types.PropertyInfoAssertions.NotBeWritable(string, object[])"/>.
         /// </summary>
         /// <param name="because">
         /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
@@ -100,7 +100,7 @@ namespace FluentAssertions.Properties.Assertions
 
         /// <summary>
         /// Asserts that the selected property is virtual.
-        /// This method is analogous to <see cref="FluentAssertions.Types.PropertyInfoAssertions.BeVirtual(string, object[])"./>
+        /// This method is analogous to <see cref="FluentAssertions.Types.PropertyInfoAssertions.BeVirtual(string, object[])"/>.
         /// </summary>
         /// <param name="because">
         /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
@@ -118,7 +118,7 @@ namespace FluentAssertions.Properties.Assertions
 
         /// <summary>
         /// Asserts that the selected property is not virtual.
-        /// This method is analogous to <see cref="FluentAssertions.Types.PropertyInfoAssertions.NotBeVirtual(string, object[])"./>
+        /// This method is analogous to <see cref="FluentAssertions.Types.PropertyInfoAssertions.NotBeVirtual(string, object[])"/>.
         /// </summary>
         /// <param name="because">
         /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion

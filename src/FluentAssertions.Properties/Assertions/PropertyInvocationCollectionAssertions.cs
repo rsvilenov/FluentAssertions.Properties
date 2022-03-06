@@ -90,7 +90,7 @@ namespace FluentAssertions.Properties.Assertions
         }
 
         /// <summary>
-        /// Asserts that the selected properties throw from their setters an exception of type <typeparamref name="Exception" />.
+        /// Asserts that the selected properties throw from their setters an exception of type <typeparamref name="TException" />.
         /// </summary>
         /// <typeparam name="TException">The expected type of exception.</typeparam>
         /// <param name="because">
@@ -112,7 +112,7 @@ namespace FluentAssertions.Properties.Assertions
         }
 
         /// <summary>
-        /// Asserts that the selected properties throw from their getters an exception of type <typeparamref name="Exception" />.
+        /// Asserts that the selected properties throw from their getters an exception of type <typeparamref name="TException" />.
         /// </summary>
         /// <typeparam name="TException">The expected type of exception.</typeparam>
         /// <param name="because">

@@ -43,7 +43,7 @@ namespace FluentAssertions.Properties
         /// <typeparam name="TDeclaringType">The type of the instance.</typeparam>
         /// <param name="instance">The instance of the type whose property will be tested.</param>
         /// <param name="properties">An expression, which specifies the properties to be selected.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="typeSelector"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="instance"/> is <c>null</c>.</exception>
         public static InstancePropertySelector<TDeclaringType> Properties<TDeclaringType>(this TDeclaringType instance, params Expression<Func<TDeclaringType, object>>[] properties)
         {
             Guard.ThrowIfArgumentIsNull(instance, nameof(instance));
@@ -62,7 +62,7 @@ namespace FluentAssertions.Properties
         /// <typeparam name="TProperty">The type of the selected properties.</typeparam>
         /// <param name="instance">The instance of the type whose property will be tested.</param>
         /// <param name="properties">An expression, which specifies the properties to be selected.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="typeSelector"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="instance"/> is <c>null</c>.</exception>
         public static InstancePropertyOfKnownTypeSelector<TDeclaringType, TProperty> Properties<TDeclaringType, TProperty>(this TDeclaringType instance, params Expression<Func<TDeclaringType, TProperty>>[] properties)
         {
             Guard.ThrowIfArgumentIsNull(instance, nameof(instance));

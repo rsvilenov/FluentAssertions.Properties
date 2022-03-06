@@ -47,7 +47,6 @@ namespace FluentAssertions.Properties.Data
         /// Asserts that the selected properties have a specified count.
         /// </summary>
         /// <param name="expectedCount">The expected count of the selected properties.</param>
-        /// <param name="accessModifier">The expected C# access modifier.</param>
         /// <param name="because">
         /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
         /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
@@ -69,7 +68,6 @@ namespace FluentAssertions.Properties.Data
         /// <summary>
         /// Asserts that the selected properties's types are primitive.
         /// </summary>
-        /// <param name="accessModifier">The expected C# access modifier.</param>
         /// <param name="because">
         /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
         /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
@@ -99,7 +97,6 @@ namespace FluentAssertions.Properties.Data
         /// <summary>
         /// Asserts that the selected properties's types are not primitive.
         /// </summary>
-        /// <param name="accessModifier">The expected C# access modifier.</param>
         /// <param name="because">
         /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
         /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
@@ -129,7 +126,6 @@ namespace FluentAssertions.Properties.Data
         /// <summary>
         /// Asserts that the selected properties are of value type.
         /// </summary>
-        /// <param name="accessModifier">The expected C# access modifier.</param>
         /// <param name="because">
         /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
         /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
@@ -159,7 +155,6 @@ namespace FluentAssertions.Properties.Data
         /// <summary>
         /// Asserts that the selected properties are of reference type.
         /// </summary>
-        /// <param name="accessModifier">The expected C# access modifier.</param>
         /// <param name="because">
         /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
         /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
@@ -189,7 +184,6 @@ namespace FluentAssertions.Properties.Data
         /// <summary>
         /// Asserts that the selected properties are virtual.
         /// </summary>
-        /// <param name="accessModifier">The expected C# access modifier.</param>
         /// <param name="because">
         /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
         /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
@@ -219,7 +213,6 @@ namespace FluentAssertions.Properties.Data
         /// <summary>
         /// Asserts that the selected properties are not virtual.
         /// </summary>
-        /// <param name="accessModifier">The expected C# access modifier.</param>
         /// <param name="because">
         /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
         /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
@@ -249,7 +242,6 @@ namespace FluentAssertions.Properties.Data
         /// <summary>
         /// Asserts that the selected properties do not have a setter.
         /// </summary>
-        /// <param name="accessModifier">The expected C# access modifier.</param>
         /// <param name="because">
         /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
         /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
@@ -280,7 +272,6 @@ namespace FluentAssertions.Properties.Data
         /// <summary>
         /// Asserts that the selected properties have a setter.
         /// </summary>
-        /// <param name="accessModifier">The expected C# access modifier.</param>
         /// <param name="because">
         /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
         /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.

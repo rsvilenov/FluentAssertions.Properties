@@ -13,9 +13,10 @@ namespace FluentAssertions.Properties.Selectors
 {
     /// <summary>
     /// Allows for fluent selection of class properties of an instance and setting them up for assertion.
-    /// <typeparamref name="TDeclaringType">The type of the instance.</typeparamref>
-    /// <typeparamref name="TInstancePropertyInfo">The type of the <see cref="InstancePropertyInfo{TDeclaringType}"/> for the selected properties.</typeparamref>
+    /// <typeparam name="TDeclaringType">The type of the instance.</typeparam>
+    /// <typeparam name="TInstancePropertyInfo">The type of the <see cref="InstancePropertyInfo{TDeclaringType}"/> for the selected properties.</typeparam>
     /// <typeparam name="TSelector">The actual type of the selector.</typeparam>
+    /// </summary>
     public abstract class InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo, TSelector>
         : IEnumerable<TInstancePropertyInfo>
         where TInstancePropertyInfo : InstancePropertyInfo<TDeclaringType>
