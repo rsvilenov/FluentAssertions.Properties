@@ -392,6 +392,27 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
                 .BeEquivalentTo(expectedPropertyInfos);
         }
 
+#if NET5_0_OR_GREATER
+        [Fact]
+        public void When_selecting_init_only_properties_should_succceed()
+        {
+            // Arrange
+            var testObj = new TestRecord();
+            var expectedPropertyName = nameof(TestRecord.MyInitOnlyProperty);
+
+            // Act
+            var selectedProperties = testObj
+                .Properties()
+                .ThatAreInitOnly;
+
+            // Assert
+            selectedProperties
+                .Select(ipi => ipi.PropertyInfo.Name)
+                .Should()
+                .ContainSingle(expectedPropertyName);
+        }
+#endif
+
         [Fact]
         public void When_selecting_properties_with_type_matching_custom_predicate_should_succceed()
         {

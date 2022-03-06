@@ -63,11 +63,6 @@ namespace FluentAssertions.Properties.Selectors
             return CloneFiltered(filteredProperties);
         }
 
-        protected override InstancePropertySelector<TDeclaringType> CloneFiltered(IEnumerable<InstancePropertyInfo<TDeclaringType>> filteredProperties)
-        {
-            return new InstancePropertySelector<TDeclaringType>(Instance, filteredProperties);
-        }
-
         /// <summary>
         /// Only select the properties that are of value type.
         /// </summary>
@@ -94,6 +89,11 @@ namespace FluentAssertions.Properties.Selectors
 
                 return CloneFiltered(filteredProperties);
             }
+        }
+
+        protected override InstancePropertySelector<TDeclaringType> CloneFiltered(IEnumerable<InstancePropertyInfo<TDeclaringType>> filteredProperties)
+        {
+            return new InstancePropertySelector<TDeclaringType>(Instance, filteredProperties);
         }
 
     }

@@ -331,5 +331,40 @@ namespace FluentAssertions.Properties.Data
 
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
+
+
+#if NET5_0_OR_GREATER
+
+        /// <summary>
+        /// Asserts that the selected properties have an init only setter.
+        /// </summary>
+        /// <param name="because">
+        /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
+        /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
+        /// </param>
+        /// <param name="becauseArgs">
+        /// Zero or more objects to format using the placeholders in <paramref name="because" />.
+        /// </param>
+        public AndConstraint<TAssertions> BeInitOnly(string because = "", params object[] becauseArgs)
+        {
+            return ExceptionStackTrace.StartFromCurrentFrame(() =>
+                                 BeInitOnlyInternal(because, becauseArgs));
+        }
+
+        private AndConstraint<TAssertions> BeInitOnlyInternal(string because, params object[] becauseArgs)
+        {
+            using (AssertionScope scope = new AssertionScope())
+            {
+                foreach (var subject in Subject)
+                {
+                    subject.Should().BeInitOnly(because, becauseArgs);
+                }
+            }
+
+            return new AndConstraint<TAssertions>((TAssertions)this);
+        }
+
+#endif
+
     }
 }

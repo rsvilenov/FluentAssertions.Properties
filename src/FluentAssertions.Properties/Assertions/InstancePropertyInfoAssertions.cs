@@ -4,6 +4,7 @@ using FluentAssertions.Properties.Common;
 using FluentAssertions.Properties.Data;
 using System.Diagnostics;
 using System;
+using FluentAssertions.Properties.Extensions;
 
 namespace FluentAssertions.Properties.Assertions
 {
@@ -97,6 +98,32 @@ namespace FluentAssertions.Properties.Assertions
 
             return new AndConstraint<TAssertions>((TAssertions)this);
         }
+
+#if NET5_0_OR_GREATER
+
+        /// <summary>
+        /// Asserts that the selected property has an init only setter. 
+        /// </summary>
+        /// <param name="because">
+        /// A formatted phrase as is supported by <see cref="string.Format(string,object[])" /> explaining why the assertion
+        /// is needed. If the phrase does not start with the word <i>because</i>, it is prepended automatically.
+        /// </param>
+        /// <param name="becauseArgs">
+        /// Zero or more objects to format using the placeholders in <paramref name="because" />.
+        /// </param>
+        public AndConstraint<TAssertions> BeInitOnly(string because = "", params object[] becauseArgs)
+        {
+            ExceptionStackTrace.StartFromCurrentFrame(() => 
+                Execute.Assertion
+                    .ForCondition(Subject.PropertyInfo.IsInitOnly())
+                    .BecauseOf(because, becauseArgs)
+                    .FailWith(
+                        "Expected {context:property} {0} to have an init only setter{reason}.",
+                        Subject.PropertyInfo));
+
+            return new AndConstraint<TAssertions>((TAssertions)this);
+        }
+#endif
 
         /// <summary>
         /// Asserts that the selected property is virtual.

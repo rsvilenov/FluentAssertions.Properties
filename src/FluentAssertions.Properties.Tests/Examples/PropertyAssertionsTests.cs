@@ -28,7 +28,12 @@ namespace FluentAssertions.Properties.Assertions
                 .ThatAreWritable
                 .WhenCalledWithValuesFrom(new Fixture().Create<SampleDto>())
                 .Should()
-                .ProvideSymmetricAccess(); 
+                .ProvideSymmetricAccess();
+
+//#if NET5_0_OR_GREATER
+//            sampleDto.Properties().Should().BeInitOnly();
+//#endif
+
 
             //sampleDto.Properties().Should().BeOfPrimitiveType();
             //Action test = () => throw new ArgumentException();
@@ -66,18 +71,18 @@ namespace FluentAssertions.Properties.Assertions
             //    .ThrowFromSetterExactly<ArgumentException>()
             //    .WithInnerException<NullReferenceException>()
             //    .WithInnerException<Win32Exception>();
-                //.Where(ex => ex.Message.StartsWith("ate"), "some reason");
-                //.WithMessage("test2", "some reason");
+            //.Where(ex => ex.Message.StartsWith("ate"), "some reason");
+            //.WithMessage("test2", "some reason");
 
 
 
             //sampleDto.Properties<SampleDto, string>()
             //    .HavingValue("test").Should().BeWritable();
 
-                //.WhenCalledWith("throw")
-                //.Should()
-                //.ThrowFromSetter<ArgumentException>()
-                //.WithMessage("test");
+            //.WhenCalledWith("throw")
+            //.Should()
+            //.ThrowFromSetter<ArgumentException>()
+            //.WithMessage("test");
 
             //sampleDto
             //    .Properties()

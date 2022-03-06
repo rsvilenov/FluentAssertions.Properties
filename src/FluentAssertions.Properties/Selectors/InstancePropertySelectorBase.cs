@@ -64,6 +64,24 @@ namespace FluentAssertions.Properties.Selectors
             }
         }
 
+#if NET5_0_OR_GREATER
+
+        /// <summary>
+        /// Only select the properties that have an init only setter.
+        /// </summary>
+        public TSelector ThatAreInitOnly
+        {
+            get
+            {
+                var filteredProperties = SelectedProperties
+                    .Where(p => p.PropertyInfo.IsInitOnly());
+
+                return CloneFiltered(filteredProperties);
+            }
+        }
+
+#endif
+
         /// <summary>
         /// Only select the properties that are marked as virtual.
         /// </summary>

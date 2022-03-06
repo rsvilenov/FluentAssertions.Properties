@@ -476,7 +476,8 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
             // Arrange
             var testObj = new TestClass();
             var selector =
-                testObj.Properties(p => p.StringPropertyWithInternalSetter, 
+                testObj.Properties(
+                    p => p.StringPropertyWithInternalSetter, 
                     p => p.StringPropertyWithPrivateSetter,
                     p => p.StringProperty);
             var assertReason = base.CreateAssertReason();
@@ -490,5 +491,43 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
                 .Throw<Xunit.Sdk.XunitException>()
                 .WithMessage($"Expected property * not to have a setter because {assertReason}.");
         }
+
+#if NET5_0_OR_GREATER
+
+        [Fact]
+        public void When_selecting_init_only_properties_BeInitOnly_should_succeed()
+        {
+            // Arrange
+            var testObj = new TestRecord();
+            var selector =
+                testObj.Properties()
+                .ThatAreInitOnly;
+
+            // Act & Assert
+            selector.Should().BeInitOnly();
+        }
+
+        [Fact]
+        public void When_selecting_properties_that_are_not_init_only_BeInitOnly_should_fail()
+        {
+            // Arrange
+            var testObj = new TestRecord();
+            var selector =
+                testObj.Properties(
+                    p => p.MyMutableProperty,
+                    p => p.MyReadOnlyProperty);
+            var assertReason = base.CreateAssertReason();
+
+            // Act & Assert
+            Action assertion = ()
+                => selector.Should().BeInitOnly(assertReason.BecauseWithFormat, assertReason.BecauseArg1, assertReason.BecauseArg2);
+
+            assertion
+                .Should()
+                .Throw<Xunit.Sdk.XunitException>()
+                .WithMessage($"Expected property * to have an init only setter because {assertReason}.");
+        }
+
+#endif
     }
 }
