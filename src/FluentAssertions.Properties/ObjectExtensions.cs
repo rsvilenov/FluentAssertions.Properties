@@ -1,7 +1,6 @@
 ﻿using FluentAssertions.Properties.Common;
 using FluentAssertions.Properties.Extensions;
 using FluentAssertions.Properties.Selectors;
-using FluentAssertions.Types;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -15,28 +14,6 @@ namespace FluentAssertions.Properties
     [DebuggerNonUserCode]
     public static class ObjectExtensions
     {
-        /// <summary>
-        /// Returns a property selector for the current <see cref="Type"/>. 
-        /// This method directs the call to the original FluentAssertions library.
-        /// </summary>
-        /// <exception cref="ArgumentNullException"><paramref name="type"/> is <c>null</c>.</exception>
-        public static PropertyInfoSelector Properties(this Type type)
-        {
-            return new PropertyInfoSelector(type);
-        }
-
-        /// <summary>
-        /// Returns a property selector for the current <see cref="Type"/>.
-        /// This method directs the call to the original FluentAssertions library.
-        /// </summary>
-        /// <exception cref="ArgumentNullException"><paramref name="typeSelector"/> is <c>null</c>.</exception>
-        public static PropertyInfoSelector Properties(this TypeSelector typeSelector)
-        {
-            Guard.ThrowIfArgumentIsNull(typeSelector, nameof(typeSelector));
-
-            return new PropertyInfoSelector(typeSelector.ToList());
-        }
-
         /// <summary>
         /// Returns a property selector for the current instance.
         /// </summary>
