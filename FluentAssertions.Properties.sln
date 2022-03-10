@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31402.337
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentAssertions.Properties", "FluentAssertions.Properties\FluentAssertions.Properties.csproj", "{0D95E585-32D4-4D2A-8840-628FAAAD927F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentAssertions.Properties", "src\FluentAssertions.Properties\FluentAssertions.Properties.csproj", "{0D95E585-32D4-4D2A-8840-628FAAAD927F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentAssertions.Properties.Tests", "FluentAssertions.Properties.Tests\FluentAssertions.Properties.Tests.csproj", "{BB057172-6B8B-42EF-86CC-189F9E2A90CE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentAssertions.Properties.Tests", "src\FluentAssertions.Properties.Tests\FluentAssertions.Properties.Tests.csproj", "{BB057172-6B8B-42EF-86CC-189F9E2A90CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
