@@ -29,7 +29,7 @@ jobs:
     - name: Generate coverage report
       run: |
         cd ./src/FluentAssertions.Properties.Tests/
-        dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput=TestResults/ /f:net6.0
+        dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput=TestResults/
         with:
           dotnet-version: '6.0.x' 
     - name: Publish coverage report to coveralls.io
