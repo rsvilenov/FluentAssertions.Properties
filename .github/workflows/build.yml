@@ -30,8 +30,8 @@ jobs:
       run: |
         cd ./src/FluentAssertions.Properties.Tests/
         dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput=TestResults/
-        ls -l ./src/FluentAssertions.Properties.Tests/
-        ls -l ./src/FluentAssertions.Properties.Tests/TestResults/
+        ls -l
+        ls -l TestResults/
     - name: Publish coverage report to coveralls.io
       uses: coverallsapp/github-action@v1.0.1
       with:
