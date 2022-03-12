@@ -15,7 +15,6 @@ Unofficial FluentAssertions extensions for testing the behavior of class/struct/
 
     sampleDto
         .Properties()
-        .OfType<int>()
         .ThatAreWritable
         .WhenCalledWithValuesFrom(testValues)
         .Should()
