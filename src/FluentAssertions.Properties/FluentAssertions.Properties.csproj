@@ -9,6 +9,9 @@
 		<IncludeSymbols>true</IncludeSymbols>
 		<LangVersion>9.0</LangVersion>
 		<ProduceReferenceAssemblies>true</ProduceReferenceAssemblies>
+		<AssemblyVersion>0.0.1.0</AssemblyVersion>
+		<FileVersion>0.0.1.0</FileVersion>
+		<Version>0.0.1.0</Version>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -25,24 +28,24 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">
-	  <WarningLevel>5</WarningLevel>
+		<WarningLevel>5</WarningLevel>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0|AnyCPU'">
-	  <WarningLevel>5</WarningLevel>
+		<WarningLevel>5</WarningLevel>
 	</PropertyGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net5' Or '$(TargetFramework)' == 'net6'">
 		<Compile Remove="Selectors/InstancePropertySelectorBase.InitSetters.cs" />
 	</ItemGroup>
-  
+
 	<ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<PackageReference Include="coverlet.collector" Version="3.1.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
-  
+
 	<ItemGroup>
 		<PackageReference Include="FluentAssertions" Version="5.10.3" />
 	</ItemGroup>
@@ -52,5 +55,5 @@
 			<_Parameter1>FluentAssertions.Properties.Tests</_Parameter1>
 		</AssemblyAttribute>
 	</ItemGroup>
-  
+
 </Project>
