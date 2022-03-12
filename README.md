@@ -21,7 +21,7 @@ Unofficial FluentAssertions extensions for testing the behavior of class/struct/
         .ProvideSymmetricAccess();
 ```
 
-* Test that getters/setters throws exceptions:
+* Test that getters/setters throw exceptions:
 
 ```csharp
     var objectUnderTest = new TestClass();
@@ -35,15 +35,18 @@ Unofficial FluentAssertions extensions for testing the behavior of class/struct/
         .WithMessage("Nulls are not accepted here");
 ```
 
-* Select specific properties to test:
+* Select specific properties to test by their type and value
 ```csharp
     var objectUnderTest = new TestClass();
             
     objectUnderTest
-        .Properties(o => o.PropertyOne, o => o.PropertyTwo)
+        .Properties()
+        .OfType<double>()
+        .ThatHaveDefaultValue
         .Should()
-        .BeInitOnly();
+        .HaveCount(10);
 ```
+
 or
 ```csharp
     var objectUnderTest = new TestClass();
@@ -54,6 +57,18 @@ or
         .HavingValue("some value")
         .Should()
         .HaveCount(2);
+```
+
+or select individual properties by name
+```csharp
+    var objectUnderTest = new TestRecord();
+    string testValue = Guid.NewGuid().ToString();
+
+    objectUnderTest
+        .Properties(o => o.StringPropertyOne, o => o.StringPropertyTwo)
+        .WhenCalledWith(testValue)
+        .Should()
+        .ProvideSymmetricAccess();
 ```
 
 ## Why should I consider testing my class properties?
