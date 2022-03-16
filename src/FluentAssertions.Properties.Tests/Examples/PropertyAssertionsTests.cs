@@ -30,9 +30,9 @@ namespace FluentAssertions.Properties.Assertions
                 .Should()
                 .ProvideSymmetricAccess();
 
-//#if NET5_0_OR_GREATER
-//            sampleDto.Properties().Should().BeInitOnly();
-//#endif
+            //#if NET5_0_OR_GREATER
+            //            sampleDto.Properties().Should().BeInitOnly();
+            //#endif
 
 
             //sampleDto.Properties().Should().BeOfPrimitiveType();
