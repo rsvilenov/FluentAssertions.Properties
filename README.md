@@ -84,20 +84,20 @@ or select individual properties by name
 The public properties are part of the public contract of a type. Their semantics is such that
 one expects them to behave like public fields. However, they have accessor methods, 
 which can contain logic that breaks the expected behavior. Implementing nontrivial logic in the accessors is sometimes considered
-to be an <a href="https://www.codeproject.com/Tips/1069467/Asymmetric-Property-anti-pattern">anti-pattern</a>,
+to be an [anti-pattern](https://www.codeproject.com/Tips/1069467/Asymmetric-Property-anti-pattern){:target="_blank"},
 and rightfully so - in order for a programmer to see how a particular property behaves,
 they have to open the implementation of the class and look inside the code. The presence of accessor
-methods is a big part of the reason why Microsoft has provided a list of <a href="https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/property">bad practices and design guidelines</a> that are often seen 
+methods is a big part of the reason why Microsoft has provided a list of [bad practices and design guidelines](https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/property){:target="_blank"} that are often seen 
 when properties are implemented.
 
 ### But that goes against the conventional wisdom!
 There is a general rule of thumb that says properties should not be tested if their getter or setter does not
 have any logic inside. However, no one can guarantee that the setter/getter, which is nothing but a method,
 will never contain any complex logic. So, if we agree that we should always test our public methods, 
-why not test our public properties as well? And there seems to be a <a href="https://stackoverflow.com/questions/18967697/should-you-unit-test-simple-properties">not-so-small minority</a>, which agrees.
+why not test our public properties as well? And there seems to be a [not-so-small minority](https://stackoverflow.com/questions/18967697/should-you-unit-test-simple-properties){:target="_blank"}, which agrees.
 
 ## Installation
-You can view the [package page on NuGet](https://www.nuget.org/packages/FluentAssertions.Properties/).
+You can view the [package page on NuGet](https://www.nuget.org/packages/FluentAssertions.Properties/){:target="_blank"}.
 
 To install `FluentAssertions.Properties`, run the following command in the Package Manager Console:
 

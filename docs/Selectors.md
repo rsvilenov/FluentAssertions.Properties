@@ -1,14 +1,14 @@
 # Selecting properties for assertion
 
 ## Selecting properties from a type
-The original FluentAssertions library already provides means of enumerating all publicly visible properties of a certain type. See <a href="https://fluentassertions.com/typesandmethods/" target="_blank"> this </a> for details. Using these selectors and the corresponding assertions, we can assert that the definitions of the properties meat certain criteria.
+The original FluentAssertions library already provides means of enumerating all publicly visible properties of a certain type. See [this](https://fluentassertions.com/typesandmethods/){:target="_blank"} for details. Using these selectors and the corresponding assertions, we can assert that the definitions of the properties meat certain criteria.
 
 ## Selecting properties from an instance
 When we want to assert the <b>behavior</b> of properties, rather than how they are defined, we need to operate upon the instance of the type that has defined the properties. To do this, we can use the selectors, provided by FluentAssertions.Properties.
 
 ### Selecting all publicly visible properties
 
-Publicly visible properties are those that can be seen from the project, containing the tests. These are all public properties as well as the internal ones from the friend assemblies (see <a href="https://docs.microsoft.com/en-us/dotnet/api/system.runtime.compilerservices.internalsvisibletoattribute?view=net-6.0" target="_blank">InternalsVisibleToAttribute</a>).
+Publicly visible properties are those that can be seen from the project, containing the tests. These are all public properties as well as the internal ones from the friend assemblies (see [InternalsVisibleToAttribute](https://docs.microsoft.com/en-us/dotnet/api/system.runtime.compilerservices.internalsvisibletoattribute?view=net-6.0){:target="_blank"}).
 
 ```csharp
     // Instantiate the type
@@ -24,7 +24,7 @@ Publicly visible properties are those that can be seen from the project, contain
         .ProvideSymmetricAccess();
 ```
 
-In the above example `valueSource` is an instance of the same object or an instance of an object with the same interface, filled with test values (see <a href="./Assertions.md:#Passing-a-value-source-object">this</a> for details).
+In the above example `valueSource` is an instance of the same object or an instance of an object with the same interface, filled with test values (see [this](./Assertions.md#Passing-a-value-source-object) for details).
 ### Selecting properties by name
 
 It is possible to select individual properties by their name:

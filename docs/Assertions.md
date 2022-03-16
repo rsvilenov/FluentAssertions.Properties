@@ -18,7 +18,7 @@ In order to test the behavior of the getters and setters of the selected propert
 ```
 
 ### Passing a value source object
-To generate test values, we can use the wonderful library <a href="https://github.com/AutoFixture/AutoFixture" target="_blank">AutoFixture</a>. Or we can create an object of the type under test (or a type that implement the same interface) and assign the test values manually.
+To generate test values, we can use the wonderful library [AutoFixture](https://github.com/AutoFixture/AutoFixture){:target="_blank"}. Or we can create an object of the type under test (or a type that implement the same interface) and assign the test values manually.
 
 - Creating a value source object with AutoFixture:
 
@@ -77,7 +77,7 @@ Asserting the throwing of exceptions requires passing a value or a value source 
         .WithMessage("Nulls are not accepted.");
 ```
 
-The method `WithMessage()` supports wildcard patterns. The supported wildcard characters are described here: <a href="https://fluentassertions.com/exceptions/" target="_blank">https://fluentassertions.com/exceptions/</a>.
+The method `WithMessage()` supports wildcard patterns. The supported wildcard characters are described here: [https://fluentassertions.com/exceptions/](https://fluentassertions.com/exceptions/){:target="_blank"}.
 
 * Assert that the exception is exactly of a certain type and not from a derived one:
 
