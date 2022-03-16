@@ -102,10 +102,8 @@ namespace FluentAssertions.Properties.Assertions
             {
                 foreach (PropertyException<TException> pex in _exceptionCollection)
                 {
-                    using (var innerScope = Execute.Assertion)
-                    {
-                        innerScope.Context = pex.AccessorEvaluationType.GetDescription();
-                        innerScope.ForCondition(condition(pex.Exception))
+                    scope.Context = pex.AccessorEvaluationType.GetDescription();
+                    scope.ForCondition(condition(pex.Exception))
                         .BecauseOf(because, becauseArgs)
                         .FailWith("Expected an exception {0} for the {context} of property {1} where {2}{reason}, but the condition was not met by:{3}{3}{4}.",
                             ConstructExceptionPedigree(),
@@ -113,7 +111,6 @@ namespace FluentAssertions.Properties.Assertions
                             exceptionExpression.Body,
                             Environment.NewLine,
                             pex.Exception);
-                    }
                 }
             }
 
@@ -178,22 +175,17 @@ namespace FluentAssertions.Properties.Assertions
                         string failMessage = string.Format("the {0} exception has no inner exception.",
                                 _innerExceptionPedigree.Count > 1 ? "inner" : "thrown");
 
-                        using (var innerScope = Execute.Assertion)
-                        {
-                            innerScope.Context = pex.AccessorEvaluationType.GetDescription();
-                            innerScope.BecauseOf(because, becauseArgs)
+                        scope.Context = pex.AccessorEvaluationType.GetDescription();
+                        scope.BecauseOf(because, becauseArgs)
                             .WithExpectation("Expected inner {0}{reason} for the {context} of property {1}, but ",
                                 ConstructExceptionPedigree(typeof(TInnerException)),
                                 pex.PropertyName)
                             .FailWith(failMessage);
-                        }
                     }
                     else
                     {
-                        using (var innerScope = Execute.Assertion)
-                        {
-                            innerScope.Context = pex.AccessorEvaluationType.GetDescription();
-                            innerScope.ForCondition(matchExactType
+                        scope.Context = pex.AccessorEvaluationType.GetDescription();
+                        scope.ForCondition(matchExactType
                                 ? pex.Exception.InnerException.GetType().Equals(typeof(TInnerException))
                                 : pex.Exception.InnerException is TInnerException)
                             .BecauseOf(because, becauseArgs)
@@ -202,7 +194,6 @@ namespace FluentAssertions.Properties.Assertions
                                 pex.PropertyName)
                             .FailWith("found {0}.",
                                 ConstructExceptionPedigree(pex.Exception.InnerException.GetType()));
-                        }
                     }
                 }
             }
