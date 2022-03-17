@@ -16,7 +16,7 @@ Unofficial FluentAssertions extensions for testing the behavior of class/struct/
 
 ## How?
 
-* Test that all properties from a class provide symmetric access, i.e. return the same value that has been assigned to them
+* Testing that all properties from a class provide symmetric access, i.e. they return the same value that has been assigned to them
 ```csharp
     var dtoUnderTest = new SampleDto();
     var testValues = new Fixture().Create<SampleDto>();
@@ -31,7 +31,7 @@ Unofficial FluentAssertions extensions for testing the behavior of class/struct/
 
 In the AutoFixture's lingo we can say that `ProvideSymmetricAccess()` verifies that the properteis are "well-behaved writables" (see [AutoFixture's WritablePropertyAssertion idiom](http://www.shujaat.net/2013/05/writable-property-assertions-using.html)).
 
-* Test that getters/setters throw exceptions in certain cases
+* Testing that getters/setters throw exceptions in certain cases
 
 ```csharp
     var objectUnderTest = new TestClass();
@@ -45,7 +45,7 @@ In the AutoFixture's lingo we can say that `ProvideSymmetricAccess()` verifies t
         .WithMessage("Nulls are not accepted here");
 ```
 
-* Select specific properties to test by their type and value
+* Selecting specific properties to test by their type and value
 
 ```csharp
     var objectUnderTest = new TestClass();
@@ -70,7 +70,7 @@ or
         .HaveCount(2);
 ```
 
-or select individual properties by name
+or selecting individual properties by name
 ```csharp
     var objectUnderTest = new TestRecord();
     string testValue = Guid.NewGuid().ToString();
