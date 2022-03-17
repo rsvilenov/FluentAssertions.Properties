@@ -77,7 +77,7 @@ Asserting the throwing of exceptions requires passing a value or a value source 
 
 ### Asserting that the exception meets the expected criteria 
 
-* Assert that the exception has the expected message:
+* Asserting that the exception has the expected message:
 
 ```csharp
         ///...
@@ -88,7 +88,7 @@ Asserting the throwing of exceptions requires passing a value or a value source 
 
 The method `WithMessage()` supports wildcard patterns. The supported wildcard characters are described here: [https://fluentassertions.com/exceptions/](https://fluentassertions.com/exceptions/).
 
-* Assert that the exception is exactly of a certain type and not from a derived one:
+* Asserting that the exception is exactly of a certain type and not from a derived one:
 
 ```csharp
         ///...
@@ -96,7 +96,7 @@ The method `WithMessage()` supports wildcard patterns. The supported wildcard ch
         .ThrowFromSetterExactly<ArgumentNullException>()
 ```
 
-* Assert that the exception has an inner exception of an expected type:
+* Asserting that the exception has an inner exception of an expected type:
 
 ```csharp
         ///...
@@ -105,7 +105,7 @@ The method `WithMessage()` supports wildcard patterns. The supported wildcard ch
         .WithInnerException<NullReferenceException>();
 ```
 
-* Assert using a custom lambda:
+* Asserting using a custom lambda:
 
 ```csharp
         ///...
@@ -114,7 +114,7 @@ The method `WithMessage()` supports wildcard patterns. The supported wildcard ch
         .Where(ex => ex.Message.Contains("unexpected"));
 ```
 
-* Chain the assertion methods:
+* Chaining the assertion methods:
 
 ```csharp
         ///...
