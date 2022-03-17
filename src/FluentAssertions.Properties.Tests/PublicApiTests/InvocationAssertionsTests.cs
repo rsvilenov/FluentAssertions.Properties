@@ -182,6 +182,22 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
                 .WithMessage($"Expected property \"getter\" of property * to throw * because {assertReason}*");
         }
 
+        public class UnitTest1
+        {
+            public void Throw()
+            {
+                throw new NullReferenceException();
+            }
+
+            public int MyProperty { get { return 2; } set { Throw(); } }
+
+            [Fact]
+            public void Test1()
+            {
+                new UnitTest1().Properties().OfType<int>().WhenCalledWith(1).Should().ThrowFromSetter<ArgumentNullException>();
+            }
+        }
+
         [Fact]
         public void When_selected_properties_throw_from_setter_ThrowFromSetter_assert_should_succeed()
         {

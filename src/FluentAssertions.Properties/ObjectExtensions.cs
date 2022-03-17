@@ -1,10 +1,12 @@
-﻿using FluentAssertions.Properties.Common;
+﻿using FluentAssertions.Formatting;
+using FluentAssertions.Properties.Common;
 using FluentAssertions.Properties.Extensions;
 using FluentAssertions.Properties.Selectors;
 using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
+using FluentAssertions.Properties.Assertions;
 
 namespace FluentAssertions.Properties
 {
@@ -14,6 +16,11 @@ namespace FluentAssertions.Properties
     [DebuggerNonUserCode]
     public static class ObjectExtensions
     {
+        static ObjectExtensions()
+        {
+            Formatter.AddFormatter(new ExceptionFormatter());
+        }
+
         /// <summary>
         /// Returns a property selector for the current instance.
         /// </summary>

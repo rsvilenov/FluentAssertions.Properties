@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 
 namespace FluentAssertions.Properties.Invocation
 {
@@ -41,7 +42,7 @@ namespace FluentAssertions.Properties.Invocation
             }
             catch (TargetInvocationException tex)
             {
-                throw tex.InnerException;
+                ExceptionDispatchInfo.Capture(tex.InnerException).Throw();
             }
         }
         public object GetValue(string propertyName)
@@ -53,7 +54,8 @@ namespace FluentAssertions.Properties.Invocation
             }
             catch (TargetInvocationException tex)
             {
-                throw tex.InnerException;
+                ExceptionDispatchInfo.Capture(tex.InnerException).Throw();
+                throw;
             }
         }
 

@@ -229,6 +229,13 @@ namespace FluentAssertions.Properties.Assertions
             return new PropertyExceptionCollectionAssertions<TException>(propertyExceptions);
         }
 
+        private string FormatExceptionText(Exception ex)
+        {
+            string exceptionString = ex.ToString();
+            int cutIndex = exceptionString.IndexOf($"{Environment.NewLine}--- ");
+            return cutIndex > 1 ? exceptionString.Substring(0, cutIndex) : exceptionString;
+        }
+
         private bool MatchExceptionType<TException>(bool matchExactExceptionType, Exception ex) where TException : Exception
         {
             return matchExactExceptionType
