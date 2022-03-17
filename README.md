@@ -1,4 +1,5 @@
-# About this project
+# FluentAssertions.Properties
+
 Unofficial FluentAssertions extensions for testing the behavior of class/struct/record properties.
 
 [![build workflow](https://github.com/rsvilenov/FluentAssertions.Properties/actions/workflows/build.yml/badge.svg)](https://github.com/rsvilenov/FluentAssertions.Properties/actions/workflows/build.yml) 

@@ -29,7 +29,9 @@ namespace FluentAssertions.Properties.Assertions
 #if DEBUG
                     throw;
 #else
+#pragma warning disable CA2200
                     throw ex;
+#pragma warning restore CA2200
 #endif
                 }
                 else
