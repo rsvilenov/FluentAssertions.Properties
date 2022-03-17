@@ -91,18 +91,17 @@ A more comprehensive explanation of the selection and assertions methods, provid
 > -- <cite>Mark Seemann</cite>
 
 ### Why should I consider testing my class properties?
-From the perspective of the caller, the public properties are part of the public "interface" of a type. They imply a "contract" - their semantics is such that
+From the perspective of the caller, the public properties are part of the public "interface" of a type. They imply a contract - their semantics is such that
 one expects them to behave like public fields. However, they have accessor methods, 
 which can contain logic that modifies the expected behavior. Implementing nontrivial logic in the accessors is sometimes considered
 to be an [anti-pattern](https://www.codeproject.com/Tips/1069467/Asymmetric-Property-anti-pattern),
 and rightfully so - in order for a programmer to see how a particular property behaves,
 they have to open the implementation of the type and look inside the code. The presence of accessor
-methods is a big part of the reason why Microsoft has provided a list of [bad practices and design guidelines](https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/property) that are often seen 
-when properties are implemented.
+methods is a big part of the reason why Microsoft has provided a list of [bad practices and design guidelines](https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/property), concerning the implementation of properties.
 
 ### But that goes against the conventional wisdom!
-There is a general rule of thumb that says properties should not be tested if their getter or setter does not
-contain any logic, e.g. if they are auto properties. Even Robert C. Martin seems to think this way. However, there are other prominent authors, such as [Mark Seeman](https://blog.ploeh.dk/2013/03/08/test-trivial-code/), who strongly disagree. And there seems to be a [not-so-small minority](https://stackoverflow.com/questions/18967697/should-you-unit-test-simple-properties), which thinks that testing all public properties is a good thing.
+There is a rule of thumb that says properties should not be tested if their getter and setter do not
+contain any logic, e.g. if they are [auto-implemented](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/auto-implemented-properties). Even Robert C. Martin seems to think this way. However, there are other prominent authors, such as [Mark Seeman](https://blog.ploeh.dk/2013/03/08/test-trivial-code/), who strongly disagree. And there seems to be a [not-so-small minority](https://stackoverflow.com/questions/18967697/should-you-unit-test-simple-properties), which thinks that testing all public properties is necessary.
 
 ## Installation
 You can view the [package page on NuGet](https://www.nuget.org/packages/FluentAssertions.Properties/).
