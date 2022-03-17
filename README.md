@@ -114,6 +114,6 @@ Or use this command with the .NET CLI:
 ```
 
 ## Documentation
-To see more details on the property selectors, click [here](./docs/Selectors.md).
+To see more details on the property selectors, click [here](https://github.com/rsvilenov/FluentAssertions.Properties/blob/master/docs/Selectors.md).
 
-Assertion of the selected properties is described in detail [here](./docs/Assertions.md).
+Assertion of the selected properties is described in detail [here](https://github.com/rsvilenov/FluentAssertions.Properties/blob/master/docs/Assertions.md).
