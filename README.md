@@ -104,7 +104,7 @@ There is a rule of thumb that says properties should not be tested if their gett
 contain any logic, e.g. if they are [auto-implemented](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/auto-implemented-properties). Even Robert C. Martin seems to think this way. However, there are other prominent authors, such as [Mark Seeman](https://blog.ploeh.dk/2013/03/08/test-trivial-code/), who strongly disagree. And there seems to be a [not-so-small minority](https://stackoverflow.com/questions/18967697/should-you-unit-test-simple-properties), which thinks that testing all public properties is necessary.
 
 ## Installation
-You can view the [package page on NuGet](https://www.nuget.org/packages/FluentAssertions.Properties/).
+This library is distributed as a [NuGet](https://www.nuget.org/packages/FluentAssertions.Properties/).
 
 To install `FluentAssertions.Properties`, run the following command in the Package Manager Console:
 
