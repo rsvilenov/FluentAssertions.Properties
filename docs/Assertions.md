@@ -1,5 +1,14 @@
 # Asserting the behavior of selected properties
 
+## Table of Contents
+- [Asserting the behavior of selected properties](#asserting-the-behavior-of-selected-properties)
+  * [Asserting that what goes in, goes out unchanged (symmetricity)](#asserting-that-what-goes-in--goes-out-unchanged--symmetricity-)
+    + [Passing a fixed value of a certain type](#passing-a-fixed-value-of-a-certain-type)
+    + [Passing a value source object](#passing-a-value-source-object)
+  * [Asserting that the getters or setters of the selected properties throw exceptions under certain conditions](#asserting-that-the-getters-or-setters-of-the-selected-properties-throw-exceptions-under-certain-conditions)
+    + [Asserting that the exception meets the expected criteria](#asserting-that-the-exception-meets-the-expected-criteria)
+
+
 ## Asserting that what goes in, goes out unchanged (symmetricity)
 In order to test the behavior of the getters and setters of the selected properties, we should assign some values to them. FluentAssertions.Properties provides two ways of passing the values to the properties - by passing a fixed value of a certain type or by using a value source object.
 
