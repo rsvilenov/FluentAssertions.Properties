@@ -102,7 +102,7 @@ when properties are implemented.
 
 ### But that goes against the conventional wisdom!
 There is a general rule of thumb that says properties should not be tested if their getter or setter does not
-have any logic inside, e.g. if they are auto properties. Even Robert C. Martin seems to think this way. However, there are other prominent authors, such as [Mark Seeman](https://blog.ploeh.dk/2013/03/08/test-trivial-code/), who strongly disagree. And there seems to be a [not-so-small minority](https://stackoverflow.com/questions/18967697/should-you-unit-test-simple-properties), which thinks that testing all public properties is a good thing.
+contain any logic, e.g. if they are auto properties. Even Robert C. Martin seems to think this way. However, there are other prominent authors, such as [Mark Seeman](https://blog.ploeh.dk/2013/03/08/test-trivial-code/), who strongly disagree. And there seems to be a [not-so-small minority](https://stackoverflow.com/questions/18967697/should-you-unit-test-simple-properties), which thinks that testing all public properties is a good thing.
 
 ## Installation
 You can view the [package page on NuGet](https://www.nuget.org/packages/FluentAssertions.Properties/).
