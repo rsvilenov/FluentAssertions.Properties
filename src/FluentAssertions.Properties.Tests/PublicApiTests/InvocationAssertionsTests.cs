@@ -350,6 +350,9 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
             testPropertyMock
                 .SetupSet(o => o.StringProperty = guid)
                 .Throws<TestException>();
+            testPropertyMock
+                .SetupSet(o => o.IntProperty = 0)
+                .Throws<TestException>();
 
             var valueSourceMock = new Mock<ITestProperties>();
             valueSourceMock
@@ -358,7 +361,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
 
             var symmetricProperties = testPropertyMock
                 .Object
-                .Properties(p => p.StringProperty);
+                .Properties(p => p.StringProperty, p => p.IntProperty);
 
             // Act & Assert
             Action assertion = () => symmetricProperties
@@ -369,7 +372,8 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
             assertion
                 .Should()
                 .Throw<XunitException>()
-                .WithMessage($"Did not expect any exceptions for property {nameof(ITestProperties.StringProperty)}, but the setter threw *{nameof(TestException)}*");
+                .WithMessage($"Did not expect any exceptions for property {nameof(ITestProperties.StringProperty)}, but the setter threw *{nameof(TestException)}*" +
+                    $"Did not expect any exceptions for property {nameof(ITestProperties.IntProperty)}, but the setter threw *{nameof(TestException)}*");
         }
 
         [Fact]
@@ -389,6 +393,65 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
                 .WhenCalledWith(guid)
                 .Should()
                 .ThrowFromSetter<TestException>();
+        }
+
+        [Fact]
+        public void When_selected_properties_do_not_throw_from_setter_ThrowFromSetter_assert_should_return_messages_for_all_properties_expected_to_fail()
+        {
+            // Arrange
+            var testPropertyMock = new Mock<ITestProperties>();
+
+            var valueSourceMock = new Mock<ITestProperties>();
+
+            var symmetricProperties = testPropertyMock
+                .Object
+                .Properties(p => p.StringProperty, p => p.IntProperty);
+
+            // Act & Assert
+            Action assertion = () => symmetricProperties
+                .WhenCalledWithValuesFrom(valueSourceMock.Object)
+                .Should()
+                .ThrowFromSetter<TestException>();
+
+            assertion
+                .Should()
+                .Throw<XunitException>()
+                .WithMessage($"*{nameof(ITestProperties.StringProperty)}*{nameof(ITestProperties.IntProperty)}*");
+        }
+
+        [Fact]
+        public void When_selected_properties_throw_from_setter_ThrowFromSetter_assert_should_return_messages_for_all_failed_properties()
+        {
+            // Arrange
+            var testPropertyMock = new Mock<ITestProperties>();
+            string guid = Guid.NewGuid().ToString();
+            testPropertyMock
+                .SetupSet(o => o.StringProperty = guid)
+                .Throws<TestException>();
+            testPropertyMock
+                .SetupSet(o => o.IntProperty = 0)
+                .Throws<TestException>();
+
+            var valueSourceMock = new Mock<ITestProperties>();
+            valueSourceMock
+                .Setup(o => o.StringProperty)
+                .Returns(guid);
+
+            var symmetricProperties = testPropertyMock
+                .Object
+                .Properties(p => p.StringProperty, p => p.IntProperty);
+
+            // Act & Assert
+            Action assertion = () => symmetricProperties
+                .WhenCalledWithValuesFrom(valueSourceMock.Object)
+                .Should()
+                .ThrowFromSetter<NullReferenceException>();
+
+            assertion
+                .Should()
+                .Throw<XunitException>()
+                .WithMessage($"*{nameof(ITestProperties.StringProperty)}*{typeof(NullReferenceException).Name}*{typeof(TestException).Name}*" +
+                    $"*{nameof(ITestProperties.IntProperty)}*{typeof(NullReferenceException).Name}*{typeof(TestException).Name}*");
         }
 
         [Fact]

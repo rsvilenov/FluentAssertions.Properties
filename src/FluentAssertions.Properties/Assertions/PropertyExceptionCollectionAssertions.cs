@@ -58,11 +58,11 @@ namespace FluentAssertions.Properties.Assertions
 
         private PropertyExceptionCollectionAssertions<TException> WithMessageInternal(string expectedWildcardPattern, string because, object[] becauseArgs)
         {
-            using (AssertionScope scope = new AssertionScope())
+            using (AssertionScope scope = new())
             {
                 foreach (PropertyException<TException> pex in _exceptionCollection)
                 {
-                    scope.Context = $"the {pex.Exception.GetType().Name} message for property {pex.PropertyName}";
+                    using AssertionScope innerScope = new($"the {pex.Exception.GetType().Name} message for property {pex.PropertyName}");
                     pex.Exception.Message.Should().MatchEquivalentOf(expectedWildcardPattern, because, becauseArgs);
                 }
             }
@@ -98,12 +98,12 @@ namespace FluentAssertions.Properties.Assertions
         {
             Func<TException, bool> condition = exceptionExpression.Compile();
 
-            using (AssertionScope scope = new AssertionScope())
+            using (AssertionScope scope = new())
             {
                 foreach (PropertyException<TException> pex in _exceptionCollection)
                 {
-                    scope.Context = pex.AccessorEvaluationType.GetDescription();
-                    scope.ForCondition(condition(pex.Exception))
+                    using AssertionScope innerScope = new(pex.AccessorEvaluationType.GetDescription());
+                    Execute.Assertion.ForCondition(condition(pex.Exception))
                         .BecauseOf(because, becauseArgs)
                         .FailWith("Expected an exception {0} for the {context} of property {1} where {2}{reason}, but the condition was not met by:{3}{3}{4}.",
                             ConstructExceptionPedigree(),
@@ -165,18 +165,19 @@ namespace FluentAssertions.Properties.Assertions
         {
             PropertyExceptionCollection<TInnerException> innerExceptionCollection = new PropertyExceptionCollection<TInnerException>();
 
-            using (AssertionScope scope = new AssertionScope())
+            using (AssertionScope scope = new())
             {
                 foreach (PropertyException<TException> pex in _exceptionCollection)
                 {
+                    using AssertionScope innerScope = new(pex.AccessorEvaluationType.GetDescription());
+
                     if (pex.Exception.InnerException == null)
                     {
                         // format the message beforehand, so that FailWith() will not enclose the placeholders with brackets
                         string failMessage = string.Format("the {0} exception has no inner exception.",
                                 _innerExceptionPedigree.Count > 1 ? "inner" : "thrown");
 
-                        scope.Context = pex.AccessorEvaluationType.GetDescription();
-                        scope.BecauseOf(because, becauseArgs)
+                        Execute.Assertion.BecauseOf(because, becauseArgs)
                             .WithExpectation("Expected inner {0}{reason} for the {context} of property {1}, but ",
                                 ConstructExceptionPedigree(typeof(TInnerException)),
                                 pex.PropertyName)
@@ -184,8 +185,7 @@ namespace FluentAssertions.Properties.Assertions
                     }
                     else
                     {
-                        scope.Context = pex.AccessorEvaluationType.GetDescription();
-                        scope.ForCondition(matchExactType
+                        Execute.Assertion.ForCondition(matchExactType
                                 ? pex.Exception.InnerException.GetType().Equals(typeof(TInnerException))
                                 : pex.Exception.InnerException is TInnerException)
                             .BecauseOf(because, becauseArgs)

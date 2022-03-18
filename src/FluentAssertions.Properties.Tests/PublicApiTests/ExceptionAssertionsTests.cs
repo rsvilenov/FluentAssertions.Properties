@@ -62,6 +62,9 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
             testPropertyMock
                 .Setup(o => o.StringProperty)
                 .Throws(new TestException(exceptionMessage));
+            testPropertyMock
+                .Setup(o => o.IntProperty)
+                .Throws(new TestException(exceptionMessage));
 
             var valueSourceMock = new Mock<ITestProperties>();
             valueSourceMock
@@ -70,7 +73,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
 
             var symmetricProperties = testPropertyMock
                 .Object
-                .Properties(p => p.StringProperty);
+                .Properties(p => p.StringProperty, p => p.IntProperty);
 
             var assertReason = base.CreateAssertReason();
 
@@ -84,7 +87,8 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
             assertion
                 .Should()
                 .Throw<XunitException>()
-                .WithMessage($"Expected the {nameof(TestException)} message for property {nameof(ITestProperties.StringProperty)} to match the equivalent of*\"expected\" because {assertReason}, but*\"{exceptionMessage}\" does not.");
+                .WithMessage($"Expected the {nameof(TestException)} message for property {nameof(ITestProperties.StringProperty)} to match the equivalent of*\"expected\" because {assertReason}, but*\"{exceptionMessage}\" does not.*" +
+                             $"Expected the {nameof(TestException)} message for property {nameof(ITestProperties.IntProperty)} to match the equivalent of*\"expected\" because {assertReason}, but*\"{exceptionMessage}\" does not.");
         }
 
         [Fact]
@@ -122,6 +126,9 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
             testPropertyMock
                 .Setup(o => o.StringProperty)
                 .Throws(exception);
+            testPropertyMock
+                .Setup(o => o.IntProperty)
+                .Throws(exception);
 
             var valueSourceMock = new Mock<ITestProperties>();
             valueSourceMock
@@ -130,7 +137,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
 
             var symmetricProperties = testPropertyMock
                 .Object
-                .Properties(p => p.StringProperty);
+                .Properties(p => p.StringProperty, p => p.IntProperty);
 
             var assertReason = base.CreateAssertReason();
 
@@ -144,7 +151,8 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
             assertion
                 .Should()
                 .Throw<XunitException>()
-                .WithMessage($"Expected inner \"{nameof(TestException)}->{nameof(TestException)}\" because {assertReason} for the getter of property \"{nameof(ITestProperties.StringProperty)}\", but found*.");
+                .WithMessage($"Expected inner \"{nameof(TestException)}->{nameof(TestException)}\" because {assertReason} for the getter of property \"{nameof(ITestProperties.StringProperty)}\", but found*." +
+                             $"Expected inner \"{nameof(TestException)}->{nameof(TestException)}\" because {assertReason} for the getter of property \"{nameof(ITestProperties.IntProperty)}\", but found*.");
         }
 
         [Fact]

@@ -418,7 +418,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
         public void When_selecting_properties_with_type_matching_custom_predicate_should_succceed()
         {
             // Arrange
-            const string testPropertyName = "IntProperty";
+            const string testPropertyName = nameof(TestClass.IntProperty);
             var testObj = new TestClass();
             var expectedPropertyInfo = typeof(TestClass)
                 .GetProperty(testPropertyName);
@@ -432,7 +432,9 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
             selectedProperties
                 .Select(ipi => ipi.PropertyInfo)
                 .Should()
-                .BeEquivalentTo(expectedPropertyInfo);
+                .ContainSingle()
+                .And
+                .ContainEquivalentOf(expectedPropertyInfo);
         }
 
         [Fact]

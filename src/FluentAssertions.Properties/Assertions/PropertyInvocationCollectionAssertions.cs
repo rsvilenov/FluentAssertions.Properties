@@ -60,7 +60,7 @@ namespace FluentAssertions.Properties.Assertions
 
         private AndConstraint<TAssertions> ProvideSymmetricAccessInternal(string because, params object[] becauseArgs)
         {
-            using (AssertionScope assertion = new AssertionScope())
+            using (AssertionScope scope = new AssertionScope())
             {
                 foreach (var propertyInvocationInfo in Subject)
                 {
@@ -244,10 +244,12 @@ namespace FluentAssertions.Properties.Assertions
                                     ex.GetType(),
                                     ex);
                         }
-
-                        propertyExceptions.Add((TException)ex,
-                            propertyName,
-                            evalType);
+                        else
+                        {
+                            propertyExceptions.Add((TException)ex,
+                                propertyName,
+                                evalType);
+                        }
 
                         continue;
                     }
