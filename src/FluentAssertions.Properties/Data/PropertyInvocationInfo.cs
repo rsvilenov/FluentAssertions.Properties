@@ -13,8 +13,8 @@ namespace FluentAssertions.Properties.Data
             ValueSourceInvocationDelegate = valueSourceInvocationDelegate;
         }
 
-        public PropertyInfo PropertyInfo { get; }
+        internal PropertyInfo PropertyInfo { get; }
 
-        public Func<IInvocationResult<TProperty>> ValueSourceInvocationDelegate { get; }
+        internal Func<IInvocationResult<TProperty>> ValueSourceInvocationDelegate { get; }
     }
 }

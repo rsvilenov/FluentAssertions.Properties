@@ -2,13 +2,13 @@
 
 namespace FluentAssertions.Properties.Invocation
 {
-    public interface IInvocationResult<TProperty>
+    internal interface IInvocationResult<TProperty>
         : IInvocationResult
     {
         TProperty Value { get; }
     }
 
-    public interface IInvocationResult
+    internal interface IInvocationResult
     {
         bool Success { get; }
         ExceptionDispatchInfo ExceptionDispatchInfo { get; }

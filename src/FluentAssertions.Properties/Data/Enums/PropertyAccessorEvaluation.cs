@@ -2,7 +2,7 @@
 
 namespace FluentAssertions.Properties.Data.Enums
 {
-    public enum PropertyAccessorEvaluation
+    internal enum PropertyAccessorEvaluation
     {
         [Description("getter")]
         Getter,

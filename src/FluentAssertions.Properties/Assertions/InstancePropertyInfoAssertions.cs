@@ -36,7 +36,7 @@ namespace FluentAssertions.Properties.Assertions
         /// <summary>
         /// Gets the object whose value is being asserted.
         /// </summary>
-        public InstancePropertyInfo<TDeclaringType> Subject { get; }
+        internal InstancePropertyInfo<TDeclaringType> Subject { get; }
 
         /// <summary>
         /// Asserts that the selected property has a setter. 

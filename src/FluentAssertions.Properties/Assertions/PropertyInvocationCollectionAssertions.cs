@@ -6,7 +6,6 @@ using FluentAssertions.Properties.Invocation;
 using System;
 using System.Diagnostics;
 using System.Reflection;
-using System.Runtime.ExceptionServices;
 
 namespace FluentAssertions.Properties.Assertions
 {
@@ -41,7 +40,7 @@ namespace FluentAssertions.Properties.Assertions
         /// <summary>
         /// Gets the object whose value is being asserted.
         /// </summary>
-        public PropertyInvocationCollection<TDeclaringType, TProperty> Subject { get; }
+        internal PropertyInvocationCollection<TDeclaringType, TProperty> Subject { get; }
 
         /// <summary>
         /// Asserts that the selected properties return the same value as the one that has been assigned to them.

@@ -41,7 +41,7 @@ namespace FluentAssertions.Properties.Data
         /// <summary>
         /// Gets the object whose value is being asserted.
         /// </summary>
-        public InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo, TSelector> Subject { get; }
+        internal InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo, TSelector> Subject { get; }
 
         /// <summary>
         /// Asserts that the selected properties have a specified count.

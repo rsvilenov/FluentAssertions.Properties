@@ -7,7 +7,7 @@ namespace FluentAssertions.Properties.Data
     public class PropertyInvocationCollection<TDeclaringType, TProperty> : IEnumerable<PropertyInvocationInfo<TDeclaringType, TProperty>>
     {
         protected internal IEnumerable<PropertyInvocationInfo<TDeclaringType, TProperty>> SelectedProperties { get; set; } = new List<PropertyInvocationInfo<TDeclaringType, TProperty>>();
-        public TDeclaringType Instance { get; }
+        internal TDeclaringType Instance { get; }
 
         internal PropertyInvocationCollection(TDeclaringType instance, IEnumerable<PropertyInvocationInfo<TDeclaringType, TProperty>> instancePropertyInfos)
         {

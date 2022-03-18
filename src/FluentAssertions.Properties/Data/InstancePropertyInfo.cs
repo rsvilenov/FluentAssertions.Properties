@@ -14,9 +14,9 @@ namespace FluentAssertions.Properties.Data
             : this(instancePropertyInfo.PropertyInfo)
             { }
 
-        public PropertyInfo PropertyInfo { get; internal set; }
+        internal PropertyInfo PropertyInfo { get; set; }
 
-        public Type InstanceType => typeof(TDeclaringType);
+        internal Type InstanceType => typeof(TDeclaringType);
     }
 
     public class InstancePropertyInfo<TDeclaringType, TProperty> : InstancePropertyInfo<TDeclaringType>
