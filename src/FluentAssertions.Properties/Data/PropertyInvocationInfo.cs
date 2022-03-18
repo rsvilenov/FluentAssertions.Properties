@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FluentAssertions.Properties.Invocation;
+using System;
 using System.Reflection;
 
 namespace FluentAssertions.Properties.Data
@@ -6,14 +7,14 @@ namespace FluentAssertions.Properties.Data
     public class PropertyInvocationInfo<TDeclaringType, TProperty>
     {
         internal PropertyInvocationInfo(PropertyInfo propertyInfo,
-            Func<TProperty> valueDelegate)
+            Func<IInvocationResult<TProperty>> valueSourceInvocationDelegate)
         {
             PropertyInfo = propertyInfo;
-            ValueDelegate = valueDelegate;
+            ValueSourceInvocationDelegate = valueSourceInvocationDelegate;
         }
 
         public PropertyInfo PropertyInfo { get; }
 
-        public Func<TProperty> ValueDelegate { get; }
+        public Func<IInvocationResult<TProperty>> ValueSourceInvocationDelegate { get; }
     }
 }

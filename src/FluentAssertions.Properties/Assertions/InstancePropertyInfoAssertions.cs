@@ -2,9 +2,9 @@
 using FluentAssertions.Execution;
 using FluentAssertions.Properties.Common;
 using FluentAssertions.Properties.Data;
-using System.Diagnostics;
-using System;
 using FluentAssertions.Properties.Extensions;
+using System;
+using System.Diagnostics;
 
 namespace FluentAssertions.Properties.Assertions
 {

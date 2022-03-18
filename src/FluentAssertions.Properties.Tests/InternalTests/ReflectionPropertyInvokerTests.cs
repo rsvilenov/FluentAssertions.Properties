@@ -78,10 +78,12 @@ namespace FluentAssertions.Properties.Tests.InternalTests
             var invoker = new ReflectionPropertyInvoker<PropertyContainer, int>(instance);
 
             // Act
-            int gotValue = invoker.GetValue(nameof(PropertyContainer.ReadWriteProperty));
+            IInvocationResult<int> getResult = invoker.GetValue(nameof(PropertyContainer.ReadWriteProperty));
 
             // Assert
-            gotValue.Should().Be(testValue);
+            getResult.Value
+                .Should()
+                .Be(testValue);
         }
 
         [Fact]

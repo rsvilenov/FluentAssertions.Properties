@@ -194,13 +194,13 @@ namespace FluentAssertions.Properties.Selectors
             Guard.ThrowIfArgumentIsNull(source, nameof(source));
 
             var propertyInvocationInfos = new List<PropertyInvocationInfo<TDeclaringType, object>>();
-            var propertyInvoker = InvocationContext.PropertyInvokerFactory.CreatePropertyInvoker<TDeclaringType>(source);
+            var propertyInvoker = InvocationContext.PropertyInvokerFactory.CreatePropertyInvoker<TDeclaringType, object>(source);
             
             foreach (PropertyInfo propInfo in typeof(TDeclaringType)
                 .GetPublicOrInternalProperties()
                 .Where(pi => SelectedProperties.Any(ipi => ipi.PropertyInfo.Name == pi.Name)))
             {
-                Func<object> valueDelegate = () => propertyInvoker.GetValue(propInfo.Name);
+                var valueDelegate = () => propertyInvoker.GetValue(propInfo.Name);
                 propertyInvocationInfos.Add(new PropertyInvocationInfo<TDeclaringType, object>(propInfo, valueDelegate));
             }
 

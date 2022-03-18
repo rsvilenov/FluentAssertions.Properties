@@ -6,6 +6,7 @@ using FluentAssertions.Properties.Invocation;
 using System;
 using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 
 namespace FluentAssertions.Properties.Assertions
 {
@@ -76,9 +77,25 @@ namespace FluentAssertions.Properties.Assertions
                     }
                     else
                     {
+                        IInvocationResult<TProperty> valueSourceInvocationResult = propertyInvocationInfo
+                            .ValueSourceInvocationDelegate
+                            .Invoke();
+                        if (!valueSourceInvocationResult.Success)
+                        {
+                            var valueSourceInvocationException = valueSourceInvocationResult.ExceptionDispatchInfo.SourceException;
+                            Execute.Assertion
+                                    .BecauseOf(because, becauseArgs)
+                                    .FailWith("Did not expect any exceptions when getting the value to be passed to property {0}, but {1} was thrown.{2} {3}",
+                                        propertyInfo.Name,
+                                        valueSourceInvocationException.GetType(),
+                                        Environment.NewLine,
+                                        valueSourceInvocationException);
+                            continue;
+                        }
+                        
                         Execute
                             .Assertion
-                            .ForCondition(AreGetSetOperationsSymmetric(propertyInfo.Name, propertyInvocationInfo.ValueDelegate.Invoke()))
+                            .ForCondition(AreGetSetOperationsSymmetric(propertyInfo.Name, valueSourceInvocationResult.Value))
                             .BecauseOf(because, becauseArgs)
                             .FailWith("Expected the get and set operations of property {0} to be symmetric{reason}, but were not.", propertyInfo.Name);
                     }
@@ -192,19 +209,29 @@ namespace FluentAssertions.Properties.Assertions
                         .PropertyInfo
                         .Name;
 
-                    try
+                    IInvocationResult<TProperty> valueSourceInvocationResult = propertyInvocationInfo
+                        .ValueSourceInvocationDelegate
+                        .Invoke();
+                    if (!valueSourceInvocationResult.Success)
                     {
-                        CallPropertyAccessors(evalType, propertyInvocationInfo, propertyName);
-
+                        var valueSourceInvocationException = valueSourceInvocationResult.ExceptionDispatchInfo.SourceException;
                         Execute.Assertion
-                            .BecauseOf(because, becauseArgs)
-                            .FailWith("Expected property {0} of property {1} to throw {2}{reason}, but no exception was thrown.",
-                                accessorTypeFailMessagePart,
-                                propertyName,
-                                typeof(TException));
+                                    .BecauseOf(because, becauseArgs)
+                                    .FailWith("Did not expect any exceptions when getting the value to be passed to property {0}, but {1} was thrown. {2}",
+                                        propertyName,
+                                        valueSourceInvocationException.GetType(),
+                                        valueSourceInvocationException);
+                        continue;
                     }
-                    catch (Exception ex)
+
+                    TProperty sourceValue = valueSourceInvocationResult.Value;
+                    IInvocationResult invocationResult = evalType == PropertyAccessorEvaluation.Setter
+                        ? _propertyInvoker.SetValue(propertyName, sourceValue)
+                        : _propertyInvoker.GetValue(propertyName);
+
+                    if (!invocationResult.Success)
                     {
+                        Exception ex = invocationResult.ExceptionDispatchInfo.SourceException;
                         bool exceptionTypeMatches = MatchExceptionType<TException>(matchExactExceptionType, ex);
 
                         if (!exceptionTypeMatches)
@@ -222,18 +249,20 @@ namespace FluentAssertions.Properties.Assertions
                         propertyExceptions.Add((TException)ex,
                             propertyName,
                             evalType);
+
+                        continue;
                     }
+
+                    Execute.Assertion
+                            .BecauseOf(because, becauseArgs)
+                            .FailWith("Expected property {0} of property {1} to throw {2}{reason}, but no exception was thrown.",
+                                accessorTypeFailMessagePart,
+                                propertyName,
+                                typeof(TException));
                 }
             }
 
             return new PropertyExceptionCollectionAssertions<TException>(propertyExceptions);
-        }
-
-        private string FormatExceptionText(Exception ex)
-        {
-            string exceptionString = ex.ToString();
-            int cutIndex = exceptionString.IndexOf($"{Environment.NewLine}--- ");
-            return cutIndex > 1 ? exceptionString.Substring(0, cutIndex) : exceptionString;
         }
 
         private bool MatchExceptionType<TException>(bool matchExactExceptionType, Exception ex) where TException : Exception
@@ -243,33 +272,26 @@ namespace FluentAssertions.Properties.Assertions
                 : ex is TException;
         }
 
-        private void CallPropertyAccessors(PropertyAccessorEvaluation evalType, PropertyInvocationInfo<TDeclaringType, TProperty> propertyInvocationInfo, string propertyName)
-        {
-            TProperty value = propertyInvocationInfo.ValueDelegate.Invoke();
-
-            if (evalType == PropertyAccessorEvaluation.Setter)
-            {
-                _propertyInvoker.SetValue(propertyName, value);
-            }
-            else if (evalType == PropertyAccessorEvaluation.Getter)
-            {
-                _propertyInvoker.GetValue(propertyName);
-            }
-        }
-
         private bool AreGetSetOperationsSymmetric(string propertyName, TProperty value)
         {
             bool isSymmetric = false;
-            try
-            {
-                _propertyInvoker.SetValue(propertyName, value);
-                TProperty got = _propertyInvoker.GetValue(propertyName);
-                isSymmetric = Equals(got, value);
-            }
-            catch (Exception ex)
+            IInvocationResult setResult = _propertyInvoker.SetValue(propertyName, value);
+
+            if (!setResult.Success)
             {
                 Execute.Assertion
-                    .FailWith($"Did not expect any exceptions for property {propertyName}, but got {ex}.");
+                    .FailWith($"Did not expect any exceptions for property {propertyName}, but the setter threw {setResult.ExceptionDispatchInfo.SourceException}.");
+            }
+            else
+            {
+                IInvocationResult<TProperty> getResult = _propertyInvoker.GetValue(propertyName);
+                if (!getResult.Success)
+                {
+                    Execute.Assertion
+                        .FailWith($"Did not expect any exceptions for property {propertyName}, but the getter threw {getResult.ExceptionDispatchInfo.SourceException}.");
+                }
+
+                isSymmetric = Equals(getResult.Value, value);
             }
 
             return isSymmetric;

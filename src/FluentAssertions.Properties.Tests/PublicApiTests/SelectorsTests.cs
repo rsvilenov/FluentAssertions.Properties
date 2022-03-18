@@ -2,6 +2,7 @@
 using FluentAssertions.Properties.Selectors;
 using FluentAssertions.Properties.Tests.Extensions;
 using FluentAssertions.Properties.Tests.PublicApiTests.TestObjects;
+using Moq;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
@@ -701,6 +702,28 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
         }
 
         [Fact]
+        public void When_selecting_properties_of_value_types_that_have_default_value_and_throwing_getters_should_fail_with_appropriate_message()
+        {
+            // Arrange
+            string exceptionMessage = Guid.NewGuid().ToString();
+            var testPropertyMock = new Mock<ITestProperties>();
+            testPropertyMock
+                .SetupGet(o => o.IntProperty)
+                .Throws(new TestException(exceptionMessage));
+
+            // Act & Assert
+            var testAction = () => testPropertyMock.Object
+                .Properties()
+                .ThatAreOfValueType
+                .ThatHaveDefaultValue;
+
+            testAction
+                .Should()
+                .Throw<Xunit.Sdk.XunitException>()
+                .WithMessage($"Did not expect any exceptions for property *, but got * {exceptionMessage}*");
+        }
+
+        [Fact]
         public void When_selecting_properties_of_string_type_that_have_no_value_HavingValue_should_return_no_properties()
         {
             // Arrange
@@ -770,6 +793,27 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
                 .NotBeEmpty()
                 .And
                 .NotContain(p => p == nameof(testObj.StringProperty));
+        }
+
+        [Fact]
+        public void When_selecting_properties_of_value_types_that_have_throwing_getters_HavingValue_should_fail_with_appropriate_message()
+        {
+            // Arrange
+            string exceptionMessage = Guid.NewGuid().ToString();
+            var testPropertyMock = new Mock<ITestProperties>();
+            testPropertyMock
+                .SetupGet(o => o.IntProperty)
+                .Throws(new TestException(exceptionMessage));
+
+            // Act & Assert
+            var testAction = () => testPropertyMock.Object
+                .Properties(o => o.IntProperty)
+                .HavingValue(1);
+
+            testAction
+                .Should()
+                .Throw<Xunit.Sdk.XunitException>()
+                .WithMessage($"Did not expect any exceptions for property *, but got * {exceptionMessage}*");
         }
 
         [Fact]

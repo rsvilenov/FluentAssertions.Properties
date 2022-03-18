@@ -6,56 +6,37 @@ namespace FluentAssertions.Properties.Invocation
 {
     internal class ReflectionPropertyInvoker<TDeclaringType, TProperty> : IPropertyInvoker<TProperty>
     {
-        private readonly IPropertyInvoker _nonGenericPropertyInvoker;
-
-        public ReflectionPropertyInvoker(TDeclaringType instance)
-        {
-            _nonGenericPropertyInvoker = new ReflectionPropertyInvoker<TDeclaringType>(instance);
-        }
-
-        public TProperty GetValue(string propertyName)
-        {
-            return (TProperty)_nonGenericPropertyInvoker.GetValue(propertyName);
-        }
-
-        public void SetValue(string propertyName, TProperty testData)
-        {
-            _nonGenericPropertyInvoker.SetValue(propertyName, testData);
-        }
-    }
-
-
-    internal class ReflectionPropertyInvoker<TDeclaringType> : IPropertyInvoker
-    {
         private readonly TDeclaringType _instance;
         public ReflectionPropertyInvoker(TDeclaringType instance)
         {
             _instance = instance;
         }
 
-        public void SetValue(string propertyName, object testData)
+        public IInvocationResult SetValue(string propertyName, TProperty value)
         {
             try
             {
                 PropertyInfo propInfo = GetPropertyInfo(propertyName);
-                propInfo.SetValue(_instance, testData);
+                propInfo.SetValue(_instance, value);
+                return new InvocationResult();
             }
             catch (TargetInvocationException tex)
             {
-                ExceptionDispatchInfo.Capture(tex.InnerException).Throw();
+                return new InvocationResult(ExceptionDispatchInfo.Capture(tex.InnerException));
             }
         }
-        public object GetValue(string propertyName)
+
+        public IInvocationResult<TProperty> GetValue(string propertyName)
         {
             try
             {
-                var propInfo = GetPropertyInfo(propertyName);
-                return propInfo.GetValue(_instance);
+                object valueObj = GetPropertyInfo(propertyName).GetValue(_instance);
+                TProperty value = valueObj != default ? (TProperty)valueObj : default;
+                return new PropertyInvocationResult<TProperty>(value);
             }
             catch (TargetInvocationException tex)
             {
-                ExceptionDispatchInfo.Capture(tex.InnerException).Throw();
-                throw;
+                return new PropertyInvocationResult<TProperty>(ExceptionDispatchInfo.Capture(tex.InnerException));
             }
         }
 

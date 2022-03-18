@@ -7,7 +7,7 @@ using FluentAssertions.Properties.Tests.Extensions;
 
 namespace FluentAssertions.Properties.Tests.PublicApiTests
 {
-    public class InvocationAssertionsTests : PublicApiTestBase
+    public partial class InvocationAssertionsTests : PublicApiTestBase
     {
         [Fact]
         public void When_selected_symmetric_properties_are_called_with_values_from_source_object_ProvideSymmetricAccess_assert_should_succeed()
@@ -126,7 +126,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
             action
                 .Should()
                 .Throw<XunitException>()
-                .WithMessage("Did not expect any exceptions for property *, but got *");
+                .WithMessage("Did not expect any exceptions for property *, but *");
         }
 
         [Fact]
@@ -180,22 +180,6 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
                 .Should()
                 .Throw<XunitException>()
                 .WithMessage($"Expected property \"getter\" of property * to throw * because {assertReason}*");
-        }
-
-        public class UnitTest1
-        {
-            public void Throw()
-            {
-                throw new NullReferenceException();
-            }
-
-            public int MyProperty { get { return 2; } set { Throw(); } }
-
-            [Fact]
-            public void Test1()
-            {
-                new UnitTest1().Properties().OfType<int>().WhenCalledWith(1).Should().ThrowFromSetter<ArgumentNullException>();
-            }
         }
 
         [Fact]
@@ -286,6 +270,33 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
         }
 
         [Fact]
+        public void When_the_source_object_throws_an_exception_ThrowFromSetter_assert_should_fail()
+        {
+            // Arrange
+            var testPropertyMock = new Mock<ITestProperties>();
+
+            var valueSourceMock = new Mock<ITestProperties>();
+            valueSourceMock
+                .SetupGet(o => o.StringProperty)
+                .Throws<TestException>();
+
+            var symmetricProperties = testPropertyMock
+                .Object
+                .Properties(p => p.StringProperty);
+
+            // Act & Assert
+            Action assertion = () => symmetricProperties
+                .WhenCalledWithValuesFrom(valueSourceMock.Object)
+                .Should()
+                .ThrowFromSetter<Exception>();
+
+            assertion
+                .Should()
+                .Throw<XunitException>()
+                .WithMessage($"Did not expect any exceptions when getting the value to be passed to property *{nameof(TestException)} * was thrown*");
+        }
+
+        [Fact]
         public void When_selecting_properties_of_string_type_WhenCalledWith_ProvideSymmetricAccess_assert_should_succeed()
         {
             // Arrange
@@ -301,6 +312,64 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
                 .WhenCalledWith(testValue)
                 .Should()
                 .ProvideSymmetricAccess();
+        }
+
+        [Fact]
+        public void When_the_source_object_throws_an_exception_ProvideSymmetricAccess_assert_should_fail()
+        {
+            // Arrange
+            var testPropertyMock = new Mock<ITestProperties>();
+
+            var valueSourceMock = new Mock<ITestProperties>();
+            valueSourceMock
+                .SetupGet(o => o.StringProperty)
+                .Throws<TestException>();
+
+            var symmetricProperties = testPropertyMock
+                .Object
+                .Properties(p => p.StringProperty);
+
+            // Act & Assert
+            Action assertion = () => symmetricProperties
+                .WhenCalledWithValuesFrom(valueSourceMock.Object)
+                .Should()
+                .ProvideSymmetricAccess();
+
+            assertion
+                .Should()
+                .Throw<XunitException>()
+                .WithMessage($"Did not expect any exceptions when getting the value to be passed to property *{nameof(TestException)} * was thrown*");
+        }
+
+        [Fact]
+        public void When_selected_properties_throw_from_setter_ProvideSymmetricAccess_assert_should_fail()
+        {
+            // Arrange
+            var testPropertyMock = new Mock<ITestProperties>();
+            string guid = Guid.NewGuid().ToString();
+            testPropertyMock
+                .SetupSet(o => o.StringProperty = guid)
+                .Throws<TestException>();
+
+            var valueSourceMock = new Mock<ITestProperties>();
+            valueSourceMock
+                .Setup(o => o.StringProperty)
+                .Returns(guid);
+
+            var symmetricProperties = testPropertyMock
+                .Object
+                .Properties(p => p.StringProperty);
+
+            // Act & Assert
+            Action assertion = () => symmetricProperties
+                .WhenCalledWithValuesFrom(valueSourceMock.Object)
+                .Should()
+                .ProvideSymmetricAccess();
+
+            assertion
+                .Should()
+                .Throw<XunitException>()
+                .WithMessage($"Did not expect any exceptions for property {nameof(ITestProperties.StringProperty)}, but the setter threw *{nameof(TestException)}*");
         }
 
         [Fact]

@@ -1,4 +1,5 @@
-﻿using FluentAssertions.Properties.Data;
+﻿using FluentAssertions.Execution;
+using FluentAssertions.Properties.Data;
 using FluentAssertions.Properties.Extensions;
 using FluentAssertions.Properties.Invocation;
 using System;
@@ -29,8 +30,25 @@ namespace FluentAssertions.Properties.Selectors
         {
             get
             {
-                var filteredProperties = SelectedProperties
-                    .Where(property => CheckIfValueIsDefault(property.PropertyInfo));
+                List<InstancePropertyInfo<TDeclaringType>> filteredProperties = new();
+
+                using (AssertionScope scope = new())
+                {
+                    foreach (var instancePropInfo in SelectedProperties)
+                    {
+                        bool success = TryCheckIfValueIsDefault(instancePropInfo.PropertyInfo, out bool isDefault, out Exception ex);
+                        if (!success)
+                        {
+                            Execute.Assertion
+                                .FailWith($"Did not expect any exceptions for property {instancePropInfo.PropertyInfo.Name}, but got {ex}.");
+                        }
+                        else if (isDefault)
+                        {
+                            filteredProperties.Add(instancePropInfo);
+                        }
+                        
+                    }
+                }
 
                 return CloneFiltered(filteredProperties);
             }
@@ -69,7 +87,7 @@ namespace FluentAssertions.Properties.Selectors
             return new InstancePropertyOfValueTypeSelector<TDeclaringType>(Instance, filteredProperties);
         }
 
-        private bool CheckIfValueIsDefault(PropertyInfo propertyInfo)
+        private bool TryCheckIfValueIsDefault(PropertyInfo propertyInfo, out bool isDefault, out Exception ex)
         {
             bool isNullableValueType = propertyInfo.PropertyType.IsNullableValueType();
             Type actualType = isNullableValueType
@@ -78,12 +96,22 @@ namespace FluentAssertions.Properties.Selectors
 
             object defaultValue = Activator
                 .CreateInstance(actualType);
-            IPropertyInvoker propertyInvoker = InvocationContext.PropertyInvokerFactory.CreatePropertyInvoker<TDeclaringType>(Instance);
-            object value = propertyInvoker.GetValue(propertyInfo.Name);
-            
-            return isNullableValueType 
-                ? value == null
-                : value.Equals(defaultValue);
+            IPropertyInvoker<object> propertyInvoker = InvocationContext.PropertyInvokerFactory.CreatePropertyInvoker<TDeclaringType, object>(Instance);
+            IInvocationResult<object> getResult = propertyInvoker.GetValue(propertyInfo.Name);
+            if (!getResult.Success)
+            {
+                ex = getResult.ExceptionDispatchInfo.SourceException;
+                isDefault = false;
+                return false;
+            }
+            else
+            {
+                ex = null;
+                isDefault = isNullableValueType
+                    ? getResult.Value == null
+                    : getResult.Value.Equals(defaultValue);
+                return true;
+            }
         }
     }
 }

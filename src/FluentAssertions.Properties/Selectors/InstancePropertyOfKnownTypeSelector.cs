@@ -1,4 +1,5 @@
-﻿using FluentAssertions.Properties.Data;
+﻿using FluentAssertions.Execution;
+using FluentAssertions.Properties.Data;
 using FluentAssertions.Properties.Invocation;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -29,10 +30,22 @@ namespace FluentAssertions.Properties.Selectors
         /// </param>
         public InstancePropertyOfKnownTypeSelector<TDeclaringType, TProperty> HavingValue(TProperty value)
         {
-            var propertyInvoker = InvocationContext.PropertyInvokerFactory.CreatePropertyInvoker<TDeclaringType>(Instance);
-            
-            var filteredProperties = SelectedProperties
-                .Where(p => Equals(propertyInvoker.GetValue(p.PropertyInfo.Name), value));
+            var propertyInvoker = InvocationContext.PropertyInvokerFactory.CreatePropertyInvoker<TDeclaringType, TProperty>(Instance);
+
+            List<InstancePropertyInfo<TDeclaringType, TProperty>> filteredProperties = new();
+            foreach (var property in SelectedProperties)
+            {
+                var invocationResult = propertyInvoker.GetValue(property.PropertyInfo.Name);
+                if (!invocationResult.Success)
+                {
+                    Execute.Assertion
+                        .FailWith($"Did not expect any exceptions for property {property.PropertyInfo.Name}, but got {invocationResult.ExceptionDispatchInfo.SourceException}.");
+                }
+                else if (Equals(invocationResult.Value, value))
+                {
+                    filteredProperties.Add(property);
+                }
+            }
 
             return CloneFiltered(filteredProperties);
         }
@@ -48,7 +61,8 @@ namespace FluentAssertions.Properties.Selectors
         public PropertyInvocationCollection<TDeclaringType, TProperty> WhenCalledWith(TProperty value)
         {
             var propertyInvocationInfos = SelectedProperties
-                .Select(ipi => new PropertyInvocationInfo<TDeclaringType, TProperty>(ipi.PropertyInfo, () => value));
+                .Select(ipi => new PropertyInvocationInfo<TDeclaringType, TProperty>(ipi.PropertyInfo, 
+                    () => new PropertyInvocationResult<TProperty>(value)));
             
             return new PropertyInvocationCollection<TDeclaringType, TProperty>(
                 Instance,
