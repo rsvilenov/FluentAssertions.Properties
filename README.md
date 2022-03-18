@@ -16,6 +16,8 @@ Unofficial FluentAssertions extensions for testing the behavior of class/struct/
 
 ## How?
 
+Some common scenarios:
+
 * Testing that all properties from a class provide symmetric access, i.e. they return the same value that has been assigned to them
 ```csharp
     var dtoUnderTest = new SampleDto();
