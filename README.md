@@ -31,7 +31,7 @@ Some common scenarios:
         .ProvideSymmetricAccess();
 ```
 
-Speaking in the lingo of AutoFixture we can say that `ProvideSymmetricAccess()` verifies that the properteis are "well-behaved writables" (see [AutoFixture's WritablePropertyAssertion idiom](http://www.shujaat.net/2013/05/writable-property-assertions-using.html)).
+Speaking in the lingo of AutoFixture, we can say that `ProvideSymmetricAccess()` verifies that the properteis are "well-behaved writables" (see [AutoFixture's WritablePropertyAssertion idiom](http://www.shujaat.net/2013/05/writable-property-assertions-using.html)).
 
 * Testing that getters/setters throw exceptions in certain cases
 
