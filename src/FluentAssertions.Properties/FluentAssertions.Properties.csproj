@@ -22,7 +22,6 @@
 		<PackageProjectUrl>https://github.com/rsvilenov/FluentAssertions.Properties</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/rsvilenov/FluentAssertions.Properties</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>MSTest2;xUnit;NUnit;MSpec;NSpec;TDD;BDD;Fluent;netcore;netstandard</PackageTags>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<Copyright>Copyright Rosen Svilenov 2022</Copyright>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
