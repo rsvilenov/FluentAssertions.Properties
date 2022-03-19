@@ -85,9 +85,9 @@ namespace FluentAssertions.Properties.Data
         {
             using (AssertionScope scope = new AssertionScope())
             {
-                foreach (var subject in Subject)
+                foreach (var item in Subject.GetSelection())
                 {
-                    subject.Should().BeOfPrimitiveType(because, becauseArgs);
+                    item.Should().BeOfPrimitiveType(because, becauseArgs);
                 }
             }
 
@@ -114,9 +114,9 @@ namespace FluentAssertions.Properties.Data
         {
             using (AssertionScope scope = new AssertionScope())
             {
-                foreach (var subject in Subject)
+                foreach (var item in Subject.GetSelection())
                 {
-                    subject.Should().NotBeOfPrimitiveType(because, becauseArgs);
+                    item.Should().NotBeOfPrimitiveType(because, becauseArgs);
                 }
             }
 
@@ -143,9 +143,9 @@ namespace FluentAssertions.Properties.Data
         {
             using (AssertionScope scope = new AssertionScope())
             {
-                foreach (var subject in Subject)
+                foreach (var item in Subject.GetSelection())
                 {
-                    subject.Should().BeOfValueType(because, becauseArgs);
+                    item.Should().BeOfValueType(because, becauseArgs);
                 }
             }
 
@@ -172,9 +172,9 @@ namespace FluentAssertions.Properties.Data
         {
             using (AssertionScope scope = new AssertionScope())
             {
-                foreach (var subject in Subject)
+                foreach (var item in Subject.GetSelection())
                 {
-                    subject.Should().BeOfReferenceType(because, becauseArgs);
+                    item.Should().BeOfReferenceType(because, becauseArgs);
                 }
             }
 
@@ -201,9 +201,9 @@ namespace FluentAssertions.Properties.Data
         {
             using (AssertionScope scope = new AssertionScope())
             {
-                foreach (var subject in Subject)
+                foreach (var item in Subject.GetSelection())
                 {
-                    subject.Should().BeVirtual(because, becauseArgs);
+                    item.Should().BeVirtual(because, becauseArgs);
                 }
             }
 
@@ -230,9 +230,9 @@ namespace FluentAssertions.Properties.Data
         {
             using (AssertionScope scope = new AssertionScope())
             {
-                foreach (var subject in Subject)
+                foreach (var item in Subject.GetSelection())
                 {
-                    subject.Should().NotBeVirtual(because, becauseArgs);
+                    item.Should().NotBeVirtual(because, becauseArgs);
                 }
             }
 
@@ -260,9 +260,9 @@ namespace FluentAssertions.Properties.Data
         {
             using (AssertionScope scope = new AssertionScope())
             {
-                foreach (var subject in Subject)
+                foreach (var item in Subject.GetSelection())
                 {
-                    subject.Should().NotBeWritable(because, becauseArgs);
+                    item.Should().NotBeWritable(because, becauseArgs);
                 }
             }
 
@@ -289,9 +289,9 @@ namespace FluentAssertions.Properties.Data
         {
             using (AssertionScope scope = new AssertionScope())
             {
-                foreach (var subject in Subject)
+                foreach (var item in Subject.GetSelection())
                 {
-                    subject.Should().BeWritable(because, becauseArgs);
+                    item.Should().BeWritable(because, becauseArgs);
                 }
             }
 
@@ -323,9 +323,9 @@ namespace FluentAssertions.Properties.Data
         {
             using (AssertionScope scope = new AssertionScope())
             {
-                foreach (var subject in Subject)
+                foreach (var item in Subject.GetSelection())
                 {
-                    subject.Should().BeWritable(accessModifier, because, becauseArgs);
+                    item.Should().BeWritable(accessModifier, because, becauseArgs);
                 }
             }
 
@@ -355,9 +355,9 @@ namespace FluentAssertions.Properties.Data
         {
             using (AssertionScope scope = new AssertionScope())
             {
-                foreach (var subject in Subject)
+                foreach (var item in Subject.GetSelection())
                 {
-                    subject.Should().BeInitOnly(because, becauseArgs);
+                    item.Should().BeInitOnly(because, becauseArgs);
                 }
             }
 

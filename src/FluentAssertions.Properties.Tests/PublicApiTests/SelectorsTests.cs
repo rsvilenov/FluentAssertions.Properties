@@ -73,6 +73,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
 
             // Assert
             selectedProperties
+                .GetSelection()
                 .Select(ipi => ipi.PropertyInfo.Name)
                 .Should()
                 .HaveCount(1)
@@ -112,6 +113,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
 
             // Assert
             selectedProperties
+                .GetSelection()
                 .Select(ipi => ipi.PropertyInfo)
                 .Should()
                 .BeEquivalentTo(expectedPropertyInfos);
@@ -126,6 +128,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
             // Act
             var selectedPropertyNames = testObj
                 .Properties(p => p.StringProperty, p => p.IntProperty)
+                .GetSelection()
                 .Select(ipi => ipi.PropertyInfo.Name);
 
             // Assert
@@ -174,30 +177,10 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
 
             // Assert
             selectedProperties
+                .GetSelection()
                 .Select(ipi => ipi.PropertyInfo)
                 .Should()
                 .BeEquivalentTo(expectedPropertyInfos);
-        }
-
-        [Fact]
-        public void When_selecting_properties_of_a_class_count_via_nongeneric_enumerable_should_succeed()
-        {
-            // Arrange
-            var testObj = new TestClass();
-            var expectedPropertyCount = typeof(TestClass)
-                .GetPublicOrInternalProperties()
-                .Count();
-
-            // Act
-            int propertyCountViaNonGenericEnumerable = testObj
-                .Properties()
-                .AsNonGenericEnumerable()
-                .Count();
-
-            // Assert
-            propertyCountViaNonGenericEnumerable
-                .Should()
-                .Be(expectedPropertyCount);
         }
 
         [Fact]
@@ -238,6 +221,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
 
             // Assert
             selectedProperties
+                .GetSelection()
                 .Select(ipi => ipi.PropertyInfo)
                 .Should()
                 .BeEquivalentTo(expectedPropertyInfos);
@@ -260,6 +244,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
 
             // Assert
             selectedProperties
+                .GetSelection()
                 .Select(ipi => ipi.PropertyInfo)
                 .Should()
                 .BeEquivalentTo(expectedPropertyInfos);
@@ -282,6 +267,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
 
             // Assert
             selectedProperties
+                .GetSelection()
                 .Select(ipi => ipi.PropertyInfo)
                 .Should()
                 .BeEquivalentTo(expectedPropertyInfos);
@@ -304,6 +290,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
 
             // Assert
             selectedProperties
+                .GetSelection()
                 .Select(ipi => ipi.PropertyInfo)
                 .Should()
                 .BeEquivalentTo(expectedPropertyInfos);
@@ -325,6 +312,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
 
             // Assert
             selectedProperties
+                .GetSelection()
                 .Select(ipi => ipi.PropertyInfo)
                 .Should()
                 .BeEquivalentTo(expectedPropertyInfos);
@@ -346,6 +334,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
 
             // Assert
             selectedProperties
+                .GetSelection()
                 .Select(ipi => ipi.PropertyInfo)
                 .Should()
                 .BeEquivalentTo(expectedPropertyInfos);
@@ -367,6 +356,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
 
             // Assert
             selectedProperties
+                .GetSelection()
                 .Select(ipi => ipi.PropertyInfo)
                 .Should()
                 .BeEquivalentTo(expectedPropertyInfos);
@@ -388,6 +378,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
 
             // Assert
             selectedProperties
+                .GetSelection()
                 .Select(ipi => ipi.PropertyInfo)
                 .Should()
                 .BeEquivalentTo(expectedPropertyInfos);
@@ -408,6 +399,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
 
             // Assert
             selectedProperties
+                .GetSelection()
                 .Select(ipi => ipi.PropertyInfo.Name)
                 .Should()
                 .ContainSingle(expectedPropertyName);
@@ -430,6 +422,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
 
             // Assert
             selectedProperties
+                .GetSelection()
                 .Select(ipi => ipi.PropertyInfo)
                 .Should()
                 .ContainSingle()
@@ -453,6 +446,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
 
             // Assert
             selectedProperties
+                .GetSelection()
                 .Select(ipi => ipi.PropertyInfo)
                 .Should()
                 .Contain(expectedPropertyInfo);
@@ -473,6 +467,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
 
             // Assert
             selectedProperties
+                .GetSelection()
                 .Select(ipi => ipi.PropertyInfo)
                 .Should()
                 .BeEquivalentTo(expectedPropertyInfos);
@@ -490,6 +485,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
 
             // Assert
             selectedProperties
+                .GetSelection()
                 .Select(ipi => ipi.PropertyInfo.Name)
                 .Should()
                 .Contain(inherittedPropertyName);
@@ -509,6 +505,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
 
             // Assert
             selectedProperties
+                .GetSelection()
                 .Select(ipi => ipi.PropertyInfo.Name)
                 .Should()
                 .NotContain(inherittedPropertyName);
@@ -530,6 +527,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
 
             // Assert
             selectedProperties
+                .GetSelection()
                 .Select(ipi => ipi.PropertyInfo)
                 .Should()
                 .BeEquivalentTo(expectedPropertyInfos);
@@ -588,6 +586,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
 
             // Assert
             selectedProperties
+                .GetSelection()
                 .Select(ipi => ipi.PropertyInfo)
                 .Should()
                 .BeEquivalentTo(expectedPropertyInfos);
@@ -609,6 +608,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
 
             // Assert
             selectedProperties
+                .GetSelection()
                 .Select(ipi => ipi.PropertyInfo)
                 .Should()
                 .BeEquivalentTo(expectedPropertyInfos);
@@ -683,7 +683,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
             // Act
             var selectedPropertyArray = testObj
                 .Properties()
-                .ToArray();
+                .GetSelection();
 
             // Assert
             selectedPropertyArray
@@ -702,12 +702,12 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
                 .Select(pi => pi.PropertyType);
 
             // Act
-            var selectedPropertyList = testObj
-                .Properties()
-                .ToList();
+            var selectedProperties = testObj
+                .Properties();
 
             // Assert
-            selectedPropertyList
+            selectedProperties
+                .GetSelection()
                 .Select(ipi => ipi.PropertyInfo.PropertyType)
                 .Should()
                 .BeEquivalentTo(expectedPropertyTypes);
@@ -724,13 +724,14 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
                 .Select(pi => pi.PropertyType);
 
             // Act
-            var selectedPropertyList = testObj
+            var selectedProperties = testObj
                 .Properties()
                 .ThatAreOfValueType
                 .ThatAreNullable;
 
             // Assert
-            selectedPropertyList
+            selectedProperties
+                .GetSelection()
                 .Select(ipi => ipi.PropertyInfo.PropertyType)
                 .Should()
                 .BeEquivalentTo(expectedPropertyTypes);
@@ -747,13 +748,14 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
                 .Select(pi => pi.PropertyType);
 
             // Act
-            var selectedPropertyList = testObj
+            var selectedProperties = testObj
                 .Properties()
                 .ThatAreOfValueType
                 .ThatAreNotNullable;
 
             // Assert
-            selectedPropertyList
+            selectedProperties
+                .GetSelection()
                 .Select(ipi => ipi.PropertyInfo.PropertyType)
                 .Should()
                 .BeEquivalentTo(expectedPropertyTypes);
@@ -766,13 +768,14 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
             var testObj = new TestClassValueTypePropertiesOnly();
 
             // Act
-            var selectedPropertyList = testObj
+            var selectedProperties = testObj
                 .Properties()
                 .ThatAreOfValueType
                 .ThatHaveDefaultValue;
 
             // Assert
-            selectedPropertyList
+            selectedProperties
+                .GetSelection()
                 .Select(ipi => ipi.PropertyInfo.Name)
                 .Should()
                 .NotContain(s => s.EndsWith(TestClassValueTypePropertiesOnly.NonDefaultValueSuffix));
@@ -808,13 +811,14 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
             string testValue = Guid.NewGuid().ToString();
 
             // Act
-            var selectedPropertyList = testObj
+            var selectedProperties = testObj
                 .Properties()
                 .ExactlyOfType<string>()
                 .HavingValue(testValue);
 
             // Assert
-            var selectedPropertyNames = selectedPropertyList
+            var selectedPropertyNames = selectedProperties
+                .GetSelection()
                 .Select(ipi => ipi.PropertyInfo.Name);
 
             selectedPropertyNames
@@ -831,13 +835,14 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
             testObj.StringProperty = testValue;
 
             // Act
-            var selectedPropertyList = testObj
+            var selectedProperties = testObj
                 .Properties()
                 .ExactlyOfType<string>()
                 .HavingValue(testValue);
 
             // Assert
-            var selectedPropertyNames = selectedPropertyList
+            var selectedPropertyNames = selectedProperties
+                .GetSelection()
                 .Select(ipi => ipi.PropertyInfo.Name);
 
             selectedPropertyNames
@@ -856,13 +861,14 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
             testObj.StringProperty = "not null";
 
             // Act
-            var selectedPropertyList = testObj
+            var selectedProperties = testObj
                 .Properties()
                 .ExactlyOfType<string>()
                 .HavingValue(testValue);
 
             // Assert
-            var selectedPropertyNames = selectedPropertyList
+            var selectedPropertyNames = selectedProperties
+                .GetSelection()
                 .Select(ipi => ipi.PropertyInfo.Name);
 
             selectedPropertyNames

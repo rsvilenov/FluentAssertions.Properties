@@ -17,7 +17,6 @@ namespace FluentAssertions.Properties.Selectors
     /// <typeparam name="TSelector">The actual type of the selector.</typeparam>
     /// </summary>
     public abstract class InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo, TSelector>
-        : IEnumerable<TInstancePropertyInfo>
         where TInstancePropertyInfo : InstancePropertyInfo<TDeclaringType>
         where TSelector : InstancePropertySelectorBase<TDeclaringType, TInstancePropertyInfo, TSelector>
     {
@@ -177,35 +176,15 @@ namespace FluentAssertions.Properties.Selectors
         }
 
         /// <summary>
-        /// The resulting <see cref="PropertyInfo"/> objects.
+        /// Returns the number of selected properties.
         /// </summary>
-        public TInstancePropertyInfo[] ToArray()
+        public int Count()
+        {
+            return SelectedProperties.Count();
+        }
+        internal TInstancePropertyInfo[] GetSelection()
         {
             return SelectedProperties.ToArray();
-        }
-
-        /// <summary>
-        /// Returns an enumerator that iterates through the collection.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="System.Collections.Generic.IEnumerator{T}"/> that can be used to iterate through the collection.
-        /// </returns>
-        /// <filterpriority>1</filterpriority>
-        public IEnumerator<TInstancePropertyInfo> GetEnumerator()
-        {
-            return SelectedProperties.GetEnumerator();
-        }
-
-        /// <summary>
-        /// Returns an enumerator that iterates through a collection.
-        /// </summary>
-        /// <returns>
-        /// An <see cref="System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
-        /// </returns>
-        /// <filterpriority>2</filterpriority>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
     }
 }

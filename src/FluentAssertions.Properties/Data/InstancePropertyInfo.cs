@@ -12,7 +12,7 @@ namespace FluentAssertions.Properties.Data
 
         internal InstancePropertyInfo(InstancePropertyInfo<TDeclaringType> instancePropertyInfo)
             : this(instancePropertyInfo.PropertyInfo)
-            { }
+        { }
 
         internal PropertyInfo PropertyInfo { get; set; }
 
@@ -23,7 +23,6 @@ namespace FluentAssertions.Properties.Data
     {
         internal InstancePropertyInfo(InstancePropertyInfo<TDeclaringType> instancePropertyInfo)
             : base(instancePropertyInfo)
-        {
-        }
+        { }
     }
 }
