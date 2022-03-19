@@ -60,7 +60,7 @@ namespace FluentAssertions.Properties.Assertions
 
         private AndConstraint<TAssertions> ProvideSymmetricAccessInternal(string because, params object[] becauseArgs)
         {
-            using (AssertionScope scope = new AssertionScope())
+            using (new AssertionScope())
             {
                 foreach (var propertyInvocationInfo in Subject)
                 {
@@ -200,18 +200,25 @@ namespace FluentAssertions.Properties.Assertions
 
             string accessorTypeFailMessagePart = evalType.GetDescription();
 
-            using (AssertionScope assertion = new AssertionScope())
+            using (new AssertionScope())
             {
                 foreach (var propertyInvocationInfo in Subject)
                 {
-                    if (evalType == PropertyAccessorEvaluation.Setter)
-                    {
-                        propertyInvocationInfo.PropertyInfo.Should().BeWritable();
-                    }
 
                     string propertyName = propertyInvocationInfo
                         .PropertyInfo
                         .Name;
+
+                    if (evalType == PropertyAccessorEvaluation.Setter
+                        && !propertyInvocationInfo.PropertyInfo.CanWrite)
+                    {
+                        Execute
+                            .Assertion
+                            .BecauseOf(because, becauseArgs)
+                            .FailWith("Expected property {0} to be writable, but was not.", propertyName);
+                        
+                        continue;
+                    }
 
                     IInvocationResult<TProperty> valueSourceInvocationResult = propertyInvocationInfo
                         .ValueSourceInvocationDelegate

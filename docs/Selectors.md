@@ -48,7 +48,7 @@ The properties, selected with the property selectors, can be filtered further by
    
    // Get all properties of types that implement IDisposable:
     var disposableProperties = properties
-        .OfType<IDisposable>();
+            .OfType<IDisposable>();
 ```
 
 or
@@ -59,7 +59,7 @@ or
    
     // Get all writable properties of type int that have value of 1:
     var filteredProperties = properties
-        .ExactlyOfType<int>()
-        .ThatAreWritable
-        .HavingValue(1);
+            .ExactlyOfType<int>()
+            .ThatAreWritable
+            .HavingValue(1);
 ```

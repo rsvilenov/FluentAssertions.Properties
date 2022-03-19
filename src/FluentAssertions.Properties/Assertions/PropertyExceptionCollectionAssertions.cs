@@ -58,7 +58,7 @@ namespace FluentAssertions.Properties.Assertions
 
         private PropertyExceptionCollectionAssertions<TException> WithMessageInternal(string expectedWildcardPattern, string because, object[] becauseArgs)
         {
-            using (AssertionScope scope = new())
+            using (new AssertionScope())
             {
                 foreach (PropertyException<TException> pex in _exceptionCollection)
                 {
@@ -98,7 +98,7 @@ namespace FluentAssertions.Properties.Assertions
         {
             Func<TException, bool> condition = exceptionExpression.Compile();
 
-            using (AssertionScope scope = new())
+            using (new AssertionScope())
             {
                 foreach (PropertyException<TException> pex in _exceptionCollection)
                 {
@@ -165,7 +165,7 @@ namespace FluentAssertions.Properties.Assertions
         {
             PropertyExceptionCollection<TInnerException> innerExceptionCollection = new PropertyExceptionCollection<TInnerException>();
 
-            using (AssertionScope scope = new())
+            using (new AssertionScope())
             {
                 foreach (PropertyException<TException> pex in _exceptionCollection)
                 {

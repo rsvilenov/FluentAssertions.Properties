@@ -83,7 +83,7 @@ namespace FluentAssertions.Properties.Data
 
         private AndConstraint<TAssertions> BeOfPrimitiveTypeInternal(string because, params object[] becauseArgs)
         {
-            using (AssertionScope scope = new AssertionScope())
+            using (new AssertionScope())
             {
                 foreach (var item in Subject.GetSelection())
                 {
@@ -112,7 +112,7 @@ namespace FluentAssertions.Properties.Data
 
         private AndConstraint<TAssertions> NotBeOfPrimitiveTypeInternal(string because, params object[] becauseArgs)
         {
-            using (AssertionScope scope = new AssertionScope())
+            using (new AssertionScope())
             {
                 foreach (var item in Subject.GetSelection())
                 {
@@ -141,7 +141,7 @@ namespace FluentAssertions.Properties.Data
 
         private AndConstraint<TAssertions> BeOfValueTypeInternal(string because, params object[] becauseArgs)
         {
-            using (AssertionScope scope = new AssertionScope())
+            using (new AssertionScope())
             {
                 foreach (var item in Subject.GetSelection())
                 {
@@ -170,7 +170,7 @@ namespace FluentAssertions.Properties.Data
         
         private AndConstraint<TAssertions> BeOfReferenceTypeInternal(string because, params object[] becauseArgs)
         {
-            using (AssertionScope scope = new AssertionScope())
+            using (new AssertionScope())
             {
                 foreach (var item in Subject.GetSelection())
                 {
@@ -199,7 +199,7 @@ namespace FluentAssertions.Properties.Data
 
         private AndConstraint<TAssertions> BeVirtualInternal(string because, params object[] becauseArgs)
         {
-            using (AssertionScope scope = new AssertionScope())
+            using (new AssertionScope())
             {
                 foreach (var item in Subject.GetSelection())
                 {
@@ -228,7 +228,7 @@ namespace FluentAssertions.Properties.Data
 
         private AndConstraint<TAssertions> NotBeVirtualInternal(string because, params object[] becauseArgs)
         {
-            using (AssertionScope scope = new AssertionScope())
+            using (new AssertionScope())
             {
                 foreach (var item in Subject.GetSelection())
                 {
@@ -258,7 +258,7 @@ namespace FluentAssertions.Properties.Data
 
         private AndConstraint<TAssertions> NotBeWritableInternal(string because, params object[] becauseArgs)
         {
-            using (AssertionScope scope = new AssertionScope())
+            using (new AssertionScope())
             {
                 foreach (var item in Subject.GetSelection())
                 {
@@ -287,7 +287,7 @@ namespace FluentAssertions.Properties.Data
 
         private AndConstraint<TAssertions> BeWritableInternal(string because, params object[] becauseArgs)
         {
-            using (AssertionScope scope = new AssertionScope())
+            using (new AssertionScope())
             {
                 foreach (var item in Subject.GetSelection())
                 {
@@ -321,7 +321,7 @@ namespace FluentAssertions.Properties.Data
 
         private AndConstraint<TAssertions> BeWritableInternal(CSharpAccessModifier accessModifier, string because, params object[] becauseArgs)
         {
-            using (AssertionScope scope = new AssertionScope())
+            using (new AssertionScope())
             {
                 foreach (var item in Subject.GetSelection())
                 {
@@ -353,7 +353,7 @@ namespace FluentAssertions.Properties.Data
 
         private AndConstraint<TAssertions> BeInitOnlyInternal(string because, params object[] becauseArgs)
         {
-            using (AssertionScope scope = new AssertionScope())
+            using (new AssertionScope())
             {
                 foreach (var item in Subject.GetSelection())
                 {

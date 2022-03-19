@@ -297,6 +297,29 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
         }
 
         [Fact]
+        public void When_evaluating_read_only_property_ThrowFromSetter_assert_should_fail()
+        {
+            // Arrange
+            var testPropertyMock = new Mock<ITestProperties>();
+            var valueSourceMock = new Mock<ITestProperties>();
+
+            var symmetricProperties = testPropertyMock
+                .Object
+                .Properties(p => p.ReadOnlyStringProperty);
+
+            // Act & Assert
+            Action assertion = () => symmetricProperties
+                .WhenCalledWithValuesFrom(valueSourceMock.Object)
+                .Should()
+                .ThrowFromSetter<Exception>();
+
+            assertion
+                .Should()
+                .Throw<XunitException>()
+                .WithMessage($"Expected property \"{nameof(ITestProperties.ReadOnlyStringProperty)}\" to be writable, but was not.");
+        }
+
+        [Fact]
         public void When_selecting_properties_of_string_type_WhenCalledWith_ProvideSymmetricAccess_assert_should_succeed()
         {
             // Arrange

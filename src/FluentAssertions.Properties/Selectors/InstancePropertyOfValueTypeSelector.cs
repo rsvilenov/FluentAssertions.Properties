@@ -32,7 +32,7 @@ namespace FluentAssertions.Properties.Selectors
             {
                 List<InstancePropertyInfo<TDeclaringType>> filteredProperties = new();
 
-                using (AssertionScope scope = new())
+                using (new AssertionScope())
                 {
                     foreach (var instancePropInfo in SelectedProperties)
                     {

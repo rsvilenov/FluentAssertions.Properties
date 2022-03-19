@@ -41,10 +41,10 @@ Speaking in the lingo of AutoFixture, we can say that `ProvideSymmetricAccess()`
     instanceUnderTest
         .Properties()
         .ExactlyOfType<string>()
-        .WhenCalledWith(null)
+        .WhenCalledWith(string.Empty)
         .Should()
-        .ThrowFromSetter<ArgumentNullException>()
-        .WithMessage("Nulls are not accepted here");
+        .ThrowFromSetter<ArgumentException>()
+        .WithMessage("Empty strings are not accepted.");
 ```
 
 * Selecting specific properties to test by their type and value
@@ -108,6 +108,5 @@ Or use this command with the .NET CLI:
 
 ## Documentation
 
-[Property selector methods](https://github.com/rsvilenov/FluentAssertions.Properties/blob/master/docs/Selectors.md).
-
-[Assertion methods](https://github.com/rsvilenov/FluentAssertions.Properties/blob/master/docs/Assertions.md).
+* [Property selector methods](https://github.com/rsvilenov/FluentAssertions.Properties/blob/master/docs/Selectors.md).
+* [Assertion methods](https://github.com/rsvilenov/FluentAssertions.Properties/blob/master/docs/Assertions.md).
