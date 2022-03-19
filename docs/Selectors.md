@@ -45,11 +45,21 @@ The properties, selected with the property selectors, can be filtered further by
 ```csharp
     // Select all publicly visible properties
     var properties = instance.Properties();
+   
+   // Get all properties of types that implement IDisposable:
+    var disposableProperties = properties
+        .OfType<IDisposable>();
+```
 
+or
+
+```csharp
+    // Select all publicly visible properties
+    var properties = instance.Properties();
+   
     // Get all writable properties of type int that have value of 1:
     var filteredProperties = properties
-        .OfType<int>()
+        .ExactlyOfType<int>()
         .ThatAreWritable
         .HavingValue(1);
-
 ```

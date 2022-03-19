@@ -204,6 +204,11 @@ namespace FluentAssertions.Properties.Assertions
             {
                 foreach (var propertyInvocationInfo in Subject)
                 {
+                    if (evalType == PropertyAccessorEvaluation.Setter)
+                    {
+                        propertyInvocationInfo.PropertyInfo.Should().BeWritable();
+                    }
+
                     string propertyName = propertyInvocationInfo
                         .PropertyInfo
                         .Name;

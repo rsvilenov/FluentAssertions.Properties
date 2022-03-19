@@ -515,6 +515,64 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
         }
 
         [Fact]
+        public void When_selecting_properties_castable_to_specified_type_it_should_succeed()
+        {
+            // Arrange
+            var testObj = new TestClassPublicPropertiesOnly();
+            var expectedPropertyInfos = typeof(TestClassPublicPropertiesOnly)
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(propertyInfo => typeof(string).IsAssignableFrom(propertyInfo.PropertyType));
+            
+            // Act
+            var selectedProperties = testObj
+                .Properties()
+                .OfType<string>();
+
+            // Assert
+            selectedProperties
+                .Select(ipi => ipi.PropertyInfo)
+                .Should()
+                .BeEquivalentTo(expectedPropertyInfos);
+        }
+
+        [Fact]
+        public void When_selecting_properties_castable_to_object_OfType_should_return_all_properties()
+        {
+            // Arrange
+            var testObj = new TestClassPublicPropertiesOnly();
+            var expectedPropertyCount = typeof(TestClassPublicPropertiesOnly)
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Count();
+
+            // Act
+            var selectedProperties = testObj
+                .Properties()
+                .OfType<object>();
+
+            // Assert
+            selectedProperties
+                .Should()
+                .HaveCount(expectedPropertyCount);
+        }
+
+        [Fact]
+        public void When_selecting_properties_of_derived_types_ExactlyOfType_with_object_type_param_should_return_no_properties()
+        {
+            // Arrange
+            var testObj = new TestClassPublicPropertiesOnly();
+
+            // Act
+            var selectedProperties = testObj
+                .Properties(p => p.IntProperty, p => p.StringProperty)
+                .ExactlyOfType<object>();
+
+            // Assert
+            selectedProperties
+                .Should()
+                .HaveCount(0);
+        }
+
+        [Fact]
         public void When_selecting_properties_of_specific_types_should_succeed()
         {
             // Arrange
@@ -526,7 +584,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
             // Act
             var selectedProperties = testObj
                 .Properties()
-                .OfType<string>();
+                .ExactlyOfType<string>();
 
             // Assert
             selectedProperties
@@ -554,6 +612,23 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
                 .Select(ipi => ipi.PropertyInfo)
                 .Should()
                 .BeEquivalentTo(expectedPropertyInfos);
+        }
+
+        [Fact]
+        public void When_selecting_properties_NotOfType_with_object_type_param_should_not_return_any_properties()
+        {
+            // Arrange
+            var testObj = new TestClass();
+
+            // Act
+            var selectedProperties = testObj
+                .Properties()
+                .NotOfType<object>();
+
+            // Assert
+            selectedProperties
+                .Should()
+                .HaveCount(0);
         }
 
         [Fact]
@@ -586,7 +661,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
             // Act
             var firstPropertyReturnType = testObj
                 .Properties()
-                .OfType<string>()
+                .ExactlyOfType<string>()
                 .ReturnTypes()
                 .First();
 
@@ -735,7 +810,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
             // Act
             var selectedPropertyList = testObj
                 .Properties()
-                .OfType<string>()
+                .ExactlyOfType<string>()
                 .HavingValue(testValue);
 
             // Assert
@@ -758,7 +833,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
             // Act
             var selectedPropertyList = testObj
                 .Properties()
-                .OfType<string>()
+                .ExactlyOfType<string>()
                 .HavingValue(testValue);
 
             // Assert
@@ -783,7 +858,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
             // Act
             var selectedPropertyList = testObj
                 .Properties()
-                .OfType<string>()
+                .ExactlyOfType<string>()
                 .HavingValue(testValue);
 
             // Assert

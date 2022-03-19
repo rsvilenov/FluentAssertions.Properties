@@ -20,7 +20,7 @@ In order to test the behavior of the getters and setters of the selected propert
 
     instance
         .Properties()
-        .OfType<string>()
+        .ExactlyOfType<string>()
         .WhenCalledWith(testValue)
         .Should()
         .ProvideSymmetricAccess();

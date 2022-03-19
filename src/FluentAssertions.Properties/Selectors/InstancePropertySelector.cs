@@ -41,9 +41,21 @@ namespace FluentAssertions.Properties.Selectors
         }
 
         /// <summary>
-        /// Only select the properties of the specified type.
+        /// Only select the properties that can be cast to the specified type.
         /// </summary>
-        public InstancePropertyOfKnownTypeSelector<TDeclaringType, TProperty> OfType<TProperty>()
+        public InstancePropertyOfCategorySelector<TDeclaringType, TProperty> OfType<TProperty>()
+        {
+            var selectedProperties = SelectedProperties
+                .Where(property => typeof(TProperty).IsAssignableFrom(property.PropertyInfo.PropertyType))
+                .Select(p => new InstancePropertyInfo<TDeclaringType, TProperty>(p));
+            
+            return new InstancePropertyOfCategorySelector<TDeclaringType, TProperty>(Instance, selectedProperties);
+        }
+
+        /// <summary>
+        /// Only select the properties whose type is exactly the specified one.
+        /// </summary>
+        public InstancePropertyOfKnownTypeSelector<TDeclaringType, TProperty> ExactlyOfType<TProperty>()
         {
             var selectedProperties = SelectedProperties
                 .Where(property => property.PropertyInfo.PropertyType == typeof(TProperty))
@@ -53,14 +65,26 @@ namespace FluentAssertions.Properties.Selectors
         }
 
         /// <summary>
-        /// Only select the properties that are not of the specified type
+        /// Only select the properties that are cannot be cast to the specified type
         /// </summary>
         public InstancePropertySelector<TDeclaringType> NotOfType<TProperty>()
         {
             var filteredProperties = SelectedProperties
-                .Where(property => property.PropertyInfo.PropertyType != typeof(TProperty));
+                .Where(property => !typeof(TProperty).IsAssignableFrom(property.PropertyInfo.PropertyType));
 
             return CloneFiltered(filteredProperties);
+        }
+
+        /// <summary>
+        /// Only select the properties whose <see cref="PropertyInfo"/> matches a given predicate.
+        /// </summary>
+        /// <param name="condition">The filter condition for the properties.</param>
+        public InstancePropertyOfCategorySelector<TDeclaringType> OfTypeMatching(Predicate<PropertyInfo> condition)
+        {
+            var selectedProperties = SelectedProperties
+                .Where(p => condition(p.PropertyInfo));
+
+            return new InstancePropertyOfCategorySelector<TDeclaringType>(Instance, selectedProperties);
         }
 
         /// <summary>
@@ -80,14 +104,44 @@ namespace FluentAssertions.Properties.Selectors
         /// <summary>
         /// Only select the properties that are not of reference type.
         /// </summary>
-        public InstancePropertySelector<TDeclaringType> ThatAreOfReferenceType
+        public InstancePropertyOfCategorySelector<TDeclaringType> ThatAreOfReferenceType
         {
             get
             {
-                var filteredProperties = SelectedProperties
+                var selectedProperties = SelectedProperties
                     .Where(property => !property.PropertyInfo.PropertyType.IsValueType);
 
-                return CloneFiltered(filteredProperties);
+                return new InstancePropertyOfCategorySelector<TDeclaringType>(Instance, selectedProperties);
+            }
+        }
+
+
+
+        /// <summary>
+        /// Only select the properties whose types are among the primitive ones.
+        /// </summary>
+        public InstancePropertyOfCategorySelector<TDeclaringType> ThatAreOfPrimitiveTypes
+        {
+            get
+            {
+                var selectedProperties = SelectedProperties
+                    .Where(property => property.PropertyInfo.PropertyType.IsPrimitive);
+
+                return new InstancePropertyOfCategorySelector<TDeclaringType>(Instance, selectedProperties);
+            }
+        }
+
+        /// <summary>
+        /// Only select the properties whose types are not among the primitive ones.
+        /// </summary>
+        public InstancePropertyOfCategorySelector<TDeclaringType> ThatAreNotOfPrimitiveTypes
+        {
+            get
+            {
+                var selectedProperties = SelectedProperties
+                    .Where(property => !property.PropertyInfo.PropertyType.IsPrimitive);
+
+                return new InstancePropertyOfCategorySelector<TDeclaringType>(Instance, selectedProperties);
             }
         }
 

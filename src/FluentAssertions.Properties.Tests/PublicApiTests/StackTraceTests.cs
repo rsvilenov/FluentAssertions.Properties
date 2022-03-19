@@ -27,14 +27,13 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
                 } 
             }
 
-
             [Fact]
-            public void Test1()
+            public void When_selected_properties_throw_from_setter_the_stack_trace_in_the_error_message_should_be_correct_and_not_include_frames_from_this_library()
             {
                var testAction = () =>
                     new StackTraceTests()
                         .Properties()
-                        .OfType<int>()
+                        .ExactlyOfType<int>()
                         .WhenCalledWith(1)
                         .Should()
                         .ThrowFromSetter<ArgumentNullException>();

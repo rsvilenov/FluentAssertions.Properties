@@ -3,7 +3,6 @@ using FluentAssertions.Properties.Data;
 using FluentAssertions.Properties.Extensions;
 using FluentAssertions.Properties.Invocation;
 using FluentAssertions.Types;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -111,34 +110,6 @@ namespace FluentAssertions.Properties.Selectors
         }
 
         /// <summary>
-        /// Only select the properties whose types are among the primitive ones.
-        /// </summary>
-        public TSelector ThatAreOfPrimitiveTypes
-        {
-            get
-            {
-                var filteredProperties = SelectedProperties
-                    .Where(property => property.PropertyInfo.PropertyType.IsPrimitive);
-
-                return CloneFiltered(filteredProperties);
-            }
-        }
-
-        /// <summary>
-        /// Only select the properties whose types are not among the primitive ones.
-        /// </summary>
-        public TSelector ThatAreNotOfPrimitiveTypes
-        {
-            get
-            {
-                var filteredProperties = SelectedProperties
-                    .Where(property => !property.PropertyInfo.PropertyType.IsPrimitive);
-
-                return CloneFiltered(filteredProperties);
-            }
-        }
-
-        /// <summary>
         /// Only select the internal properties.
         /// </summary>
         public TSelector ThatAreNotInternal
@@ -168,18 +139,6 @@ namespace FluentAssertions.Properties.Selectors
 
                 return CloneFiltered(filteredProperties);
             }
-        }
-
-        /// <summary>
-        /// Only select the properties whose <see cref="PropertyInfo"/> matches a given predicate.
-        /// </summary>
-        /// <param name="condition">The filter condition for the properties.</param>
-        public TSelector OfTypeMatching(Predicate<PropertyInfo> condition)
-        {
-            var filteredProperties = SelectedProperties
-                .Where(p => condition(p.PropertyInfo));
-
-            return CloneFiltered(filteredProperties);
         }
 
         /// <summary>

@@ -49,7 +49,7 @@ namespace FluentAssertions.Properties
                 : null;
 
             var selector = new InstancePropertySelector<TDeclaringType>(instance, propertyNames);
-            return selector.OfType<TProperty>();
+            return selector.ExactlyOfType<TProperty>();
         }
     }
 }

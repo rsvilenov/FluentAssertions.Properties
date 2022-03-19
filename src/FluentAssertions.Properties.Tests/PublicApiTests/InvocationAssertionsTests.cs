@@ -308,7 +308,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
             testObj
                 .Properties()
                 .ThatAreWritable
-                .OfType<string>()
+                .ExactlyOfType<string>()
                 .WhenCalledWith(testValue)
                 .Should()
                 .ProvideSymmetricAccess();

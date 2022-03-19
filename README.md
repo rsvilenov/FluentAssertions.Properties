@@ -20,10 +20,10 @@ Some common scenarios:
 
 * Testing that all properties from a class provide symmetric access, i.e. they return the same value that has been assigned to them
 ```csharp
-    var dtoUnderTest = new SampleDto();
+    var instanceUnderTest = new SampleDto();
     var testValues = new Fixture().Create<SampleDto>();
 
-    sampleDto
+    instanceUnderTest
         .Properties()
         .ThatAreWritable
         .WhenCalledWithValuesFrom(testValues)
@@ -36,11 +36,11 @@ Speaking in the lingo of AutoFixture, we can say that `ProvideSymmetricAccess()`
 * Testing that getters/setters throw exceptions in certain cases
 
 ```csharp
-    var objectUnderTest = new TestClass();
+    var instanceUnderTest = new TestClass();
             
-    objectUnderTest
+    instanceUnderTest
         .Properties()
-        .OfType<string>()
+        .ExactlyOfType<string>()
         .WhenCalledWith(null)
         .Should()
         .ThrowFromSetter<ArgumentNullException>()
@@ -50,23 +50,11 @@ Speaking in the lingo of AutoFixture, we can say that `ProvideSymmetricAccess()`
 * Selecting specific properties to test by their type and value
 
 ```csharp
-    var objectUnderTest = new TestClass();
+    var instanceUnderTest = new TestClass();
             
-    objectUnderTest
+    instanceUnderTest
         .Properties()
-        .OfType<double>()
-        .ThatHaveDefaultValue
-        .Should()
-        .HaveCount(10);
-```
-
-or
-```csharp
-    var objectUnderTest = new TestClass();
-            
-    objectUnderTest
-        .Properties()
-        .OfType<string>()
+        .ExactlyOfType<string>()
         .HavingValue("some value")
         .Should()
         .HaveCount(2);
@@ -74,10 +62,10 @@ or
 
 or selecting individual properties by name
 ```csharp
-    var objectUnderTest = new TestRecord();
+    var instanceUnderTest = new TestRecord();
     string testValue = Guid.NewGuid().ToString();
 
-    objectUnderTest
+    instanceUnderTest
         .Properties(o => o.StringPropertyOne, o => o.StringPropertyTwo)
         .WhenCalledWith(testValue)
         .Should()
