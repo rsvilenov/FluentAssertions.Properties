@@ -89,7 +89,7 @@ and rightfully so - in order for a programmer to see how a particular property b
 they have to open the implementation of the type and look inside the code. The presence of accessor
 methods is a big part of the reason why Microsoft has provided a list of [bad practices and design guidelines](https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/property), concerning the implementation of properties.
 
-### But testing properties goes against the conventional wisdom!
+### But testing property accessors goes against the conventional wisdom!
 There is a rule of thumb that says properties should not be tested if their getter and setter do not
 contain any logic, e.g. if they are [auto-implemented](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/auto-implemented-properties). Even Robert C. Martin [thinks that testing property accessors is foolish](https://blog.cleancoder.com/uncle-bob/2013/03/06/ThePragmaticsOfTDD.html). However, there are other prominent authors, such as Mark Seeman, who [strongly disagree](https://blog.ploeh.dk/2013/03/08/test-trivial-code/). And there seems to be a [not-so-small minority](https://stackoverflow.com/questions/18967697/should-you-unit-test-simple-properties), which thinks that testing all public properties is necessary.
 
