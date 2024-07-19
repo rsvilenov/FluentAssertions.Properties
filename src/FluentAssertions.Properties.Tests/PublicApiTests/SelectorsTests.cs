@@ -158,7 +158,7 @@ namespace FluentAssertions.Properties.Tests.PublicApiTests
             var testObj = new TestClass();
             Expression<Func<TestClass, object>> unsupportedExpression = (a) => null;
             Func<InstancePropertySelector<TestClass>> act = () =>
-                testObj.Properties(unsupportedExpression);
+                testObj.Properties<TestClass>(unsupportedExpression);
 
             // Act & Assert
             act.Should().Throw<NotSupportedException>();
