@@ -91,7 +91,7 @@ methods is a big part of the reason why Microsoft has provided a list of [bad pr
 
 ### But testing property accessors goes against the conventional wisdom!
 There is a rule of thumb that says properties should not be tested if their getter and setter do not
-contain any logic, e.g. if they are [auto-implemented](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/auto-implemented-properties). Even Robert C. Martin [thinks that testing property accessors is foolish](https://blog.cleancoder.com/uncle-bob/2013/03/06/ThePragmaticsOfTDD.html). However, there are other prominent authors, such as Mark Seeman, who [strongly disagree](https://blog.ploeh.dk/2013/03/08/test-trivial-code/). And there seems to be a [not-so-small minority](https://stackoverflow.com/questions/18967697/should-you-unit-test-simple-properties), which thinks that testing all public properties is necessary.
+contain any logic, e.g. if they are [auto-implemented](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/auto-implemented-properties). Robert C. Martin goes as far as to say that [testing property accessors is foolish](https://blog.cleancoder.com/uncle-bob/2013/03/06/ThePragmaticsOfTDD.html). However, there are other prominent authors, such as Mark Seeman, who [strongly disagree](https://blog.ploeh.dk/2013/03/08/test-trivial-code/). And there seems to be a [not-so-small minority](https://stackoverflow.com/questions/18967697/should-you-unit-test-simple-properties), which thinks that testing all public properties is necessary.
 
 ## Installation
 This library is distributed as a [NuGet](https://www.nuget.org/packages/FluentAssertions.Properties/).
