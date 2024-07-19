@@ -18,7 +18,7 @@ Unofficial FluentAssertions extensions for testing the behavior of class/struct/
 
 Some common scenarios:
 
-* Testing that all properties from a class provide symmetric access, i.e. they return the same value that has been assigned to them
+* Testing that all properties in a class provide symmetric access, i.e. they return the same value that has been assigned to them
 ```csharp
     var instanceUnderTest = new SampleDto();
     var testValues = new Fixture().Create<SampleDto>();
@@ -89,7 +89,7 @@ and rightfully so - in order for a programmer to see how a particular property b
 they have to open the implementation of the type and look inside the code. The presence of accessor
 methods is a big part of the reason why Microsoft has provided a list of [bad practices and design guidelines](https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/property), concerning the implementation of properties.
 
-### But that goes against the conventional wisdom!
+### But testing properties goes against the conventional wisdom!
 There is a rule of thumb that says properties should not be tested if their getter and setter do not
 contain any logic, e.g. if they are [auto-implemented](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/auto-implemented-properties). Even Robert C. Martin seems to think this way. However, there are other prominent authors, such as [Mark Seeman](https://blog.ploeh.dk/2013/03/08/test-trivial-code/), who strongly disagree. And there seems to be a [not-so-small minority](https://stackoverflow.com/questions/18967697/should-you-unit-test-simple-properties), which thinks that testing all public properties is necessary.
 
